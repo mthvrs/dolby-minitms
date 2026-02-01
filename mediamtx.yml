@@ -1,0 +1,14 @@
+# Minimal MediaMTX config for LAN playback via WHEP
+logLevel: info
+
+# Use simple slugs (no spaces) mapped to your theaters
+paths:
+  salle-1:
+    source: rtsp://admin:Password@10.98.156.15:554/Streaming/Channels/1
+    sourceOnDemand: yes
+  salle-2:
+    source: rtsp://admin:Password@10.98.156.25:554/Streaming/Channels/1
+    sourceOnDemand: yes
+  salle-3:
+    source: rtsp://admin:Password@10.98.156.35:554/Streaming/Channels/1
+    sourceOnDemand: yes

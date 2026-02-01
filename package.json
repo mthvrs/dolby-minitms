@@ -1,0 +1,29 @@
+{
+  "name": "dolby-control-panel",
+  "version": "1.0.0",
+  "description": "Dolby Cinema Control Web Server (Win7 Compatible)",
+  "main": "main.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js",
+    "electron": "electron ."
+  },
+  "dependencies": {
+    "axios": "0.21.4",
+    "cheerio": "1.0.0-rc.3",
+    "electron-store": "8.1.0",
+    "express": "4.17.1",
+    "express-session": "1.17.2",
+    "express-ws": "5.0.2",
+    "ffmpeg-static": "4.4.0",
+    "fs-extra": "9.1.0",
+    "rtsp-relay": "1.7.0"
+  },
+  "devDependencies": {
+    "electron": "22.3.27",
+    "nodemon": "2.0.20"
+  },
+  "engines": {
+    "node": "13.x"
+  }
+}
