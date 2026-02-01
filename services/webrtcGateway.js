@@ -5,8 +5,12 @@ const Logger = require('./logger');
 
 const logger = new Logger('WebRTC-Gateway');
 
+// Determine binary name based on platform (Windows vs Linux)
+const isWin = process.platform === 'win32';
+const binName = isWin ? 'mediamtx.exe' : 'mediamtx';
+
 // Paths relative to project root
-const BIN = path.join(__dirname, '..', 'mediamtx.exe');
+const BIN = path.join(__dirname, '..', binName);
 const CFG = path.join(__dirname, '..', 'mediamtx.yml');
 
 let child = null;
@@ -17,7 +21,7 @@ function ensureRunning() {
         return;
     }
     if (!fs.existsSync(BIN)) {
-        logger.error(`Missing mediamtx.exe at ${BIN}`);
+        logger.error(`Missing MediaMTX binary at ${BIN}`);
         return;
     }
     if (child) return;
@@ -26,6 +30,15 @@ function ensureRunning() {
     
     // cwd is important so mediamtx finds its config file
     const cwd = path.dirname(BIN);
+    
+    // Allow execution permission on Linux
+    if (!isWin) {
+        try {
+            fs.chmodSync(BIN, '755');
+        } catch (e) {
+            logger.warn(`Could not set executable permissions on ${BIN}: ${e.message}`);
+        }
+    }
     
     child = spawn(BIN, [CFG], { 
         stdio: ['ignore', 'pipe', 'pipe'],

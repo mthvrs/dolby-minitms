@@ -32,6 +32,9 @@ app.use('/api/macros', require('./routes/macros'));
 app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'public', 'index.html')));
 
 // Start Server
-app.listen(config.PORT, () => {
-    logger.info(`Dolby Control Server listening on http://localhost:${config.PORT}`);
+const HOST = '0.0.0.0'; 
+
+app.listen(config.PORT, HOST, () => {
+    logger.info(`Dolby Control Server listening on http://${HOST}:${config.PORT}`);
+    logger.info(`Access this UI from other computers using your en02 IP address.`);
 });
