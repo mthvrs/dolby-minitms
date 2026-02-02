@@ -11,9 +11,31 @@ class App {
   }
 
   async initialize() {
+    this.setupTheme(); // Initialize theme first
     this.startClock();
     this.setupModal();
     await this.loadTheaters();
+  }
+
+  // New method to handle Light/Dark mode
+  setupTheme() {
+    const toggleBtn = document.getElementById('theme-toggle');
+    const html = document.documentElement;
+    
+    // Check local storage or system preference
+    const savedTheme = localStorage.getItem('theme');
+    const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    
+    const initialTheme = savedTheme || (systemPrefersDark ? 'dark' : 'light');
+    html.setAttribute('data-theme', initialTheme);
+
+    toggleBtn.addEventListener('click', () => {
+      const currentTheme = html.getAttribute('data-theme');
+      const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+      
+      html.setAttribute('data-theme', newTheme);
+      localStorage.setItem('theme', newTheme);
+    });
   }
 
   startClock() {
@@ -29,8 +51,7 @@ class App {
   async loadTheaters() {
     try {
       const resp = await api.getTheaters();
-      // [FIX] Removed optional chaining for Win7 browser compatibility
-      // Accept { theaters: [...] } or bare array for resilience
+      
       let list = [];
       if (Array.isArray(resp)) {
         list = resp;
@@ -76,7 +97,6 @@ class App {
     const tabsContainer = document.getElementById('tabs');
     const contentContainer = document.querySelector('.content');
 
-    // Remove any existing theater tabs/content, keep overview
     const existingTabs = Array.from(tabsContainer.querySelectorAll('.tab')).filter(t => t.dataset.tab !== 'overview');
     existingTabs.forEach(tab => tab.remove());
 
@@ -90,14 +110,12 @@ class App {
       const data = this.theaters[name];
       const safeId = String(name).toLowerCase().replace(/\s+/g, '-');
 
-      // Create tab button
       const tabBtn = document.createElement('button');
       tabBtn.className = 'tab';
       tabBtn.dataset.tab = safeId;
       tabBtn.textContent = name;
       tabsContainer.appendChild(tabBtn);
 
-      // Create tab content
       const tabContent = document.createElement('div');
       tabContent.className = 'tab-content';
       tabContent.id = `${safeId}-content`;
@@ -114,12 +132,10 @@ class App {
       `;
       contentContainer.appendChild(tabContent);
 
-      // Initialize video player
       const videoContainer = tabContent.querySelector(`#video-${safeId}`);
       const videoPlayer = new VideoPlayer(videoContainer, name);
       videoPlayer.initialize();
 
-      // Initialize macro panel
       const controlsContainer = tabContent.querySelector(`#controls-${safeId}`);
       const macroPanel = new MacroPanel(controlsContainer, name);
       macroPanel.load();
@@ -139,13 +155,11 @@ class App {
   }
 
   switchTab(tabName) {
-    // Update active tab button
     document.querySelectorAll('.tab').forEach((t) => {
       if (t.dataset.tab === tabName) t.classList.add('active');
       else t.classList.remove('active');
     });
 
-    // Update active content
     document.querySelectorAll('.tab-content').forEach((content) => {
       if (content.id === `${tabName}-content`) content.classList.add('active');
       else content.classList.remove('active');
@@ -174,7 +188,6 @@ class App {
       this.hideModal();
     });
 
-    // Close on escape
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') {
         if (this.confirmCallback) this.confirmCallback(false);
@@ -182,7 +195,6 @@ class App {
       }
     });
 
-    // Close on background click
     modal.addEventListener('click', (e) => {
       if (e.target === modal) {
         if (this.confirmCallback) this.confirmCallback(false);
