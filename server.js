@@ -1,3 +1,4 @@
+// - server.js
 const path = require('path');
 const express = require('express');
 const expressWs = require('express-ws');
@@ -28,7 +29,13 @@ const theaters = require('./routes/theaters');
 app.use(theaters.router);
 app.use('/api/macros', require('./routes/macros'));
 
-// Fallback to index.html for SPA-like navigation (optional)
+// Multiview Route
+app.get('/cams', (req, res) => {
+    logger.info(`Client requesting Multiview Page (/cams) from ${req.ip}`);
+    res.sendFile(path.join(__dirname, 'public', 'cams.html'));
+});
+
+// Fallback to index.html for SPA-like navigation
 app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'public', 'index.html')));
 
 // Start Server

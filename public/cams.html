@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dolby Multiview</title>
+    <style>
+        body {
+            background-color: #000;
+            margin: 0;
+            overflow: hidden;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            height: 100vh;
+            width: 100vw;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #app-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 100%;
+        }
+
+        .cam-wrapper {
+            background: #000;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        /* object-fit: fill allows the "Squish" engine to stretch the video slightly to fill gaps */
+        video {
+            display: block;
+            width: 100%;
+            height: 100%;
+            object-fit: fill; 
+        }
+
+        /* Loading Spinner */
+        .spinner {
+            border: 4px solid rgba(255, 255, 255, 0.1);
+            border-left-color: #ffffff;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            position: absolute;
+            z-index: 10;
+            display: none; /* Hidden by default, toggled by JS */
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        #error-log {
+            position: absolute;
+            top: 0;
+            left: 0;
+            color: red;
+            background: rgba(0,0,0,0.8);
+            padding: 5px;
+            display: none;
+            z-index: 1000;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="error-log"></div>
+    <div id="app-container"></div>
+
+    <script src="/js/api.js"></script>
+    <script>
+        const appContainer = document.getElementById('app-container');
+        const errorLog = document.getElementById('error-log');
+        const players = [];
+        
+        // Logger
+        const logger = {
+            log: (msg) => console.log(`[Cams] ${msg}`),
+            error: (msg) => {
+                console.error(`[Cams] ${msg}`);
+                errorLog.style.display = 'block';
+                errorLog.textContent = msg;
+            }
+        };
+
+        // Layout Constants
+        const TARGET_AR = 1.777; // 16:9
+        // Doubled tolerance to 10%
+        const TOLERANCE = 0.10;  
+        const MIN_AR = TARGET_AR * (1 - TOLERANCE);
+        const MAX_AR = TARGET_AR * (1 + TOLERANCE);
+
+        // --- WebRTC Player Class ---
+        class WebRTCFeed {
+            constructor(container, theaterSlug) {
+                this.container = container;
+                this.slug = theaterSlug;
+                this.pc = null;
+                
+                // Spinner
+                this.spinner = document.createElement('div');
+                this.spinner.className = 'spinner';
+                this.container.appendChild(this.spinner);
+
+                // Video Element
+                this.video = document.createElement('video');
+                this.video.muted = true;
+                this.video.autoplay = true;
+                this.video.playsInline = true;
+                // Hide video until it's actually playing to show black/spinner background
+                this.video.style.opacity = '0'; 
+                this.video.style.transition = 'opacity 0.5s ease';
+                this.container.appendChild(this.video);
+
+                // Event Listeners for UI state
+                this.video.onplaying = () => {
+                    this.spinner.style.display = 'none';
+                    this.video.style.opacity = '1';
+                };
+
+                this.video.onwaiting = () => {
+                    this.spinner.style.display = 'block';
+                };
+                
+                // Auto-reload every 10 mins to prevent freeze (Regularish reloading logic)
+                this.reloadInterval = setInterval(() => {
+                    logger.log(`[${this.slug}] Scheduled reload...`);
+                    this.restart();
+                }, 10 * 60 * 1000);
+            }
+
+            async start() {
+                try {
+                    this.spinner.style.display = 'block';
+                    const whepUrl = `/api/whep/${this.slug}`;
+                    logger.log(`Starting WebRTC for ${this.slug}`);
+
+                    this.pc = new RTCPeerConnection({ iceServers: [] });
+                    
+                    // Connection State Monitoring (Handle dropouts)
+                    this.pc.onconnectionstatechange = () => {
+                        const state = this.pc.connectionState;
+                        logger.log(`[${this.slug}] Connection State: ${state}`);
+                        if (state === 'failed' || state === 'disconnected') {
+                            logger.log(`[${this.slug}] Connection failed. Restarting...`);
+                            this.restart();
+                        }
+                    };
+
+                    this.pc.addTransceiver('video', { direction: 'recvonly' });
+                    
+                    const remoteStream = new MediaStream();
+                    this.video.srcObject = remoteStream;
+
+                    this.pc.ontrack = (ev) => {
+                        ev.streams[0].getTracks().forEach(track => remoteStream.addTrack(track));
+                    };
+
+                    const offer = await this.pc.createOffer();
+                    await this.pc.setLocalDescription(offer);
+                    await this.waitIceComplete();
+
+                    const res = await fetch(whepUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/sdp' },
+                        body: this.pc.localDescription.sdp
+                    });
+
+                    if (!res.ok) throw new Error(`WHEP Error ${res.status}`);
+                    
+                    const answer = await res.text();
+                    await this.pc.setRemoteDescription({ type: 'answer', sdp: answer });
+                    
+                } catch (e) {
+                    logger.error(`Stream Error (${this.slug}): ${e.message}`);
+                    // Retry after 5 seconds if start failed completely
+                    setTimeout(() => this.restart(), 5000);
+                }
+            }
+
+            waitIceComplete() {
+                return new Promise(resolve => {
+                    if (this.pc.iceGatheringState === 'complete') return resolve();
+                    const check = () => {
+                        if (this.pc.iceGatheringState === 'complete') {
+                            this.pc.removeEventListener('icegatheringstatechange', check);
+                            resolve();
+                        }
+                    };
+                    this.pc.addEventListener('icegatheringstatechange', check);
+                    setTimeout(resolve, 1000); // Fallback
+                });
+            }
+
+            restart() {
+                // Visual reset
+                this.video.style.opacity = '0';
+                this.spinner.style.display = 'block';
+                
+                if (this.pc) {
+                    this.pc.close();
+                    this.pc = null;
+                }
+                // Small delay to ensure clean teardown
+                setTimeout(() => this.start(), 500);
+            }
+        }
+
+        // --- Main Logic ---
+        async function init() {
+            try {
+                // 1. Fetch Theaters
+                const data = await api.getTheaters();
+                const allTheaters = data.theaters || [];
+                
+                if (allTheaters.length === 0) return logger.error("No theaters found");
+
+                // 2. Parse URL Params for ?1, ?2 filtering
+                const urlParams = new URLSearchParams(window.location.search);
+                const requestedIndices = [];
+                
+                for (const key of urlParams.keys()) {
+                    // Check if key is a number (e.g. "1" from "?1")
+                    const num = parseInt(key);
+                    if (!isNaN(num) && num > 0) {
+                        requestedIndices.push(num - 1); // Convert 1-based to 0-based
+                    }
+                }
+
+                let targets = [];
+                if (requestedIndices.length > 0) {
+                    // Filter specifically requested theaters
+                    targets = allTheaters.filter((_, index) => requestedIndices.includes(index));
+                    
+                    if (targets.length === 0) {
+                        return logger.error(`Theaters ${requestedIndices.map(i=>i+1).join(', ')} not found.`);
+                    }
+                    logger.log(`Displaying specific theaters: ${targets.map(t => t.name).join(', ')}`);
+                } else {
+                    // Default: First 3
+                    targets = allTheaters.slice(0, 3);
+                    logger.log(`Displaying default multiview (first 3)`);
+                }
+
+                // 3. Initialize Players
+                targets.forEach(t => {
+                    const wrapper = document.createElement('div');
+                    wrapper.className = 'cam-wrapper';
+                    appContainer.appendChild(wrapper);
+
+                    const feed = new WebRTCFeed(wrapper, t.slug);
+                    feed.start();
+
+                    players.push({ wrapper, feed });
+                });
+
+                // 4. Layout Engine
+                window.addEventListener('resize', calculateLayout);
+                calculateLayout();
+
+            } catch (err) {
+                logger.error(`Init Error: ${err.message}`);
+            }
+        }
+
+        function calculateLayout() {
+            if (players.length === 0) return;
+
+            const W = window.innerWidth;
+            const H = window.innerHeight;
+            const count = players.length;
+
+            // Scenario A: Horizontal
+            const hSlotW = W / count;
+            const hValid = getSquishedDimensions(hSlotW, H);
+            const hTotalArea = hValid.area * count;
+
+            // Scenario B: Vertical
+            const vSlotH = H / count;
+            const vValid = getSquishedDimensions(W, vSlotH);
+            const vTotalArea = vValid.area * count;
+
+            // Decision
+            let bestLayout = (hTotalArea >= vTotalArea) ? 'horizontal' : 'vertical';
+            let finalDims = (hTotalArea >= vTotalArea) ? hValid : vValid;
+
+            // Apply
+            appContainer.style.flexDirection = (bestLayout === 'horizontal') ? 'row' : 'column';
+            appContainer.style.width = (bestLayout === 'horizontal') ? '100vw' : `${finalDims.w}px`;
+            appContainer.style.height = (bestLayout === 'vertical') ? '100vh' : `${finalDims.h}px`;
+
+            players.forEach(p => {
+                p.wrapper.style.width = `${finalDims.w}px`;
+                p.wrapper.style.height = `${finalDims.h}px`;
+            });
+        }
+
+        function getSquishedDimensions(slotW, slotH) {
+            const slotAR = slotW / slotH;
+            
+            // If within tolerance, fill completely
+            if (slotAR >= MIN_AR && slotAR <= MAX_AR) {
+                return { w: slotW, h: slotH, area: slotW * slotH };
+            }
+            // Slot too narrow/tall: constrain by Width
+            if (slotAR < MIN_AR) { 
+                const h = slotW / MIN_AR; 
+                return { w: slotW, h: h, area: slotW * h }; 
+            }
+            // Slot too wide/short: constrain by Height
+            if (slotAR > MAX_AR) { 
+                const w = slotH * MAX_AR; 
+                return { w: w, h: slotH, area: w * slotH }; 
+            }
+            return { w: slotW, h: slotH, area: 0 };
+        }
+
+        init();
+    </script>
+</body>
+</html>
