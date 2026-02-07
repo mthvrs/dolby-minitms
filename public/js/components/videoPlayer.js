@@ -5,9 +5,15 @@ class VideoPlayer {
     this.theaterName = theaterName;
     this.pc = null;
     this.video = null;
+    this.reloadTimer = null;
+    // Auto-reload every 10 minutes to prevent stuck feeds
+    this.RELOAD_INTERVAL = 10 * 60 * 1000;
   }
 
   async initialize() {
+    // Clear any existing timer to prevent duplicates or overlap
+    this.stopAutoReload();
+
     this.container.innerHTML = `
       <div class="video-container">
         <video class="video-el" autoplay playsinline muted></video>
@@ -31,8 +37,28 @@ class VideoPlayer {
 
       const loading = this.container.querySelector('.video-loading');
       if (loading) loading.style.display = 'none';
+      
+      // Start the auto-reload timer after successful initialization
+      this.startAutoReload();
+
     } catch (err) {
       console.error('Error initializing WebRTC video player:', err);
+    }
+  }
+
+  startAutoReload() {
+    this.reloadTimer = setInterval(() => {
+      console.log(`[VideoPlayer ${this.theaterName}] Auto-reloading stream to prevent freeze...`);
+      // Re-initialize completely creates a new session
+      this.destroy(false); // Destroy connection but keep the intent to reload
+      this.initialize();
+    }, this.RELOAD_INTERVAL);
+  }
+
+  stopAutoReload() {
+    if (this.reloadTimer) {
+      clearInterval(this.reloadTimer);
+      this.reloadTimer = null;
     }
   }
 
@@ -79,7 +105,11 @@ class VideoPlayer {
     });
   }
 
-  destroy() {
+  destroy(fullCleanup = true) {
+    if (fullCleanup) {
+      this.stopAutoReload();
+    }
+    
     if (this.pc) {
       this.pc.getSenders().forEach((s) => s.track && s.track.stop());
       this.pc.close();

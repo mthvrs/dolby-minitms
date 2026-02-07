@@ -12,6 +12,7 @@ class App {
 
   async initialize() {
     this.setupTheme(); // Initialize theme first
+    this.setupReloadBtn(); // Setup reload button
     this.startClock();
     this.setupModal();
     await this.loadTheaters();
@@ -36,6 +37,15 @@ class App {
       html.setAttribute('data-theme', newTheme);
       localStorage.setItem('theme', newTheme);
     });
+  }
+
+  setupReloadBtn() {
+    const reloadBtn = document.getElementById('reload-btn');
+    if (reloadBtn) {
+      reloadBtn.addEventListener('click', () => {
+        window.location.reload();
+      });
+    }
   }
 
   startClock() {
