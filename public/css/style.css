@@ -38,10 +38,9 @@
     --color-text: #111827;
     --color-text-dim: #6b7280;
     
-    --color-accent: #0078d4;     /* Keep accent distinct */
+    --color-accent: #0078d4;
     --color-accent-hover: #005a9e;
 
-    /* Adjusted for contrast on white */
     --color-success: #059669;    
     --color-warning: #d97706;
     --color-error: #dc2626;
@@ -115,7 +114,6 @@ button {
     background-color: var(--color-button);
 }
 
-/* Toggle icons based on theme */
 [data-theme="dark"] .icon-moon { display: block; }
 [data-theme="dark"] .icon-sun { display: none; }
 [data-theme="light"] .icon-moon { display: none; }
@@ -135,7 +133,7 @@ button {
     gap: 0.5rem;
     border-bottom: 2px solid var(--color-bg);
     transition: background-color 0.3s ease;
-    overflow-x: auto; /* Allow scroll on small screens */
+    overflow-x: auto;
 }
 
 .tab {
@@ -183,7 +181,8 @@ button {
    ========================================= */
 .overview-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    /* Reverted to 3 columns to ensure cards fill the screen width effectively */
+    grid-template-columns: repeat(3, 1fr);
     gap: 1.5rem;
     width: 100%;
 }
@@ -222,6 +221,7 @@ button {
     color: var(--color-text);
 }
 
+/* Playback info */
 .playback-info-container {
     padding: 0.75rem 1rem;
     font-size: 0.85rem;
@@ -264,15 +264,17 @@ button {
    ========================================= */
 .video-player-container { 
     width: 100%; 
-    background: var(--video-bg);
-    flex: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    /* Removed fixed black background to prevent "black box" issues in detail view. */
+    background: transparent;
+    /* Removed flex:1 to prevent forced vertical stretching in detail view. */
+    display: block; 
 }
 
+/* In the card view specifically, we might want the video to sit at the bottom, 
+   but standard flow is usually fine. */
+
 .video-container {
-    background-color: var(--video-bg);
+    background-color: var(--video-bg); /* Only the video box is black */
     position: relative;
     width: 100%;
     aspect-ratio: 16 / 9;
@@ -292,7 +294,7 @@ button {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    color: #fff; /* Always white on black video bg */
+    color: #fff;
     font-size: 0.9rem;
     background: rgba(0,0,0,0.5);
     padding: 0.5rem 1rem;
@@ -304,9 +306,11 @@ button {
    ========================================= */
 .theater-detail {
     display: grid;
+    /* Controls (1fr) | Video Panel (350px) */
     grid-template-columns: 1fr 350px;
     gap: 1.5rem;
-    height: calc(100vh - 180px); /* Fill remaining height roughly */
+    /* Fill height relative to viewport, but don't force stretch if content is small */
+    height: calc(100vh - 140px);
 }
 
 .controls-section { 
@@ -314,7 +318,6 @@ button {
     padding-right: 0.5rem;
 }
 
-/* Scrollbar styling for controls */
 .controls-section::-webkit-scrollbar { width: 8px; }
 .controls-section::-webkit-scrollbar-track { background: transparent; }
 .controls-section::-webkit-scrollbar-thumb { background: var(--color-button); border-radius: 4px; }
@@ -325,8 +328,9 @@ button {
     padding: 1.5rem;
     border-radius: 8px;
     box-shadow: var(--shadow-sm);
-    display: flex;
-    flex-direction: column;
+    /* Removed flex: column to stop video container from stretching vertically */
+    display: block; 
+    height: fit-content; /* Only take necessary height */
 }
 
 .panel-title {
@@ -389,15 +393,12 @@ button {
 
 .macro-btn:active { transform: translateY(0); }
 
-/* Status Classes */
 .macro-btn.emergency { 
     background-color: var(--color-emergency); 
     color: white; 
     border-color: var(--color-emergency);
 }
-.macro-btn.emergency:hover { 
-    background-color: var(--color-emergency-hover); 
-}
+.macro-btn.emergency:hover { background-color: var(--color-emergency-hover); }
 
 .macro-btn.executing { 
     background-color: var(--color-warning); 
@@ -500,11 +501,12 @@ button {
     font-style: italic;
 }
 
+/* Responsive Grid Logic */
+@media (max-width: 1200px) {
+    .overview-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
 @media (max-width: 1100px) {
-    .overview-grid { 
-        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); 
-    }
-    
     .theater-detail {
         grid-template-columns: 1fr;
         height: auto;
@@ -513,10 +515,13 @@ button {
     .right-panel {
         order: -1; /* Video on top */
         margin-bottom: 1.5rem;
+        width: 100%;
     }
 }
 
 @media (max-width: 600px) {
+    .overview-grid { grid-template-columns: 1fr; }
+
     .header {
         padding: 0.75rem 1rem;
     }
