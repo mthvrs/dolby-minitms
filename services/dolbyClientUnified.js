@@ -50,8 +50,8 @@ class DolbyClientUnified {
         return null;
     }
 
-    destroy() {
-        this.sessionManager.destroy();
+    async destroy() {
+        await this.sessionManager.destroy();
     }
 }
 

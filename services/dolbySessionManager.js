@@ -10,6 +10,7 @@ class DolbySessionManager {
     this.sessionId = null; // Stores PHPSESSID
     this.cookies = {}; // Manual cookie storage
     this.checkInterval = null; // For keep-alive polling
+    this.detectedType = null; // Stores 'IMS3000' or 'DCP2000' after successful login
 
     this.session = axios.create({
       baseURL: theaterConfig.url,
@@ -127,6 +128,45 @@ class DolbySessionManager {
     }
   }
 
+  async logout() {
+    if (!this.sessionId) return;
+
+    const type = (this.detectedType || this.config.type || '').toUpperCase();
+    let logoutUrl = '/web/logout/'; // Default IMS3000
+    let referer = `${this.config.url}/web/index.php`;
+
+    if (type === 'DCP2000') {
+      logoutUrl = '/web/logout/index.php';
+      referer = `${this.config.url}/web/overview/`;
+    } else if (type === 'IMS3000') {
+      logoutUrl = '/web/logout/';
+      referer = `${this.config.url}/web/index.php`;
+    }
+
+    this.logger.info(`Logging out previous session (Type: ${type || 'Unknown'})...`);
+
+    try {
+      await this.session.get(logoutUrl, {
+        headers: {
+          'Cookie': this.getCookieHeader(),
+          'Referer': referer,
+          'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8',
+          'Upgrade-Insecure-Requests': '1',
+          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36'
+        }
+      });
+      this.logger.debug('Logout request completed');
+    } catch (err) {
+      // We log but don't throw, as we want to proceed with clearing local state and re-login
+      this.logger.warn(`Logout request failed (network or already expired): ${err.message}`);
+    } finally {
+      this.sessionId = null;
+      this.cookies = {};
+      this.isLoggedIn = false;
+      this.detectedType = null;
+    }
+  }
+
   async attemptIMS3000Login() {
     const loginUrl = '/web/login.php';
     const formData =
@@ -151,6 +191,7 @@ class DolbySessionManager {
 
     if ((res.status === 302 || res.status === 301) && (res.headers.location || '').includes('index.php')) {
       this.logger.info('IMS3000 login success (Redirect)');
+      this.detectedType = 'IMS3000';
       return true;
     }
 
@@ -169,6 +210,7 @@ class DolbySessionManager {
       const pBody = typeof probe.data === 'string' ? probe.data : '';
       if (probe.status === 200 && !this.isLoginPage(pBody)) {
         this.logger.info('IMS3000 login confirmed (Index probe)');
+        this.detectedType = 'IMS3000';
         return true;
       }
       this.logger.error('IMS3000 login probe failed');
@@ -203,11 +245,13 @@ class DolbySessionManager {
 
     if ((res.status === 302 || res.status === 301) && !String(res.headers.location || '').includes('login')) {
       this.logger.info('DCP2000 login success (Redirect)');
+      this.detectedType = 'DCP2000';
       return true;
     }
 
     if (res.status === 200 && !this.isLoginPage(body)) {
       this.logger.info('DCP2000 login success (Index content)');
+      this.detectedType = 'DCP2000';
       return true;
     }
 
@@ -230,6 +274,11 @@ class DolbySessionManager {
             return true;
         }
         this.logger.info('Session marked active but SystemStatus check failed. Re-logging in...');
+    }
+
+    // Explicitly logout if we have a session ID, to clear it on the server
+    if (this.sessionId) {
+      await this.logout();
     }
 
     try {
@@ -332,12 +381,16 @@ class DolbySessionManager {
     }
   }
 
-  destroy() {
+  async destroy() {
     this.stopPolling();
+    if (this.sessionId) {
+      await this.logout();
+    }
     this.logger.info('Session destroyed');
     this.isLoggedIn = false;
     this.sessionId = null;
     this.cookies = {};
+    this.detectedType = null;
   }
 }
 
