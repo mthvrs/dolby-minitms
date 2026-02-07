@@ -59,11 +59,18 @@ class MacroPanel {
         const macroName = btn.dataset.macroName;
         const displayName = btn.dataset.displayName;
         
-        app.showConfirmation(displayName, async (confirmed) => {
-            if (confirmed) {
-                await this.executeMacro(btn, macroName, displayName);
-            }
-        });
+        // Check lock mode for execution strategy
+        if (app.lockMode === 'instant') {
+            // No confirmation needed (Pulsating Orange Mode)
+            this.executeMacro(btn, macroName, displayName);
+        } else {
+            // Confirmation needed (Green Mode - default)
+            app.showConfirmation(displayName, async (confirmed) => {
+                if (confirmed) {
+                    await this.executeMacro(btn, macroName, displayName);
+                }
+            });
+        }
     }
 
     async executeMacro(btn, macroName, displayName) {

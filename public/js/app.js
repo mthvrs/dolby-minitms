@@ -8,22 +8,26 @@ class App {
     this.theaterCards = [];
     this.theaterPanels = {};
     this.confirmCallback = null;
+    
+    // Lock States: 'confirm' (Green/Safe) | 'instant' (Orange/Unsafe)
+    this.lockModes = ['confirm', 'instant'];
+    this.lockMode = 'confirm'; // Default behavior: unlocked with ask
+    this.lockTimeout = null;
   }
 
   async initialize() {
     this.setupTheme(); // Initialize theme first
     this.setupReloadBtn(); // Setup reload button
+    this.setupLockBtn(); // Setup lock button
     this.startClock();
     this.setupModal();
     await this.loadTheaters();
   }
 
-  // New method to handle Light/Dark mode
   setupTheme() {
     const toggleBtn = document.getElementById('theme-toggle');
     const html = document.documentElement;
     
-    // Check local storage or system preference
     const savedTheme = localStorage.getItem('theme');
     const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
     
@@ -45,6 +49,68 @@ class App {
       reloadBtn.addEventListener('click', () => {
         window.location.reload();
       });
+    }
+  }
+
+  setupLockBtn() {
+    const lockBtn = document.getElementById('lock-btn');
+    if (lockBtn) {
+        lockBtn.addEventListener('click', () => {
+            this.cycleLockMode();
+        });
+        this.updateLockInterface();
+    }
+  }
+
+  cycleLockMode() {
+    const currentIndex = this.lockModes.indexOf(this.lockMode);
+    const nextIndex = (currentIndex + 1) % this.lockModes.length;
+    this.setLockMode(this.lockModes[nextIndex]);
+  }
+
+  setLockMode(mode) {
+    this.lockMode = mode;
+    
+    // Clear any existing reversion timer
+    if (this.lockTimeout) {
+        clearTimeout(this.lockTimeout);
+        this.lockTimeout = null;
+    }
+
+    // If entering 'instant' (Orange) mode, set timer to revert in 3 minutes
+    if (this.lockMode === 'instant') {
+        this.lockTimeout = setTimeout(() => {
+            this.setLockMode('confirm');
+        }, 3 * 60 * 1000); // 3 minutes
+    }
+    
+    this.updateLockInterface();
+  }
+
+  updateLockInterface() {
+    const lockBtn = document.getElementById('lock-btn');
+    const html = document.documentElement;
+    
+    // Set global attribute for CSS styling
+    html.setAttribute('data-lock-mode', this.lockMode);
+
+    // Update button visual state
+    lockBtn.className = 'theme-btn lock-btn'; 
+    lockBtn.classList.add(this.lockMode);
+
+    // Icons
+    // Closed Lock (used for Green/Confirm mode)
+    const iconClosed = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>`;
+    
+    // Open Lock (used for Orange/Instant mode)
+    const iconOpen = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 9.9-1"></path></svg>`;
+
+    if (this.lockMode === 'confirm') {
+        lockBtn.innerHTML = iconClosed;
+        lockBtn.title = "Sécurisé : Confirmation requise";
+    } else if (this.lockMode === 'instant') {
+        lockBtn.innerHTML = iconOpen;
+        lockBtn.title = "Attention : Exécution immédiate (Auto-reverrouillage dans 3m)";
     }
   }
 
@@ -165,6 +231,11 @@ class App {
   }
 
   switchTab(tabName) {
+    // Safety check: When switching tabs, revert to safe mode if currently in instant mode
+    if (this.lockMode === 'instant') {
+        this.setLockMode('confirm');
+    }
+
     document.querySelectorAll('.tab').forEach((t) => {
       if (t.dataset.tab === tabName) t.classList.add('active');
       else t.classList.remove('active');

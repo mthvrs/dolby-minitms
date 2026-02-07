@@ -114,6 +114,26 @@ button {
     background-color: var(--color-button);
 }
 
+/* LOCK BUTTON STYLES */
+.lock-btn {
+    transition: all 0.3s ease;
+}
+
+.lock-btn.confirm {
+    color: var(--color-success);
+}
+
+.lock-btn.instant {
+    color: var(--color-warning);
+    animation: pulse-orange 1.5s infinite;
+}
+
+@keyframes pulse-orange {
+    0% { transform: scale(1); filter: drop-shadow(0 0 0 rgba(245, 158, 11, 0)); }
+    50% { transform: scale(1.15); filter: drop-shadow(0 0 8px rgba(245, 158, 11, 0.6)); }
+    100% { transform: scale(1); filter: drop-shadow(0 0 0 rgba(245, 158, 11, 0)); }
+}
+
 [data-theme="dark"] .icon-moon { display: block; }
 [data-theme="dark"] .icon-sun { display: none; }
 [data-theme="light"] .icon-moon { display: none; }
@@ -382,6 +402,7 @@ button {
     align-items: center;
     justify-content: center;
     min-height: 60px;
+    position: relative;
 }
 
 .macro-btn:hover {
@@ -392,6 +413,11 @@ button {
 }
 
 .macro-btn:active { transform: translateY(0); }
+
+/* WARNING BORDER IN INSTANT MODE */
+[data-lock-mode="instant"] .macro-btn {
+    border-color: var(--color-warning);
+}
 
 .macro-btn.emergency { 
     background-color: var(--color-emergency); 
