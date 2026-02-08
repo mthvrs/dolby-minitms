@@ -14,13 +14,13 @@ class TheaterCard {
     const card = document.createElement('div');
     card.className = 'theater-card';
 
-    // Added playback-info-container between title and video
+    // Removed style="display: none;" from playback-info-container
     card.innerHTML = `
       <div class="theater-info">
         <h2>${this.theaterName}</h2>
       </div>
       
-      <div class="playback-info-container" style="display: none;">
+      <div class="playback-info-container">
          <div class="spl-title">--</div>
          <div class="playback-progress-track">
              <div class="playback-progress-fill" style="width: 0%;"></div>
@@ -68,17 +68,15 @@ class TheaterCard {
   async updatePlayback() {
       if (this.isDestroyed) return;
       try {
-          // Uses the new method in your API class
           const status = await api.getTheaterPlayback(this.theaterData.slug);
           
-          if (!status || !status.playing) {
-              this.ui.container.style.display = 'none';
+          if (!status) {
+              this.ui.title.textContent = "Offline";
               return;
           }
 
-          // Update UI
-          this.ui.container.style.display = 'block';
-          this.ui.title.textContent = status.splTitle;
+          // Always update UI regardless of playing state
+          this.ui.title.textContent = status.splTitle || (status.state === 'Stopped' ? 'Stopped' : status.state);
           this.ui.fill.style.width = `${status.percent}%`;
           this.ui.current.textContent = this.formatTime(status.position);
           this.ui.total.textContent = this.formatTime(status.duration);
@@ -89,7 +87,6 @@ class TheaterCard {
   }
 
   startPolling() {
-      // Poll every 2 seconds
       this.updatePlayback();
       this.pollInterval = setInterval(() => this.updatePlayback(), 2000);
   }

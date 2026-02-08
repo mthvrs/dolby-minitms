@@ -16,7 +16,7 @@ class DolbySessionManager {
       baseURL: theaterConfig.url,
       timeout: config.TIMEOUTS.http,
       withCredentials: false,
-      maxRedirects: 0,
+      maxRedirects: 0, // We handle redirects manually to capture cookies at each step
       validateStatus: () => true,
     });
 
@@ -64,6 +64,7 @@ class DolbySessionManager {
   async checkSystemStatus() {
     if (!this.sessionId) return false;
 
+    // Use the session ID in the XML if possible, though random UUID usually works for the request ID
     const soapBody = `<?xml version="1.0" encoding="UTF-8"?>
       <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:v1="http://www.doremilabs.com/dc/dcp/json/v1_0">
           <soapenv:Header/>
@@ -81,7 +82,8 @@ class DolbySessionManager {
           'Content-Type': 'text/xml',
           'Accept': '*/*',
           'X-Requested-With': 'XMLHttpRequest',
-          'Cookie': this.getCookieHeader()
+          'Cookie': this.getCookieHeader(),
+          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36'
         }
       });
 
@@ -93,7 +95,7 @@ class DolbySessionManager {
         return true;
       }
       
-      this.logger.debug(`System status check returned ${res.status} (likely session invalid)`);
+      this.logger.debug(`System status check returned ${res.status} (likely session invalid). Response: ${typeof res.data === 'string' ? this.logger.truncate(res.data, 50) : 'JSON'}`);
       return false;
     } catch (err) {
       this.logger.warn(`System status check error: ${err.message}`);
@@ -124,7 +126,7 @@ class DolbySessionManager {
       this.isLoggedIn = false;
       await this.login();
     } else {
-        this.logger.debug('Health check passed');
+        // this.logger.debug('Health check passed');
     }
   }
 
@@ -157,7 +159,6 @@ class DolbySessionManager {
       });
       this.logger.debug('Logout request completed');
     } catch (err) {
-      // We log but don't throw, as we want to proceed with clearing local state and re-login
       this.logger.warn(`Logout request failed (network or already expired): ${err.message}`);
     } finally {
       this.sessionId = null;
@@ -181,8 +182,8 @@ class DolbySessionManager {
         'Content-Type': 'application/x-www-form-urlencoded',
         'Origin': this.config.url,
         'Referer': `${this.config.url}/web/login.php`,
-        'Accept': 'text/html, */*; q=0.01',
-        'User-Agent': 'Mozilla/5.0',
+        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36',
       },
     });
 
@@ -190,7 +191,25 @@ class DolbySessionManager {
     const body = typeof res.data === 'string' ? res.data : '';
 
     if ((res.status === 302 || res.status === 301) && (res.headers.location || '').includes('index.php')) {
-      this.logger.info('IMS3000 login success (Redirect)');
+      this.logger.info('IMS3000 login credentials accepted (Redirect)');
+      
+      // CRITICAL: Follow the redirect to finalize session (Session Fixation/Rotation)
+      try {
+          const redirectUrl = res.headers.location;
+          // Handle relative redirect if necessary (though axios baseURL usually handles it if it's just a path)
+          this.logger.debug(`Following login redirect to: ${redirectUrl}`);
+          const followRes = await this.session.get(redirectUrl, {
+              headers: {
+                  'Cookie': this.getCookieHeader(),
+                  'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+                  'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36'
+              }
+          });
+          this.parseCookies(followRes.headers['set-cookie']);
+      } catch (e) {
+          this.logger.warn(`Failed to follow redirect, continuing anyway: ${e.message}`);
+      }
+
       this.detectedType = 'IMS3000';
       return true;
     }
@@ -201,6 +220,7 @@ class DolbySessionManager {
     }
 
     if (res.status === 200) {
+      // Fallback: Try hitting index.php anyway
       const probe = await this.session.get('/web/index.php', {
         headers: {
           Cookie: this.getCookieHeader()
@@ -235,8 +255,8 @@ class DolbySessionManager {
         'Content-Type': 'application/x-www-form-urlencoded',
         'Origin': this.config.url,
         'Referer': `${this.config.url}/web/index.php`,
-        'Accept': 'text/html, */*; q=0.01',
-        'User-Agent': 'Mozilla/5.0',
+        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36',
       },
     });
 
@@ -244,7 +264,24 @@ class DolbySessionManager {
     const body = typeof res.data === 'string' ? res.data : '';
 
     if ((res.status === 302 || res.status === 301) && !String(res.headers.location || '').includes('login')) {
-      this.logger.info('DCP2000 login success (Redirect)');
+      this.logger.info('DCP2000 login credentials accepted (Redirect)');
+      
+      // CRITICAL: Follow the redirect to finalize session
+      try {
+          const redirectUrl = res.headers.location;
+          this.logger.debug(`Following login redirect to: ${redirectUrl}`);
+          const followRes = await this.session.get(redirectUrl, {
+              headers: {
+                  'Cookie': this.getCookieHeader(),
+                  'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+                  'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36'
+              }
+          });
+          this.parseCookies(followRes.headers['set-cookie']);
+      } catch (e) {
+          this.logger.warn(`Failed to follow redirect: ${e.message}`);
+      }
+      
       this.detectedType = 'DCP2000';
       return true;
     }
@@ -343,7 +380,8 @@ class DolbySessionManager {
 
     const defaultHeaders = {
       'X-Requested-With': 'XMLHttpRequest',
-      ...headers,
+      'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36',
+      ...headers, // passed headers override defaults
     };
 
     const cookieHeader = this.getCookieHeader();

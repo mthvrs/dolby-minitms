@@ -43,7 +43,6 @@ class DolbyClientUnified {
     }
 
     async getPlaybackStatus() {
-        // Fallback for clients (like DCP2000) that don't implement this yet
         if (this.client.getPlaybackStatus) {
             return await this.client.getPlaybackStatus();
         }

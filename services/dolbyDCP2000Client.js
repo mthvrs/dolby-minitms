@@ -8,7 +8,6 @@ class DolbyDCP2000Client {
         this.logger = logger;
     }
 
-    // ... (parseControlViewHTML method remains unchanged) ...
     parseControlViewHTML(html) {
         const $ = cheerio.load(html);
         const groups = [];
@@ -118,25 +117,14 @@ class DolbyDCP2000Client {
         }
     }
 
-    /**
-     * Helper to safely parse JSON that might contain BOM or weird whitespace
-     */
     safeJSONParse(str) {
         if (typeof str !== 'string') return str; 
-
         try {
             return JSON.parse(str);
         } catch (e) {
-            if (str.charCodeAt(0) === 0xFEFF) {
-                str = str.slice(1);
-            }
+            if (str.charCodeAt(0) === 0xFEFF) str = str.slice(1);
             str = str.trim();
-            try {
-                return JSON.parse(str);
-            } catch (e2) {
-                this.logger.error(`[DCP2000] JSON Parse Failed. content="${str.substring(0, 100)}..." error=${e2.message}`);
-                return null;
-            }
+            try { return JSON.parse(str); } catch (e2) { return null; }
         }
     }
 
@@ -146,10 +134,10 @@ class DolbyDCP2000Client {
             await this.session.ensureLoggedIn();
             
             const uuid = this.session.generateUUID();
-            const endpoint = '/dc/dcp/json/v1/SystemOverview';
+            // Switched to ShowControl per your curl findings
+            const endpoint = '/dc/dcp/json/v1/ShowControl';
             
-            // STRICT SOAP BODY matching CURL (no prolog)
-            const soapBody = `<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:v1="http://www.doremilabs.com/dc/dcp/json/v1_0"><soapenv:Header/><soapenv:Body><v1:GetSystemOverview><sessionId>${uuid}</sessionId></v1:GetSystemOverview></soapenv:Body></soapenv:Envelope>`;
+            const soapBody = `<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:v1="http://www.doremilabs.com/dc/dcp/json/v1_0"><soapenv:Header/><soapenv:Body><v1:GetShowStatus><sessionId>${uuid}</sessionId></v1:GetShowStatus></soapenv:Body></soapenv:Envelope>`;
 
             const headers = {
                 'Content-Type': 'text/xml',
@@ -157,42 +145,36 @@ class DolbyDCP2000Client {
                 'Accept-Language': 'en-US,en;q=0.9,fr;q=0.8',
                 'X-Requested-With': 'XMLHttpRequest',
                 'Origin': this.session.config.url,
-                'Referer': `${this.session.config.url}/web/index.php`
+                'Referer': `${this.session.config.url}/web/sys_control/cinelister/playback.php`
             };
 
-            // this.logger.debug(`${logPrefix} Fetching playback...`);
-
             const res = await this.session.request('POST', endpoint, soapBody, headers);
-
             let json = res.data;
 
             if (typeof json === 'string') {
-                // this.logger.debug(`${logPrefix} Received STRING response.`);
                 json = this.safeJSONParse(json);
             }
 
-            if (res.status === 200 && json && json.GetSystemOverviewResponse && json.GetSystemOverviewResponse.playback) {
-                const s = json.GetSystemOverviewResponse.playback;
+            // Parse GetShowStatusResponse
+            if (res.status === 200 && json && json.GetShowStatusResponse && json.GetShowStatusResponse.showStatus) {
+                const s = json.GetShowStatusResponse.showStatus;
                 
-                // this.logger.info(`${logPrefix} SUCCESS! Playback data found.`);
-
                 const duration = parseInt(s.splDuration || 0, 10);
                 const position = parseInt(s.splPosition || 0, 10);
                 const percent = duration > 0 ? (position / duration) * 100 : 0;
+                const isPlaying = s.stateInfo === 'Play';
 
                 return {
-                    playing: s.stateInfo === 'Play',
-                    state: s.stateInfo,
+                    playing: isPlaying,
+                    state: s.stateInfo || 'Stopped',
                     splTitle: s.splTitle || 'No Show',
                     cplTitle: s.cplTitle || '',
                     duration: duration,
                     position: position,
                     percent: Math.min(100, Math.max(0, percent))
                 };
-            } else {
-                 this.logger.warn(`${logPrefix} Invalid JSON structure. Keys: ${json ? Object.keys(json) : 'null'}`);
             }
-
+            
             return { playing: false, state: 'Stopped', splTitle: '', percent: 0, position: 0, duration: 0 };
         } catch (err) {
             this.logger.error(`${logPrefix} EXCEPTION: ${err.message}`);
