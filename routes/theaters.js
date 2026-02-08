@@ -87,25 +87,6 @@ router.post('/api/theaters/:id/connect', async (req, res) => {
   }
 });
 
-// NEW: Get Playback Status
-router.get('/api/theaters/:id/playback', async (req, res) => {
-  const name = resolveName(req.params.id);
-  if (!name) return res.status(404).json({ error: 'Theater not found' });
-  
-  const client = clients[name];
-  
-  try {
-      const status = await client.getPlaybackStatus();
-      if (status) {
-          res.json(status);
-      } else {
-          res.json({ playing: false, state: 'Offline/Unsupported' });
-      }
-  } catch (error) {
-      res.status(500).json({ error: error.message });
-  }
-});
-
 // Disconnect
 router.post('/api/theaters/:id/disconnect', async (req, res) => {
   const name = resolveName(req.params.id);

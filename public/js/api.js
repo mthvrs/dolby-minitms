@@ -56,12 +56,6 @@ class API {
     });
   }
 
-  // NEW: Playback
-  async getTheaterPlayback(nameOrSlug) {
-    const id = API.slugifyName(nameOrSlug);
-    return this.request(`/api/theaters/${encodeURIComponent(id)}/playback`);
-  }
-
   // Macros
   async getMacros(theaterNameOrSlug) {
     const id = API.slugifyName(theaterNameOrSlug);

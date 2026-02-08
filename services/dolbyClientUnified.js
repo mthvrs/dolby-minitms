@@ -42,13 +42,6 @@ class DolbyClientUnified {
         return await this.client.executeMacro(macroName);
     }
 
-    async getPlaybackStatus() {
-        if (this.client.getPlaybackStatus) {
-            return await this.client.getPlaybackStatus();
-        }
-        return null;
-    }
-
     async destroy() {
         await this.sessionManager.destroy();
     }

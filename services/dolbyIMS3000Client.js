@@ -150,60 +150,6 @@ class DolbyIMS3000Client {
             return false;
         }
     }
-
-    safeJSONParse(str) {
-        if (typeof str !== 'string') return str;
-        try {
-            return JSON.parse(str);
-        } catch (e) {
-            if (str.charCodeAt(0) === 0xFEFF) str = str.slice(1);
-            str = str.trim();
-            try { return JSON.parse(str); } catch (e2) { return null; }
-        }
-    }
-
-async getPlaybackStatus() {
-        try {
-            await this.session.ensureLoggedIn();
-            
-            // USING ShowControl to match user's CURL
-            const endpoint = '/dc/dcp/json/v1/ShowControl';
-            const uuid = this.session.generateUUID();
-            
-            const soapBody = `<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:v1="http://www.doremilabs.com/dc/dcp/json/v1_0"><soapenv:Header/><soapenv:Body><v1:GetShowStatus><sessionId>${uuid}</sessionId></v1:GetShowStatus></soapenv:Body></soapenv:Envelope>`;
-
-            const headers = {
-                'Content-Type': 'text/xml',
-                'Referer': `${this.session.config.url}/web/sys_control/cinelister/playback.php`,
-                'Accept': '*/*'
-            };
-
-            const res = await this.session.request('POST', endpoint, soapBody, headers);
-            let json = this.safeJSONParse(res.data);
-
-            if (res.status === 200 && json && json.GetShowStatusResponse && json.GetShowStatusResponse.showStatus) {
-                const s = json.GetShowStatusResponse.showStatus;
-                
-                const duration = parseInt(s.splDuration || 0, 10);
-                const position = parseInt(s.splPosition || 0, 10);
-                const percent = duration > 0 ? (position / duration) * 100 : 0;
-
-                return {
-                    playing: s.stateInfo === 'Play',
-                    state: s.stateInfo || 'Stopped', 
-                    splTitle: s.splTitle || 'No Show',
-                    cplTitle: s.cplTitle || '',
-                    duration: duration,
-                    position: position,
-                    percent: Math.min(100, Math.max(0, percent))
-                };
-            }
-            return { playing: false, state: 'Stopped', splTitle: '', percent: 0, position: 0, duration: 0 };
-        } catch (err) {
-            this.logger.error(`[IMS3000] Playback status error: ${err.message}`);
-            return null; 
-        }
-    }
 }
 
 module.exports = DolbyIMS3000Client;

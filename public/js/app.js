@@ -8,9 +8,6 @@ class App {
     this.theaterCards = [];
     this.theaterPanels = {};
     this.confirmCallback = null;
-    
-    // Playback manager for the active detail tab
-    this.currentDetailPoller = null;
 
     // Lock States: 'confirm' (Green/Safe) | 'instant' (Orange/Unsafe)
     this.lockModes = ['confirm', 'instant'];
@@ -206,16 +203,6 @@ class App {
           <div class="right-panel">
             <h3 class="panel-title">Vue en direct</h3>
             
-            <div class="playback-info-container" id="playback-${safeId}" style="display: none; margin-bottom: 1rem;">
-                 <div class="spl-title">--</div>
-                 <div class="playback-progress-track">
-                     <div class="playback-progress-fill" style="width: 0%;"></div>
-                 </div>
-                 <div class="playback-times">
-                     <span class="time-current">00:00:00</span> / <span class="time-total">00:00:00</span>
-                 </div>
-            </div>
-
             <div class="video-player-container" id="video-${safeId}"></div>
           </div>
         </div>
@@ -250,12 +237,6 @@ class App {
         this.setLockMode('confirm');
     }
 
-    // Stop current detail poller if it exists
-    if (this.currentDetailPoller) {
-        this.currentDetailPoller.stop();
-        this.currentDetailPoller = null;
-    }
-
     document.querySelectorAll('.tab').forEach((t) => {
       if (t.dataset.tab === tabName) t.classList.add('active');
       else t.classList.remove('active');
@@ -267,22 +248,6 @@ class App {
     });
 
     this.currentTab = tabName;
-
-    // Start polling if we are on a specific theater tab
-    if (tabName !== 'overview') {
-        // Find the original name from our theaters list
-        const theaterEntry = Object.entries(this.theaters).find(([name]) => 
-            String(name).toLowerCase().replace(/\s+/g, '-') === tabName
-        );
-        
-        if (theaterEntry) {
-            const [realName, data] = theaterEntry;
-            const playbackContainerId = `playback-${tabName}`;
-            
-            this.currentDetailPoller = new DetailPlaybackManager(playbackContainerId, realName);
-            this.currentDetailPoller.start();
-        }
-    }
   }
 
   switchToTheater(theaterName) {
@@ -333,69 +298,6 @@ class App {
     modal.classList.add('hidden');
     this.confirmCallback = null;
   }
-}
-
-/**
- * Helper class to manage playback status on the individual theater view
- */
-class DetailPlaybackManager {
-    constructor(containerId, theaterName) {
-        this.container = document.getElementById(containerId);
-        this.theaterName = theaterName;
-        this.interval = null;
-        this.slug = theaterName.toLowerCase().replace(/\s+/g, '-'); // approximated slug for api call
-        
-        if (this.container) {
-            this.ui = {
-                title: this.container.querySelector('.spl-title'),
-                fill: this.container.querySelector('.playback-progress-fill'),
-                current: this.container.querySelector('.time-current'),
-                total: this.container.querySelector('.time-total')
-            };
-        }
-    }
-
-    start() {
-        if (!this.container) return;
-        this.update();
-        this.interval = setInterval(() => this.update(), 2000);
-    }
-
-    stop() {
-        if (this.interval) {
-            clearInterval(this.interval);
-            this.interval = null;
-        }
-    }
-
-    formatTime(seconds) {
-        if (!seconds && seconds !== 0) return '--:--:--';
-        const h = Math.floor(seconds / 3600).toString().padStart(2, '0');
-        const m = Math.floor((seconds % 3600) / 60).toString().padStart(2, '0');
-        const s = Math.floor(seconds % 60).toString().padStart(2, '0');
-        return `${h}:${m}:${s}`;
-    }
-
-    async update() {
-        try {
-            // Reusing the same API as TheaterCard
-            const status = await api.getTheaterPlayback(this.slug);
-            
-            if (!status || !status.playing) {
-                this.container.style.display = 'none';
-                return;
-            }
-
-            this.container.style.display = 'block';
-            if (this.ui.title) this.ui.title.textContent = status.splTitle;
-            if (this.ui.fill) this.ui.fill.style.width = `${status.percent}%`;
-            if (this.ui.current) this.ui.current.textContent = this.formatTime(status.position);
-            if (this.ui.total) this.ui.total.textContent = this.formatTime(status.duration);
-
-        } catch (err) {
-            console.warn('Playback poll error', err);
-        }
-    }
 }
 
 // Initialize app
