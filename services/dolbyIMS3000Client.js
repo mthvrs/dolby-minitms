@@ -157,23 +157,23 @@ class DolbyIMS3000Client {
             
             const uuid = this.session.generateUUID();
             
-            // Note: The IMS uses a SOAP envelope but returns JSON data
+            // Updated to use SystemOverview which provides consistent playback details
             const soapBody = `<?xml version="1.0" encoding="UTF-8"?>
                 <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:v1="http://www.doremilabs.com/dc/dcp/json/v1_0">
                     <soapenv:Header/>
                     <soapenv:Body>
-                        <v1:GetShowStatus>
+                        <v1:GetSystemOverview>
                             <sessionId>${uuid}</sessionId>
-                        </v1:GetShowStatus>
+                        </v1:GetSystemOverview>
                     </soapenv:Body>
                 </soapenv:Envelope>`;
 
-            const res = await this.session.request('POST', '/dc/dcp/json/v1/ShowControl', soapBody, {
+            const res = await this.session.request('POST', '/dc/dcp/json/v1/SystemOverview', soapBody, {
                 'Content-Type': 'text/xml',
                 'Accept': '*/*',
                 'X-Requested-With': 'XMLHttpRequest',
                 'Origin': this.session.config.url,
-                'Referer': `${this.session.config.url}/web/index.php?page=sys_control/cinelister/playback.php`
+                'Referer': `${this.session.config.url}/web/index.php`
             });
 
             // Handle case where axios didn't auto-parse JSON because header was text/xml
@@ -182,8 +182,8 @@ class DolbyIMS3000Client {
                 try { json = JSON.parse(json); } catch (e) { /* ignore */ }
             }
 
-            if (res.status === 200 && json && json.GetShowStatusResponse && json.GetShowStatusResponse.showStatus) {
-                const s = json.GetShowStatusResponse.showStatus;
+            if (res.status === 200 && json && json.GetSystemOverviewResponse && json.GetSystemOverviewResponse.playback) {
+                const s = json.GetSystemOverviewResponse.playback;
                 
                 const duration = parseInt(s.splDuration || 0, 10);
                 const position = parseInt(s.splPosition || 0, 10);

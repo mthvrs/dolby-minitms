@@ -116,6 +116,60 @@ class DolbyDCP2000Client {
             return false;
         }
     }
+
+    async getPlaybackStatus() {
+        try {
+            await this.session.ensureLoggedIn();
+            
+            const uuid = this.session.generateUUID();
+            
+            const soapBody = `<?xml version="1.0" encoding="UTF-8"?>
+                <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:v1="http://www.doremilabs.com/dc/dcp/json/v1_0">
+                    <soapenv:Header/>
+                    <soapenv:Body>
+                        <v1:GetSystemOverview>
+                            <sessionId>${uuid}</sessionId>
+                        </v1:GetSystemOverview>
+                    </soapenv:Body>
+                </soapenv:Envelope>`;
+
+            const res = await this.session.request('POST', '/dc/dcp/json/v1/SystemOverview', soapBody, {
+                'Content-Type': 'text/xml',
+                'Accept': '*/*',
+                'X-Requested-With': 'XMLHttpRequest',
+                'Origin': this.session.config.url,
+                'Referer': `${this.session.config.url}/web/index.php`
+            });
+
+            let json = res.data;
+            if (typeof json === 'string') {
+                try { json = JSON.parse(json); } catch (e) { /* ignore */ }
+            }
+
+            if (res.status === 200 && json && json.GetSystemOverviewResponse && json.GetSystemOverviewResponse.playback) {
+                const s = json.GetSystemOverviewResponse.playback;
+                
+                const duration = parseInt(s.splDuration || 0, 10);
+                const position = parseInt(s.splPosition || 0, 10);
+                const percent = duration > 0 ? (position / duration) * 100 : 0;
+
+                return {
+                    playing: s.stateInfo === 'Play',
+                    state: s.stateInfo,
+                    splTitle: s.splTitle || 'No Show',
+                    cplTitle: s.cplTitle || '',
+                    duration: duration,
+                    position: position,
+                    percent: Math.min(100, Math.max(0, percent))
+                };
+            }
+
+            return { playing: false, state: 'Stopped', splTitle: '', percent: 0, position: 0, duration: 0 };
+        } catch (err) {
+            // Silence common polling errors
+            return null; 
+        }
+    }
 }
 
 module.exports = DolbyDCP2000Client;
