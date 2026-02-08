@@ -162,32 +162,24 @@ class DolbyIMS3000Client {
         }
     }
 
-    async getPlaybackStatus() {
-        const logPrefix = `[IMS3000][${this.name}]`;
+async getPlaybackStatus() {
         try {
             await this.session.ensureLoggedIn();
             
-            const uuid = this.session.generateUUID();
-            // Switched to ShowControl per your curl findings
+            // USING ShowControl to match user's CURL
             const endpoint = '/dc/dcp/json/v1/ShowControl';
+            const uuid = this.session.generateUUID();
             
             const soapBody = `<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:v1="http://www.doremilabs.com/dc/dcp/json/v1_0"><soapenv:Header/><soapenv:Body><v1:GetShowStatus><sessionId>${uuid}</sessionId></v1:GetShowStatus></soapenv:Body></soapenv:Envelope>`;
 
             const headers = {
                 'Content-Type': 'text/xml',
-                'Accept': '*/*',
-                'Accept-Language': 'en-US,en;q=0.9,fr;q=0.8',
-                'X-Requested-With': 'XMLHttpRequest',
-                'Origin': this.session.config.url,
-                'Referer': `${this.session.config.url}/web/sys_control/cinelister/playback.php`
+                'Referer': `${this.session.config.url}/web/sys_control/cinelister/playback.php`,
+                'Accept': '*/*'
             };
 
             const res = await this.session.request('POST', endpoint, soapBody, headers);
-            let json = res.data;
-
-            if (typeof json === 'string') {
-                json = this.safeJSONParse(json);
-            }
+            let json = this.safeJSONParse(res.data);
 
             if (res.status === 200 && json && json.GetShowStatusResponse && json.GetShowStatusResponse.showStatus) {
                 const s = json.GetShowStatusResponse.showStatus;
@@ -195,10 +187,9 @@ class DolbyIMS3000Client {
                 const duration = parseInt(s.splDuration || 0, 10);
                 const position = parseInt(s.splPosition || 0, 10);
                 const percent = duration > 0 ? (position / duration) * 100 : 0;
-                const isPlaying = s.stateInfo === 'Play';
 
                 return {
-                    playing: isPlaying,
+                    playing: s.stateInfo === 'Play',
                     state: s.stateInfo || 'Stopped', 
                     splTitle: s.splTitle || 'No Show',
                     cplTitle: s.cplTitle || '',
@@ -207,10 +198,9 @@ class DolbyIMS3000Client {
                     percent: Math.min(100, Math.max(0, percent))
                 };
             }
-
             return { playing: false, state: 'Stopped', splTitle: '', percent: 0, position: 0, duration: 0 };
         } catch (err) {
-            this.logger.error(`${logPrefix} EXCEPTION: ${err.message}`);
+            this.logger.error(`[IMS3000] Playback status error: ${err.message}`);
             return null; 
         }
     }

@@ -60,11 +60,11 @@ class DolbySessionManager {
     });
   }
 
-  // Uses the SystemOverview endpoint to check if the session is truly alive
   async checkSystemStatus() {
     if (!this.sessionId) return false;
 
-    // Use the session ID in the XML if possible, though random UUID usually works for the request ID
+    // A simple probe to check if session is valid. 
+    // Using SystemOverview here as it is lightweight compared to ShowControl
     const soapBody = `<?xml version="1.0" encoding="UTF-8"?>
       <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:v1="http://www.doremilabs.com/dc/dcp/json/v1_0">
           <soapenv:Header/>
@@ -76,7 +76,7 @@ class DolbySessionManager {
       </soapenv:Envelope>`;
 
     try {
-      // Use the raw session to avoid recursive ensureLoggedIn calls
+      // Use the raw session request to avoid recursive loop with ensureLoggedIn
       const res = await this.session.post('/dc/dcp/json/v1/SystemOverview', soapBody, {
         headers: {
           'Content-Type': 'text/xml',
@@ -87,15 +87,13 @@ class DolbySessionManager {
         }
       });
 
-      // Update cookies if they rotated
       this.parseCookies(res.headers['set-cookie']);
 
-      // Check if response is 200 and looks like valid JSON status
       if (res.status === 200 && res.data && res.data.GetSystemStatusResponse) {
         return true;
       }
       
-      this.logger.debug(`System status check returned ${res.status} (likely session invalid). Response: ${typeof res.data === 'string' ? this.logger.truncate(res.data, 50) : 'JSON'}`);
+      this.logger.debug(`System status check returned ${res.status} (Session likely invalid)`);
       return false;
     } catch (err) {
       this.logger.warn(`System status check error: ${err.message}`);
@@ -106,7 +104,6 @@ class DolbySessionManager {
   startPolling() {
     this.stopPolling();
     this.logger.info('Starting keep-alive polling');
-    // Poll every 30 seconds
     this.checkInterval = setInterval(() => this.performHealthCheck(), 30000);
   }
 
@@ -119,47 +116,29 @@ class DolbySessionManager {
 
   async performHealthCheck() {
     if (!this.isLoggedIn) return;
-
     const alive = await this.checkSystemStatus();
     if (!alive) {
-      this.logger.warn('Health check failed (Session lost). Attempting auto-reconnect...');
+      this.logger.warn('Health check failed. Auto-reconnecting...');
       this.isLoggedIn = false;
       await this.login();
-    } else {
-        // this.logger.debug('Health check passed');
     }
   }
 
   async logout() {
     if (!this.sessionId) return;
-
     const type = (this.detectedType || this.config.type || '').toUpperCase();
-    let logoutUrl = '/web/logout/'; // Default IMS3000
-    let referer = `${this.config.url}/web/index.php`;
-
-    if (type === 'DCP2000') {
-      logoutUrl = '/web/logout/index.php';
-      referer = `${this.config.url}/web/overview/`;
-    } else if (type === 'IMS3000') {
-      logoutUrl = '/web/logout/';
-      referer = `${this.config.url}/web/index.php`;
-    }
-
-    this.logger.info(`Logging out previous session (Type: ${type || 'Unknown'})...`);
+    let logoutUrl = '/web/logout/';
+    if (type === 'DCP2000') logoutUrl = '/web/logout/index.php';
 
     try {
       await this.session.get(logoutUrl, {
         headers: {
           'Cookie': this.getCookieHeader(),
-          'Referer': referer,
-          'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8',
-          'Upgrade-Insecure-Requests': '1',
           'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36'
         }
       });
-      this.logger.debug('Logout request completed');
     } catch (err) {
-      this.logger.warn(`Logout request failed (network or already expired): ${err.message}`);
+      // ignore logout errors
     } finally {
       this.sessionId = null;
       this.cookies = {};
@@ -190,13 +169,13 @@ class DolbySessionManager {
     this.parseCookies(res.headers['set-cookie']);
     const body = typeof res.data === 'string' ? res.data : '';
 
+    // Check for Redirect (Success case)
     if ((res.status === 302 || res.status === 301) && (res.headers.location || '').includes('index.php')) {
       this.logger.info('IMS3000 login credentials accepted (Redirect)');
       
-      // CRITICAL: Follow the redirect to finalize session (Session Fixation/Rotation)
+      // CRITICAL: FOLLOW THE REDIRECT TO FIXATE SESSION
       try {
           const redirectUrl = res.headers.location;
-          // Handle relative redirect if necessary (though axios baseURL usually handles it if it's just a path)
           this.logger.debug(`Following login redirect to: ${redirectUrl}`);
           const followRes = await this.session.get(redirectUrl, {
               headers: {
@@ -207,7 +186,7 @@ class DolbySessionManager {
           });
           this.parseCookies(followRes.headers['set-cookie']);
       } catch (e) {
-          this.logger.warn(`Failed to follow redirect, continuing anyway: ${e.message}`);
+          this.logger.warn(`Failed to follow redirect: ${e.message}`);
       }
 
       this.detectedType = 'IMS3000';
@@ -215,29 +194,23 @@ class DolbySessionManager {
     }
 
     if (res.status === 200 && this.isLoginPage(body)) {
-      this.logger.warn('IMS3000 login rejected (Login page returned)');
+      this.logger.warn('IMS3000 login rejected (returned login page)');
       return false;
     }
 
+    // Fallback: direct index probe
     if (res.status === 200) {
-      // Fallback: Try hitting index.php anyway
       const probe = await this.session.get('/web/index.php', {
-        headers: {
-          Cookie: this.getCookieHeader()
-        },
+        headers: { Cookie: this.getCookieHeader() },
       });
       this.parseCookies(probe.headers['set-cookie']);
-      const pBody = typeof probe.data === 'string' ? probe.data : '';
-      if (probe.status === 200 && !this.isLoginPage(pBody)) {
+      if (probe.status === 200 && !this.isLoginPage(typeof probe.data === 'string' ? probe.data : '')) {
         this.logger.info('IMS3000 login confirmed (Index probe)');
         this.detectedType = 'IMS3000';
         return true;
       }
-      this.logger.error('IMS3000 login probe failed');
-      return false;
     }
 
-    this.logger.warn(`IMS3000 login unexpected status: ${res.status}`);
     return false;
   }
 
@@ -266,7 +239,7 @@ class DolbySessionManager {
     if ((res.status === 302 || res.status === 301) && !String(res.headers.location || '').includes('login')) {
       this.logger.info('DCP2000 login credentials accepted (Redirect)');
       
-      // CRITICAL: Follow the redirect to finalize session
+      // CRITICAL: FOLLOW THE REDIRECT TO FIXATE SESSION
       try {
           const redirectUrl = res.headers.location;
           this.logger.debug(`Following login redirect to: ${redirectUrl}`);
@@ -292,53 +265,30 @@ class DolbySessionManager {
       return true;
     }
 
-    if (res.status === 200 && this.isLoginPage(body)) {
-      this.logger.warn('DCP2000 login rejected');
-      return false;
-    }
-
-    this.logger.warn(`DCP2000 login unexpected status: ${res.status}`);
     return false;
   }
 
   async login() {
-    // If we think we are logged in, check system status to be sure before skipping
-    if (this.isLoggedIn && this.sessionId) {
-        const alive = await this.checkSystemStatus();
-        if (alive) {
-            this.logger.debug('Session verified active, skipping login');
-            if (!this.checkInterval) this.startPolling();
-            return true;
-        }
-        this.logger.info('Session marked active but SystemStatus check failed. Re-logging in...');
-    }
-
-    // Explicitly logout if we have a session ID, to clear it on the server
-    if (this.sessionId) {
-      await this.logout();
-    }
+    if (this.sessionId) await this.logout();
+    this.stopPolling();
 
     try {
       const type = (this.config.type || '').toUpperCase();
       let ok = false;
 
-      this.stopPolling(); // Stop polling while logging in
-
+      // Try explicit type first, then fallback
       if (type === 'IMS3000') {
         ok = await this.attemptIMS3000Login();
         if (!ok) ok = await this.attemptDCP2000Login();
-      } else if (type === 'DCP2000') {
+      } else {
         ok = await this.attemptDCP2000Login();
         if (!ok) ok = await this.attemptIMS3000Login();
-      } else {
-        ok = await this.attemptIMS3000Login();
-        if (!ok) ok = await this.attemptDCP2000Login();
       }
 
       this.isLoggedIn = !!ok;
       if (ok) {
         this.logger.info('Authentication established');
-        this.startPolling(); // Start polling on success
+        this.startPolling();
       } else {
         this.logger.error('Authentication failed');
       }
@@ -351,28 +301,15 @@ class DolbySessionManager {
 
   async ensureLoggedIn() {
     if (this.isLoggedIn && this.sessionId) return true;
-    this.logger.info('Session expired or missing, re-authenticating...');
     return this.login();
   }
 
   async checkConnection() {
-    try {
-      this.logger.debug('Checking connectivity (HTTP probe)...');
-      // We can also use checkSystemStatus here for a deeper check
-      const alive = await this.checkSystemStatus();
-      if (alive) return true;
-
-      // Fallback to simple index probe if system status fails (e.g. auth issue but connected)
-      const response = await this.session.get('/web/index.php', {
-        timeout: config.TIMEOUTS.http
-      });
-      const connected = [200, 301, 302].includes(response.status);
-      this.logger.debug(`Connectivity check: ${connected ? 'OK' : 'FAIL'} (${response.status})`);
-      return connected;
-    } catch (error) {
-      this.logger.error(`Connectivity check failed: ${error.message}`);
-      return false;
-    }
+      // Simple probe
+      try {
+          const response = await this.session.get('/web/index.php', { timeout: config.TIMEOUTS.http });
+          return [200, 301, 302].includes(response.status);
+      } catch(e) { return false; }
   }
 
   async request(method, url, data = null, headers = {}) {
@@ -381,7 +318,7 @@ class DolbySessionManager {
     const defaultHeaders = {
       'X-Requested-With': 'XMLHttpRequest',
       'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36',
-      ...headers, // passed headers override defaults
+      ...headers,
     };
 
     const cookieHeader = this.getCookieHeader();
@@ -391,25 +328,16 @@ class DolbySessionManager {
     }
 
     try {
-      this.logger.debug(`HTTP ${method} ${url}`);
-
-      const requestConfig = {
-        method,
-        url,
-        headers: defaultHeaders,
-        timeout: config.TIMEOUTS.http
-      };
+      const requestConfig = { method, url, headers: defaultHeaders, timeout: config.TIMEOUTS.http };
       if (data) requestConfig.data = data;
 
       const response = await this.session(requestConfig);
-
       this.parseCookies(response.headers['set-cookie']);
 
       const body = typeof response.data === 'string' ? response.data : '';
       if (response.status === 200 && this.isLoginPage(body)) {
         this.isLoggedIn = false;
-        this.logger.warn('Session invalidated: Login page detected in response');
-        // Optionally trigger immediate re-login attempt or let polling handle it
+        this.logger.warn('Session invalidated (Login page detected). Next request will re-login.');
       }
 
       return response;
@@ -421,14 +349,7 @@ class DolbySessionManager {
 
   async destroy() {
     this.stopPolling();
-    if (this.sessionId) {
-      await this.logout();
-    }
-    this.logger.info('Session destroyed');
-    this.isLoggedIn = false;
-    this.sessionId = null;
-    this.cookies = {};
-    this.detectedType = null;
+    await this.logout();
   }
 }
 
