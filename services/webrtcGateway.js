@@ -61,12 +61,27 @@ function ensureRunning() {
     });
 }
 
+// [NEW] Function to forcefully stop the child process
+function stop() {
+    if (child) {
+        logger.info('Stopping MediaMTX child process...');
+        child.kill(); // Sends SIGTERM
+        child = null;
+    }
+}
+
 function slugify(name) {
     return String(name).toLowerCase().replace(/\s+/g, '-');
 }
 
+// [NEW] Safety net: Ensure child is killed if the parent process exits unexpectedly
+process.on('exit', () => {
+    if (child) child.kill();
+});
+
 module.exports = {
     ensureRunning,
+    stop, // Export the stop function
     slugify,
     mediamtxHttpOrigin: 'http://127.0.0.1:8889',
 };

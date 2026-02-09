@@ -69,6 +69,12 @@ class API {
       body: JSON.stringify({ macroName, displayName }),
     });
   }
+
+  async restartService() {
+    return this.request('/api/system/restart', {
+      method: 'POST'
+    });
+  }
 }
 
 // Expose as global for classic scripts

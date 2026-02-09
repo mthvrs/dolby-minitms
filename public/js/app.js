@@ -19,6 +19,7 @@ class App {
     this.setupTheme(); // Initialize theme first
     this.setupReloadBtn(); // Setup reload button
     this.setupLockBtn(); // Setup lock button
+    this.setupRestartBtn();
     this.startClock();
     this.setupModal();
     await this.loadTheaters();
@@ -60,6 +61,30 @@ class App {
         });
         this.updateLockInterface();
     }
+  }
+
+  setupRestartBtn() {
+    const btn = document.getElementById('restart-service-btn');
+    if (!btn) return;
+
+    btn.addEventListener('click', () => {
+      // Reuse your existing modal for safety
+      this.showConfirmation('Redémarrer le serveur interne (PM2) ?', async (confirmed) => {
+        if (confirmed) {
+          try {
+            await api.restartService();
+            // Optional: Show a "rebooting" state or reload the page after a delay
+            btn.classList.add('loading'); // Assumes you have some loading CSS or just visual feedback
+            setTimeout(() => {
+                window.location.reload();
+            }, 5000); // Reload page after 5 seconds to reconnect
+          } catch (err) {
+            console.error('Restart failed:', err);
+            alert('Erreur lors du redémarrage: ' + err.message);
+          }
+        }
+      });
+    });
   }
 
   cycleLockMode() {

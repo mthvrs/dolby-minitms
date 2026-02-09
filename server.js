@@ -38,6 +38,20 @@ app.get('/cams', (req, res) => {
 // Fallback to index.html for SPA-like navigation
 app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'public', 'index.html')));
 
+app.post('/api/system/restart', (req, res) => {
+    logger.info(`Remote restart requested by ${req.ip}`);
+    res.json({ success: true, message: 'Rebooting system...' });
+    
+    setTimeout(() => {
+        logger.info('Stopping services and exiting process...');
+        
+        // [NEW] Explicitly stop the gateway before exiting
+        webrtcGateway.stop();
+        
+        process.exit(0); 
+    }, 1000);
+});
+
 // Start Server
 const HOST = '0.0.0.0'; 
 
