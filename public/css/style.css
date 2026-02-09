@@ -85,17 +85,85 @@ button {
 /* =========================================
    3. Header & Navigation
    ========================================= */
-.header {
+/* Container for merging Tabs and Header */
+.top-nav-container {
     background-color: var(--color-panel);
-    padding: 0.75rem 2rem;
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    gap: 1.5rem;
     border-bottom: 1px solid var(--color-border);
     transition: background-color 0.3s ease;
+    display: flex;
+    flex-direction: column; /* Default: Stacked (Mobile) */
 }
 
+/* Header (Buttons + Time) */
+.header {
+    background-color: var(--color-panel);
+    padding: 0.75rem 1rem;
+    display: flex;
+    justify-content: flex-end; /* Mobile: Align right, or center if preferred */
+    align-items: center;
+    gap: 1.5rem;
+    border-bottom: 1px solid var(--color-border); /* Separator on mobile */
+}
+
+/* Tabs */
+.tabs {
+    background-color: var(--color-panel);
+    display: flex;
+    padding: 0 1rem;
+    gap: 0.5rem;
+    overflow-x: auto;
+    scrollbar-width: none;
+    /* No bottom border here, container handles it */
+}
+.tabs::-webkit-scrollbar { display: none; }
+
+.tab {
+    background: none;
+    border: none;
+    color: var(--color-text-dim);
+    padding: 1rem 1.5rem;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    border-bottom: 3px solid transparent;
+    white-space: nowrap;
+}
+
+.tab:hover {
+    color: var(--color-text);
+    background-color: rgba(128, 128, 128, 0.1);
+}
+
+.tab.active {
+    color: var(--color-accent);
+    border-bottom-color: var(--color-accent);
+}
+
+/* DESKTOP NAV LAYOUT: Side-by-Side */
+@media (min-width: 800px) {
+    .top-nav-container {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+    }
+    
+    .tabs {
+        flex: 1; 
+        order: 1; /* Force Tabs to Left */
+        border-bottom: none !important; 
+    }
+
+    .header {
+        flex-shrink: 0;
+        order: 2; /* Force Header to Right */
+        border-bottom: none !important;
+        padding-left: 1rem !important;
+        border-left: 1px solid var(--color-border);
+    }
+}
+
+/* THEME & ACTION BUTTONS */
 .theme-btn {
     background: none;
     border: none;
@@ -146,39 +214,6 @@ button {
     color: var(--color-text);
 }
 
-.tabs {
-    background-color: var(--color-panel);
-    display: flex;
-    padding: 0 2rem;
-    gap: 0.5rem;
-    border-bottom: 2px solid var(--color-bg);
-    transition: background-color 0.3s ease;
-    overflow-x: auto;
-}
-
-.tab {
-    background: none;
-    border: none;
-    color: var(--color-text-dim);
-    padding: 1rem 1.5rem;
-    font-size: 0.95rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s;
-    border-bottom: 3px solid transparent;
-    white-space: nowrap;
-}
-
-.tab:hover {
-    color: var(--color-text);
-    background-color: rgba(128, 128, 128, 0.1);
-}
-
-.tab.active {
-    color: var(--color-accent);
-    border-bottom-color: var(--color-accent);
-}
-
 /* =========================================
    4. Main Content Area
    ========================================= */
@@ -201,7 +236,6 @@ button {
    ========================================= */
 .overview-grid {
     display: grid;
-    /* Reverted to 3 columns to ensure cards fill the screen width effectively */
     grid-template-columns: repeat(3, 1fr);
     gap: 1.5rem;
     width: 100%;
@@ -284,17 +318,12 @@ button {
    ========================================= */
 .video-player-container { 
     width: 100%; 
-    /* Removed fixed black background to prevent "black box" issues in detail view. */
     background: transparent;
-    /* Removed flex:1 to prevent forced vertical stretching in detail view. */
     display: block; 
 }
 
-/* In the card view specifically, we might want the video to sit at the bottom, 
-   but standard flow is usually fine. */
-
 .video-container {
-    background-color: var(--video-bg); /* Only the video box is black */
+    background-color: var(--video-bg);
     position: relative;
     width: 100%;
     aspect-ratio: 16 / 9;
@@ -329,8 +358,8 @@ button {
     /* Controls (1fr) | Video Panel (350px) */
     grid-template-columns: 1fr 350px;
     gap: 1.5rem;
-    /* Fill height relative to viewport, but don't force stretch if content is small */
-    height: calc(100vh - 140px);
+    /* Fill height relative to viewport */
+    height: calc(100vh - 120px);
 }
 
 .controls-section { 
@@ -348,9 +377,8 @@ button {
     padding: 1.5rem;
     border-radius: 8px;
     box-shadow: var(--shadow-sm);
-    /* Removed flex: column to stop video container from stretching vertically */
     display: block; 
-    height: fit-content; /* Only take necessary height */
+    height: fit-content;
 }
 
 .panel-title {
@@ -363,37 +391,40 @@ button {
 /* =========================================
    8. Macro Buttons
    ========================================= */
-.macro-group { margin-bottom: 1.5rem; }
+.macro-group { margin-bottom: 2rem; }
 
 .group-header {
     background-color: var(--color-button);
     padding: 0.75rem 1rem;
-    margin-bottom: 0.75rem;
+    margin-bottom: 1rem;
     border-radius: 4px;
     color: var(--color-text);
 }
 
 .group-title {
-    font-size: 0.9rem;
+    font-size: 1rem;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.5px;
 }
 
+/* --- BUTTON SIZING LOGIC --- */
+
+/* DEFAULT (Mobile / Tablet / iPad): Big Chunky Buttons */
 .macro-buttons {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
-    gap: 0.75rem;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 1rem;
 }
 
 .macro-btn {
     background-color: var(--color-panel);
     border: 1px solid var(--color-border);
     color: var(--color-text);
-    padding: 1rem 0.5rem;
-    border-radius: 6px;
-    font-size: 0.85rem;
-    font-weight: 600;
+    padding: 1.5rem 1rem;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    font-weight: 700;
     cursor: pointer;
     transition: all 0.2s;
     box-shadow: var(--shadow-sm);
@@ -401,8 +432,24 @@ button {
     display: flex;
     align-items: center;
     justify-content: center;
-    min-height: 60px;
+    min-height: 90px; /* Big height */
     position: relative;
+    word-break: break-word;
+    line-height: 1.3;
+}
+
+/* DESKTOP (Large Screens > 1200px): Compact Buttons to avoid scrolling */
+@media (min-width: 1200px) {
+    .macro-buttons {
+        grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+        gap: 0.75rem;
+    }
+    
+    .macro-btn {
+        padding: 1rem 0.5rem;
+        font-size: 0.95rem;
+        min-height: 60px; /* Standard height */
+    }
 }
 
 .macro-btn:hover {
@@ -423,6 +470,7 @@ button {
     background-color: var(--color-emergency); 
     color: white; 
     border-color: var(--color-emergency);
+    font-size: 1.2rem;
 }
 .macro-btn.emergency:hover { background-color: var(--color-emergency-hover); }
 
@@ -532,7 +580,8 @@ button {
     .overview-grid { grid-template-columns: repeat(2, 1fr); }
 }
 
-@media (max-width: 1100px) {
+/* iPad Landscape / Portrait Mobile Breakpoint */
+@media (max-width: 900px) {
     .theater-detail {
         grid-template-columns: 1fr;
         height: auto;
@@ -550,6 +599,7 @@ button {
 
     .header {
         padding: 0.75rem 1rem;
+        /* Mobile: Header is top, so we want border bottom. Handled by generic class above. */
     }
     
     .tabs {
