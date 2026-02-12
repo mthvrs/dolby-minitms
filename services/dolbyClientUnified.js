@@ -15,6 +15,9 @@ class DolbyClientUnified {
         this.logger = new Logger(theaterName);
         this.sessionManager = new DolbySessionManager(theaterName, theaterConfig, this.logger);
 
+        // Expose session for playback API
+        this.session = this.sessionManager;
+
         if (theaterConfig.type === 'IMS3000') {
             this.client = new DolbyIMS3000Client(theaterName, this.sessionManager, this.logger);
         } else {

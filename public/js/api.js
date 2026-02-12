@@ -76,10 +76,12 @@ class API {
     });
   }
 
-  // Playback
-  getPlayback(theaterNameOrSlug) {
-    return this.request(`/api/playback/${encodeURIComponent(theaterNameOrSlug)}`);
+// Playback
+getPlayback(theaterNameOrSlug) {
+    const id = API.slugifyName(theaterNameOrSlug);
+    return this.request(`/api/playback/${encodeURIComponent(id)}`);
 }
+
 }
 
 // Expose as global for classic scripts

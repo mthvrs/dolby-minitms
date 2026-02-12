@@ -26,21 +26,40 @@ class PlaybackTimeline {
         this.container.innerHTML = `
             <div class="${timelineClass}">
                 <div class="timeline-header">
-                    <div class="playback-state">
-                        <span class="state-icon">⏸</span>
-                        <span class="state-text">--</span>
-                    </div>
-                    <div class="playback-title">--</div>
+                    <div class="playback-title spl-title">--</div>
                 </div>
-                <div class="timeline-progress">
+                <div class="timeline-main">
+                    <div class="playback-state">
+                        <svg class="state-icon state-icon-play" width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M8 5v14l11-7z"/>
+                        </svg>
+                        <svg class="state-icon state-icon-pause" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" style="display:none;">
+                            <path d="M6 4h4v16H6V4zm8 0h4v16h-4V4z"/>
+                        </svg>
+                        <svg class="state-icon state-icon-stop" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" style="display:none;">
+                            <rect x="6" y="6" width="12" height="12"/>
+                        </svg>
+                    </div>
                     <div class="progress-bar">
                         <div class="progress-fill" style="width: 0%"></div>
                     </div>
-                    <div class="timeline-info">
-                        <span class="time-current">--:--</span>
-                        <span class="time-separator">/</span>
-                        <span class="time-total">--:--</span>
+                </div>
+                <div class="timeline-info">
+                    <div class="time-item">
+                        <span class="time-label">Écoulé</span>
+                        <span class="time-value time-current">--:--</span>
                     </div>
+                    <div class="time-item">
+                        <span class="time-label">Restant</span>
+                        <span class="time-value time-remaining">--:--</span>
+                    </div>
+                    <div class="time-item">
+                        <span class="time-label">Heure de fin</span>
+                        <span class="time-value time-end">--:--</span>
+                    </div>
+                </div>
+                <div class="cpl-title-wrapper">
+                    <div class="cpl-title">--</div>
                 </div>
             </div>
         `;
@@ -65,59 +84,93 @@ class PlaybackTimeline {
     updateUI(playback) {
         if (this.isDestroyed) return;
 
-        const stateIcon = this.container.querySelector('.state-icon');
-        const stateText = this.container.querySelector('.state-text');
-        const title = this.container.querySelector('.playback-title');
+        const splTitle = this.container.querySelector('.spl-title');
+        const cplTitle = this.container.querySelector('.cpl-title');
         const progressFill = this.container.querySelector('.progress-fill');
         const timeCurrent = this.container.querySelector('.time-current');
-        const timeTotal = this.container.querySelector('.time-total');
+        const timeRemaining = this.container.querySelector('.time-remaining');
+        const timeEnd = this.container.querySelector('.time-end');
         const timeline = this.container.querySelector('.playback-timeline');
+        
+        const iconPlay = this.container.querySelector('.state-icon-play');
+        const iconPause = this.container.querySelector('.state-icon-pause');
+        const iconStop = this.container.querySelector('.state-icon-stop');
 
         // Update state
         const state = playback.stateInfo || 'Unknown';
-        stateText.textContent = state;
         
-        // Update state icon and styling
-        timeline.className = timeline.className.split(' ').filter(c => c !== 'playing' && c !== 'paused' && c !== 'stopped').join(' ');
+        // Update state icons visibility
+        iconPlay.style.display = 'none';
+        iconPause.style.display = 'none';
+        iconStop.style.display = 'none';
+        
+        // Remove previous state classes
+        timeline.className = timeline.className.split(' ').filter(c => 
+            c !== 'playing' && c !== 'paused' && c !== 'stopped' && c !== 'feature'
+        ).join(' ');
         
         if (state === 'Play') {
-            stateIcon.textContent = '▶';
+            iconPlay.style.display = 'block';
             timeline.classList.add('playing');
         } else if (state === 'Pause') {
-            stateIcon.textContent = '⏸';
+            iconPause.style.display = 'block';
             timeline.classList.add('paused');
         } else {
-            stateIcon.textContent = '⏹';
+            iconStop.style.display = 'block';
             timeline.classList.add('stopped');
         }
 
-        // Update title (use CPL title if available, otherwise SPL title)
-        const displayTitle = playback.cplTitle || playback.splTitle || 'Aucun titre';
-        title.textContent = displayTitle;
-        title.title = displayTitle; // Tooltip for long titles
+        // Check if CPL contains _FTR or _SHR for feature/short detection
+        const cplTitleText = playback.cplTitle || '';
+        if ((cplTitleText.includes('_FTR') || cplTitleText.includes('_SHR')) && state === 'Play') {
+            timeline.classList.add('feature');
+        }
 
-        // Update progress
+        // Update SPL title (Show Playlist - prominent)
+        const displaySplTitle = playback.splTitle || 'Aucun titre';
+        splTitle.textContent = displaySplTitle;
+        splTitle.title = displaySplTitle;
+
+        // Update CPL title - no truncation, show full title
+        const displayCplTitle = playback.cplTitle || '--';
+        cplTitle.textContent = displayCplTitle;
+        cplTitle.title = displayCplTitle;
+
+        // Calculate times
         const position = parseInt(playback.splPosition || 0);
         const duration = parseInt(playback.splDuration || 1);
+        const remaining = Math.max(0, duration - position);
         const percentage = Math.min(100, Math.max(0, (position / duration) * 100));
         
+        // Calculate end time
+        const now = new Date();
+        const endTime = new Date(now.getTime() + (remaining * 1000));
+        
+        // Update progress
         progressFill.style.width = `${percentage}%`;
 
         // Update times
         timeCurrent.textContent = this.formatTime(position);
-        timeTotal.textContent = this.formatTime(duration);
+        timeRemaining.textContent = this.formatTime(remaining);
+        timeEnd.textContent = this.formatClock(endTime);
     }
 
     showError(message) {
         if (this.isDestroyed) return;
 
-        const stateText = this.container.querySelector('.state-text');
-        const title = this.container.querySelector('.playback-title');
+        const splTitle = this.container.querySelector('.spl-title');
+        const cplTitle = this.container.querySelector('.cpl-title');
         const progressFill = this.container.querySelector('.progress-fill');
+        const timeCurrent = this.container.querySelector('.time-current');
+        const timeRemaining = this.container.querySelector('.time-remaining');
+        const timeEnd = this.container.querySelector('.time-end');
         
-        if (stateText) stateText.textContent = message;
-        if (title) title.textContent = '--';
+        if (splTitle) splTitle.textContent = message;
+        if (cplTitle) cplTitle.textContent = '--';
         if (progressFill) progressFill.style.width = '0%';
+        if (timeCurrent) timeCurrent.textContent = '--:--';
+        if (timeRemaining) timeRemaining.textContent = '--:--';
+        if (timeEnd) timeEnd.textContent = '--:--';
     }
 
     formatTime(seconds) {
@@ -130,6 +183,13 @@ class PlaybackTimeline {
         } else {
             return `${m}:${String(s).padStart(2, '0')}`;
         }
+    }
+
+    formatClock(date) {
+        return date.toLocaleTimeString('fr-FR', { 
+            hour: '2-digit', 
+            minute: '2-digit' 
+        });
     }
 
     destroy() {

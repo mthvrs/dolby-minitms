@@ -194,65 +194,68 @@ class App {
     }
   }
 
-  createTheaterTabs() {
-    const tabsContainer = document.getElementById('tabs');
-    const contentContainer = document.querySelector('.content');
+ createTheaterTabs() {
+  const tabsContainer = document.getElementById('tabs');
+  const contentContainer = document.querySelector('.content');
 
-    const existingTabs = Array.from(tabsContainer.querySelectorAll('.tab')).filter(t => t.dataset.tab !== 'overview');
-    existingTabs.forEach(tab => tab.remove());
+  const existingTabs = Array.from(tabsContainer.querySelectorAll('.tab')).filter(t => t.dataset.tab !== 'overview');
+  existingTabs.forEach(tab => tab.remove());
 
-    const existingContents = Array.from(contentContainer.querySelectorAll('.tab-content')).filter(c => c.id !== 'overview-content');
-    existingContents.forEach(content => content.remove());
+  const existingContents = Array.from(contentContainer.querySelectorAll('.tab-content')).filter(c => c.id !== 'overview-content');
+  existingContents.forEach(content => content.remove());
 
-    const theaterNames = Object.keys(this.theaters);
-    if (theaterNames.length === 0) return;
+  const theaterNames = Object.keys(this.theaters);
+  if (theaterNames.length === 0) return;
 
-    for (const name of theaterNames) {
-      const data = this.theaters[name];
-      const safeId = String(name).toLowerCase().replace(/\s+/g, '-');
+  for (const name of theaterNames) {
+    const data = this.theaters[name];
+    const safeId = String(name).toLowerCase().replace(/\s+/g, '-');
 
-      const tabBtn = document.createElement('button');
-      tabBtn.className = 'tab';
-      tabBtn.dataset.tab = safeId;
-      tabBtn.textContent = name;
-      tabsContainer.appendChild(tabBtn);
+    const tabBtn = document.createElement('button');
+    tabBtn.className = 'tab';
+    tabBtn.dataset.tab = safeId;
+    tabBtn.textContent = name;
+    tabsContainer.appendChild(tabBtn);
 
-      const tabContent = document.createElement('div');
-      tabContent.className = 'tab-content';
-      tabContent.id = `${safeId}-content`;
-      tabContent.innerHTML = `
-  <div class="theater-detail">
-    <div class="controls-section" id="controls-${safeId}">
-      <div class="loading">Chargement...</div>
-    </div>
-    <div class="right-panel">
-      <h3 class="panel-title">Vue en direct</h3>
-      
-      <div class="video-player-container" id="video-${safeId}"></div>
-      
-      <div class="playback-timeline-container" id="timeline-${safeId}"></div>
-    </div>
-  </div>
-`;
-      contentContainer.appendChild(tabContent);
+    const tabContent = document.createElement('div');
+    tabContent.className = 'tab-content';
+    tabContent.id = `${safeId}-content`;
+    tabContent.innerHTML = `
+      <div class="theater-detail">
+        <div class="controls-section" id="controls-${safeId}">
+          <div class="loading">Chargement...</div>
+        </div>
+        <div class="right-panel">
+          <h3 class="panel-title">Vue en direct</h3>
+          
+          <div class="video-player-container" id="video-${safeId}"></div>
+          
+          <div class="playback-timeline-container" id="timeline-${safeId}"></div>
+        </div>
+      </div>
+    `;
+    contentContainer.appendChild(tabContent);
 
-      const videoContainer = tabContent.querySelector(`#video-${safeId}`);
-      const videoPlayer = new VideoPlayer(videoContainer, name);
-      videoPlayer.initialize();
+    // Initialize video player
+    const videoContainer = tabContent.querySelector(`#video-${safeId}`);
+    const videoPlayer = new VideoPlayer(videoContainer, name);
+    videoPlayer.initialize();
 
-      const timelineContainer = tabContent.querySelector(`#timeline-${safeId}`);
-const playbackTimeline = new PlaybackTimeline(timelineContainer, name, false);
-playbackTimeline.initialize();
+    // Initialize playback timeline
+    const timelineContainer = tabContent.querySelector(`#timeline-${safeId}`);
+    const playbackTimeline = new PlaybackTimeline(timelineContainer, name, false);
+    playbackTimeline.initialize();
 
-this.theaterPanels[safeId] = { videoPlayer, macroPanel, playbackTimeline };
+    // Initialize macro panel
+    const controlsContainer = tabContent.querySelector(`#controls-${safeId}`);
+    const macroPanel = new MacroPanel(controlsContainer, name);
+    macroPanel.load();
 
-      const controlsContainer = tabContent.querySelector(`#controls-${safeId}`);
-      const macroPanel = new MacroPanel(controlsContainer, name);
-      macroPanel.load();
-
-      this.theaterPanels[safeId] = { videoPlayer, macroPanel };
-    }
+    // Store all references ONCE
+    this.theaterPanels[safeId] = { videoPlayer, macroPanel, playbackTimeline };
   }
+}
+
 
   setupTabs() {
     const tabs = document.querySelectorAll('.tab');

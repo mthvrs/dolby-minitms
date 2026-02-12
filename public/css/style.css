@@ -615,3 +615,68 @@ button {
         padding: 1.5rem;
     }
 }
+
+/* Theater detail page - better vertical layout */
+.theater-detail {
+    display: grid;
+    grid-template-columns: 1fr 500px;
+    gap: 1.5rem;
+    height: 100%;
+    padding: 1.5rem;
+}
+
+.controls-section {
+    overflow-y: auto;
+    padding-right: 1rem;
+}
+
+.right-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    height: 100%;
+}
+
+.right-panel .panel-title {
+    margin: 0 0 0.5rem 0;
+    font-size: 1.1em;
+}
+
+.right-panel .video-player-container {
+    flex-shrink: 0;
+    aspect-ratio: 16 / 9;
+    background: #000;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.right-panel .playback-timeline-container {
+    flex-shrink: 0;
+}
+
+/* Ensure timeline doesn't compress */
+.playback-timeline {
+    min-height: 180px;
+}
+
+.playback-timeline.compact {
+    min-height: 140px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1400px) {
+    .theater-detail {
+        grid-template-columns: 1fr 450px;
+    }
+}
+
+@media (max-width: 1200px) {
+    .theater-detail {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto 1fr;
+    }
+    
+    .right-panel {
+        order: -1;
+    }
+}
