@@ -247,12 +247,12 @@ button {
     border-radius: 8px;
     overflow: hidden;
     display: grid;
-    grid-template-columns: auto 1fr;
-    grid-template-rows: auto 1fr;
+    grid-template-columns: 100px 200px 1fr;
+    grid-template-rows: auto;
     cursor: pointer;
     transition: transform 0.2s, box-shadow 0.2s;
     box-shadow: var(--shadow-sm);
-    min-height: 120px;
+    height: 140px;
 }
 
 .theater-card:hover {
@@ -262,36 +262,44 @@ button {
 }
 
 .theater-info {
-    padding: 0.75rem 1rem;
-    text-align: left;
+    padding: 0.75rem;
+    text-align: center;
     border-right: 1px solid var(--color-border);
     grid-column: 1;
-    grid-row: 1 / -1;
+    grid-row: 1;
     display: flex;
     align-items: center;
     justify-content: center;
-    min-width: 120px;
 }
 
 .theater-info h2 {
-    font-size: 1.1rem;
+    font-size: 1rem;
     margin: 0;
-    writing-mode: horizontal-tb;
     color: var(--color-text);
     text-align: center;
+    word-break: break-word;
 }
 
 .video-player-container {
     grid-column: 2;
     grid-row: 1;
     width: 100%;
-    aspect-ratio: 16 / 9;
+    height: 100%;
+    border-right: 1px solid var(--color-border);
+}
+
+.video-player-container .video-container {
+    width: 100%;
+    height: 100%;
+    aspect-ratio: unset;
 }
 
 .playback-timeline-container {
-    grid-column: 2;
-    grid-row: 2;
+    grid-column: 3;
+    grid-row: 1;
     padding: 0.75rem 1rem;
+    display: flex;
+    align-items: center;
 }
 
 /* Playback info */
@@ -374,11 +382,10 @@ button {
    ========================================= */
 .theater-detail {
     display: grid;
-    /* Controls (1fr) | Video Panel (350px) */
-    grid-template-columns: 1fr 350px;
+    grid-template-columns: 1fr 500px;
     gap: 1.5rem;
-    /* Fill height relative to viewport */
     height: calc(100vh - 120px);
+    padding: 1.5rem;
 }
 
 .controls-section { 
@@ -396,7 +403,9 @@ button {
     padding: 1.5rem;
     border-radius: 8px;
     box-shadow: var(--shadow-sm);
-    display: block; 
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
     height: fit-content;
 }
 
@@ -405,6 +414,18 @@ button {
     font-weight: 700;
     margin-bottom: 1rem;
     color: var(--color-text);
+}
+
+.right-panel .video-player-container {
+    flex-shrink: 0;
+    aspect-ratio: 16 / 9;
+    background: #000;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.right-panel .playback-timeline-container {
+    flex-shrink: 0;
 }
 
 /* =========================================
@@ -429,7 +450,7 @@ button {
 
 /* --- BUTTON SIZING LOGIC --- */
 
-/* DEFAULT (Mobile / Tablet / iPad): Big Chunky Buttons */
+/* DEFAULT (Mobile / Tablet): Big Chunky Buttons */
 .macro-buttons {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
@@ -468,6 +489,20 @@ button {
         padding: 1rem 0.5rem;
         font-size: 0.95rem;
         min-height: 60px; /* Standard height */
+    }
+}
+
+/* iPad Landscape: Use bigger buttons like tablet */
+@media (min-width: 768px) and (max-width: 1199px) and (orientation: landscape) {
+    .macro-buttons {
+        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+        gap: 0.9rem;
+    }
+    
+    .macro-btn {
+        padding: 1.25rem 0.75rem;
+        font-size: 1rem;
+        min-height: 75px;
     }
 }
 
@@ -603,6 +638,7 @@ button {
     .theater-card {
         grid-template-columns: 1fr;
         grid-template-rows: auto auto auto;
+        height: auto;
     }
     
     .theater-info {
@@ -610,13 +646,17 @@ button {
         grid-row: 1;
         border-right: none;
         border-bottom: 1px solid var(--color-border);
-        min-width: unset;
         padding: 0.75rem;
     }
     
     .video-player-container {
         grid-column: 1;
         grid-row: 2;
+        border-right: none;
+    }
+    
+    .video-player-container .video-container {
+        aspect-ratio: 16 / 9;
     }
     
     .playback-timeline-container {
@@ -625,16 +665,21 @@ button {
     }
 }
 
-/* iPad Landscape / Portrait Breakpoint - USE DESKTOP LAYOUT */
-@media (min-width: 768px) and (max-width: 1024px) and (orientation: landscape) {
-    /* Keep desktop layout for iPad landscape */
+/* iPad Landscape - KEEP DESKTOP LAYOUT FOR THEATER DETAIL */
+@media (min-width: 768px) and (max-width: 1199px) and (orientation: landscape) {
     .theater-detail {
         grid-template-columns: 1fr 400px;
+        grid-template-rows: 1fr;
         height: calc(100vh - 120px);
     }
     
     .right-panel {
-        order: 0; /* Keep on right */
+        order: 0;
+        margin-bottom: 0;
+    }
+    
+    .controls-section {
+        order: 0;
     }
 }
 
@@ -646,7 +691,7 @@ button {
     }
     
     .right-panel {
-        order: -1; /* Video on top */
+        order: -1;
         margin-bottom: 1.5rem;
         width: 100%;
     }
@@ -671,61 +716,14 @@ button {
     }
 }
 
-/* Theater detail page - better vertical layout */
-.theater-detail {
-    display: grid;
-    grid-template-columns: 1fr 500px;
-    gap: 1.5rem;
-    height: 100%;
-    padding: 1.5rem;
-}
-
-.controls-section {
-    overflow-y: auto;
-    padding-right: 1rem;
-}
-
-.right-panel {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    height: 100%;
-}
-
-.right-panel .panel-title {
-    margin: 0 0 0.5rem 0;
-    font-size: 1.1em;
-}
-
-.right-panel .video-player-container {
-    flex-shrink: 0;
-    aspect-ratio: 16 / 9;
-    background: #000;
-    border-radius: 8px;
-    overflow: hidden;
-}
-
-.right-panel .playback-timeline-container {
-    flex-shrink: 0;
-}
-
-/* Ensure timeline doesn't compress */
-.playback-timeline {
-    min-height: 180px;
-}
-
-.playback-timeline.compact {
-    min-height: 140px;
-}
-
-/* Responsive adjustments */
+/* Responsive adjustments for theater detail */
 @media (max-width: 1400px) {
     .theater-detail {
         grid-template-columns: 1fr 450px;
     }
 }
 
-@media (max-width: 1200px) {
+@media (max-width: 1199px) and (orientation: portrait) {
     .theater-detail {
         grid-template-columns: 1fr;
         grid-template-rows: auto 1fr;
@@ -734,4 +732,13 @@ button {
     .right-panel {
         order: -1;
     }
+}
+
+/* Ensure timeline doesn't compress */
+.playback-timeline {
+    min-height: 180px;
+}
+
+.playback-timeline.compact {
+    min-height: 120px;
 }
