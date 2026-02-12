@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -34,7 +34,6 @@
             position: relative;
         }
 
-        /* object-fit: fill allows the "Squish" engine to stretch the video slightly to fill gaps */
         video {
             display: block;
             width: 100%;
@@ -42,7 +41,6 @@
             object-fit: fill; 
         }
 
-        /* Loading Spinner */
         .spinner {
             border: 4px solid rgba(255, 255, 255, 0.1);
             border-left-color: #ffffff;
@@ -52,7 +50,7 @@
             animation: spin 1s linear infinite;
             position: absolute;
             z-index: 10;
-            display: none; /* Hidden by default, toggled by JS */
+            display: none;
         }
 
         @keyframes spin {
@@ -70,6 +68,190 @@
             display: none;
             z-index: 1000;
         }
+
+        /* Hover Controls */
+        #hover-controls {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            display: flex;
+            gap: 10px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 2000;
+            pointer-events: none;
+        }
+
+        body:hover #hover-controls {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .control-btn {
+            background: rgba(40, 40, 40, 0.95);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 8px;
+            padding: 12px 16px;
+            color: #fff;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s;
+            backdrop-filter: blur(10px);
+        }
+
+        .control-btn:hover {
+            background: rgba(60, 60, 60, 0.95);
+            border-color: rgba(255, 255, 255, 0.5);
+            transform: translateY(-2px);
+        }
+
+        .control-btn svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        /* Timeline Overlay */
+        .timeline-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.95) 0%, rgba(0, 0, 0, 0.9) 80%, transparent 100%);
+            padding: 12px 16px 16px 16px;
+            z-index: 100;
+            backdrop-filter: blur(5px);
+        }
+
+        .timeline-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+
+        .playback-icon {
+            width: 12px;
+            height: 12px;
+            flex-shrink: 0;
+        }
+
+        .playback-icon.playing {
+            color: #4caf50;
+        }
+
+        .playback-icon.paused {
+            color: #ff9800;
+        }
+
+        .playback-icon.stopped {
+            color: #f44336;
+        }
+
+        .show-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: #fff;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            flex: 1;
+        }
+
+        .progress-bar-mini {
+            height: 6px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 3px;
+            overflow: hidden;
+            margin-bottom: 6px;
+        }
+
+        .progress-fill-mini {
+            height: 100%;
+            background: #4caf50;
+            border-radius: 3px;
+            transition: width 0.3s ease;
+        }
+
+        .progress-fill-mini.feature {
+            background: #2196f3;
+        }
+
+        .progress-fill-mini.paused {
+            background: #ff9800;
+        }
+
+        .progress-fill-mini.stopped {
+            background: #f44336;
+        }
+
+        .timeline-times {
+            display: flex;
+            justify-content: space-between;
+            font-size: 11px;
+            font-weight: 600;
+            color: #fff;
+            font-family: 'Courier New', monospace;
+        }
+
+        .time-group {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .time-label {
+            font-size: 9px;
+            color: rgba(255, 255, 255, 0.6);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Theater Badge - Smaller, top right */
+        .theater-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(0, 0, 0, 0.75);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 4px;
+            padding: 4px 8px;
+            z-index: 100;
+            backdrop-filter: blur(5px);
+        }
+
+        .badge-id {
+            font-size: 12px;
+            font-weight: 700;
+            color: #fff;
+            text-align: center;
+            line-height: 1;
+        }
+
+        /* Clock - Top left */
+        .world-clock {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: rgba(0, 0, 0, 0.75);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 4px;
+            padding: 4px 10px;
+            z-index: 100;
+            backdrop-filter: blur(5px);
+        }
+
+        .clock-time {
+            font-size: 13px;
+            font-weight: 600;
+            color: #fff;
+            font-family: 'Courier New', monospace;
+            letter-spacing: 1px;
+            line-height: 1;
+        }
     </style>
 </head>
 <body>
@@ -77,255 +259,502 @@
     <div id="error-log"></div>
     <div id="app-container"></div>
 
+    <!-- Hover Controls -->
+    <div id="hover-controls">
+        <button class="control-btn" id="reload-btn">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="23 4 23 10 17 10"></polyline>
+                <polyline points="1 20 1 14 7 14"></polyline>
+                <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+            </svg>
+            Recharger
+        </button>
+        <button class="control-btn" id="restart-btn">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M18.36 6.64a9 9 0 1 1-12.73 0"></path>
+                <line x1="12" y1="2" x2="12" y2="12"></line>
+            </svg>
+            Redémarrer
+        </button>
+    </div>
+
     <script src="/js/api.js"></script>
-    <script>
-        const appContainer = document.getElementById('app-container');
-        const errorLog = document.getElementById('error-log');
-        const players = [];
-        
-        // Logger
-        const logger = {
-            log: (msg) => console.log(`[Cams] ${msg}`),
-            error: (msg) => {
-                console.error(`[Cams] ${msg}`);
-                errorLog.style.display = 'block';
-                errorLog.textContent = msg;
-            }
-        };
-
-        // Layout Constants
-        const TARGET_AR = 1.777; // 16:9
-        // Doubled tolerance to 10%
-        const TOLERANCE = 0.10;  
-        const MIN_AR = TARGET_AR * (1 - TOLERANCE);
-        const MAX_AR = TARGET_AR * (1 + TOLERANCE);
-
-        // --- WebRTC Player Class ---
-        class WebRTCFeed {
-            constructor(container, theaterSlug) {
-                this.container = container;
-                this.slug = theaterSlug;
-                this.pc = null;
-                
-                // Spinner
-                this.spinner = document.createElement('div');
-                this.spinner.className = 'spinner';
-                this.container.appendChild(this.spinner);
-
-                // Video Element
-                this.video = document.createElement('video');
-                this.video.muted = true;
-                this.video.autoplay = true;
-                this.video.playsInline = true;
-                // Hide video until it's actually playing to show black/spinner background
-                this.video.style.opacity = '0'; 
-                this.video.style.transition = 'opacity 0.5s ease';
-                this.container.appendChild(this.video);
-
-                // Event Listeners for UI state
-                this.video.onplaying = () => {
-                    this.spinner.style.display = 'none';
-                    this.video.style.opacity = '1';
-                };
-
-                this.video.onwaiting = () => {
-                    this.spinner.style.display = 'block';
-                };
-                
-                // Auto-reload every 10 mins to prevent freeze (Regularish reloading logic)
-                this.reloadInterval = setInterval(() => {
-                    logger.log(`[${this.slug}] Scheduled reload...`);
-                    this.restart();
-                }, 10 * 60 * 1000);
-            }
-
-            async start() {
-                try {
-                    this.spinner.style.display = 'block';
-                    const whepUrl = `/api/whep/${this.slug}`;
-                    logger.log(`Starting WebRTC for ${this.slug}`);
-
-                    this.pc = new RTCPeerConnection({ iceServers: [] });
-                    
-                    // Connection State Monitoring (Handle dropouts)
-                    this.pc.onconnectionstatechange = () => {
-                        const state = this.pc.connectionState;
-                        logger.log(`[${this.slug}] Connection State: ${state}`);
-                        if (state === 'failed' || state === 'disconnected') {
-                            logger.log(`[${this.slug}] Connection failed. Restarting...`);
-                            this.restart();
-                        }
-                    };
-
-                    this.pc.addTransceiver('video', { direction: 'recvonly' });
-                    
-                    const remoteStream = new MediaStream();
-                    this.video.srcObject = remoteStream;
-
-                    this.pc.ontrack = (ev) => {
-                        ev.streams[0].getTracks().forEach(track => remoteStream.addTrack(track));
-                    };
-
-                    const offer = await this.pc.createOffer();
-                    await this.pc.setLocalDescription(offer);
-                    await this.waitIceComplete();
-
-                    const res = await fetch(whepUrl, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/sdp' },
-                        body: this.pc.localDescription.sdp
-                    });
-
-                    if (!res.ok) throw new Error(`WHEP Error ${res.status}`);
-                    
-                    const answer = await res.text();
-                    await this.pc.setRemoteDescription({ type: 'answer', sdp: answer });
-                    
-                } catch (e) {
-                    logger.error(`Stream Error (${this.slug}): ${e.message}`);
-                    // Retry after 5 seconds if start failed completely
-                    setTimeout(() => this.restart(), 5000);
-                }
-            }
-
-            waitIceComplete() {
-                return new Promise(resolve => {
-                    if (this.pc.iceGatheringState === 'complete') return resolve();
-                    const check = () => {
-                        if (this.pc.iceGatheringState === 'complete') {
-                            this.pc.removeEventListener('icegatheringstatechange', check);
-                            resolve();
-                        }
-                    };
-                    this.pc.addEventListener('icegatheringstatechange', check);
-                    setTimeout(resolve, 1000); // Fallback
-                });
-            }
-
-            restart() {
-                // Visual reset
-                this.video.style.opacity = '0';
-                this.spinner.style.display = 'block';
-                
-                if (this.pc) {
-                    this.pc.close();
-                    this.pc = null;
-                }
-                // Small delay to ensure clean teardown
-                setTimeout(() => this.start(), 500);
-            }
+<script src="/js/api.js"></script>
+<script>
+    const appContainer = document.getElementById('app-container');
+    const errorLog = document.getElementById('error-log');
+    const players = [];
+    
+    const logger = {
+        log: (msg) => console.log(`[Cams] ${msg}`),
+        error: (msg) => {
+            console.error(`[Cams] ${msg}`);
+            errorLog.style.display = 'block';
+            errorLog.textContent = msg;
         }
+    };
 
-        // --- Main Logic ---
-        async function init() {
+    const TARGET_AR = 1.777;
+    const TOLERANCE = 0.10;  
+    const MIN_AR = TARGET_AR * (1 - TOLERANCE);
+    const MAX_AR = TARGET_AR * (1 + TOLERANCE);
+
+    // Setup controls
+    document.getElementById('reload-btn').addEventListener('click', () => {
+        window.location.reload();
+    });
+
+    document.getElementById('restart-btn').addEventListener('click', async () => {
+        if (confirm('Redémarrer le serveur ?')) {
             try {
-                // 1. Fetch Theaters
-                const data = await api.getTheaters();
-                const allTheaters = data.theaters || [];
-                
-                if (allTheaters.length === 0) return logger.error("No theaters found");
-
-                // 2. Parse URL Params for ?1, ?2 filtering
-                const urlParams = new URLSearchParams(window.location.search);
-                const requestedIndices = [];
-                
-                for (const key of urlParams.keys()) {
-                    // Check if key is a number (e.g. "1" from "?1")
-                    const num = parseInt(key);
-                    if (!isNaN(num) && num > 0) {
-                        requestedIndices.push(num - 1); // Convert 1-based to 0-based
-                    }
-                }
-
-                let targets = [];
-                if (requestedIndices.length > 0) {
-                    // Filter specifically requested theaters
-                    targets = allTheaters.filter((_, index) => requestedIndices.includes(index));
-                    
-                    if (targets.length === 0) {
-                        return logger.error(`Theaters ${requestedIndices.map(i=>i+1).join(', ')} not found.`);
-                    }
-                    logger.log(`Displaying specific theaters: ${targets.map(t => t.name).join(', ')}`);
-                } else {
-                    // Default: First 3
-                    targets = allTheaters.slice(0, 3);
-                    logger.log(`Displaying default multiview (first 3)`);
-                }
-
-                // 3. Initialize Players
-                targets.forEach(t => {
-                    const wrapper = document.createElement('div');
-                    wrapper.className = 'cam-wrapper';
-                    appContainer.appendChild(wrapper);
-
-                    const feed = new WebRTCFeed(wrapper, t.slug);
-                    feed.start();
-
-                    players.push({ wrapper, feed });
-                });
-
-                // 4. Layout Engine
-                window.addEventListener('resize', calculateLayout);
-                calculateLayout();
-
+                await api.restartService();
+                setTimeout(() => window.location.reload(), 5000);
             } catch (err) {
-                logger.error(`Init Error: ${err.message}`);
+                alert('Échec du redémarrage : ' + err.message);
+            }
+        }
+    });
+
+    // Timeline Overlay Component
+    class TimelineOverlay {
+        constructor(container, theaterSlug, theaterNumber, showClock = false) {
+            this.container = container;
+            this.theaterSlug = theaterSlug;
+            this.theaterNumber = theaterNumber;
+            this.showClock = showClock;
+            this.updateInterval = null;
+            this.elements = null;
+            this.clockElement = null;
+            
+            this.render();
+            // Small delay to ensure DOM is ready
+            setTimeout(() => {
+                this.update();
+                this.updateInterval = setInterval(() => this.update(), 2000);
+            }, 100);
+            
+            if (this.showClock) {
+                this.updateClock();
+                setInterval(() => this.updateClock(), 1000);
             }
         }
 
-        function calculateLayout() {
-            if (players.length === 0) return;
+        render() {
+            // Theater badge (top right)
+            const badge = document.createElement('div');
+            badge.className = 'theater-badge';
+            badge.innerHTML = `<div class="badge-id">S${this.theaterNumber}</div>`;
+            this.container.appendChild(badge);
 
-            const W = window.innerWidth;
-            const H = window.innerHeight;
-            const count = players.length;
+            // World clock (top left, only if showClock is true)
+            if (this.showClock) {
+                const clock = document.createElement('div');
+                clock.className = 'world-clock';
+                clock.innerHTML = `<div class="clock-time">--:--:--</div>`;
+                this.container.appendChild(clock);
+                this.clockElement = clock.querySelector('.clock-time');
+            }
 
-            // Scenario A: Horizontal
-            const hSlotW = W / count;
-            const hValid = getSquishedDimensions(hSlotW, H);
-            const hTotalArea = hValid.area * count;
+            // Timeline overlay
+            const overlay = document.createElement('div');
+            overlay.className = 'timeline-overlay';
+            overlay.innerHTML = `
+                <div class="timeline-header">
+                    <svg class="playback-icon" viewBox="0 0 24 24" fill="currentColor">
+                        <path class="icon-play" d="M8 5v14l11-7z"/>
+                        <path class="icon-pause" style="display:none;" d="M6 4h4v16H6V4zm8 0h4v16h-4V4z"/>
+                        <rect class="icon-stop" style="display:none;" x="6" y="6" width="12" height="12"/>
+                    </svg>
+                    <div class="show-title">Chargement...</div>
+                </div>
+                <div class="progress-bar-mini">
+                    <div class="progress-fill-mini"></div>
+                </div>
+                <div class="timeline-times">
+                    <div class="time-group">
+                        <div class="time-label">Écoulé</div>
+                        <div class="time-value time-elapsed">--:--</div>
+                    </div>
+                    <div class="time-group">
+                        <div class="time-label">Restant</div>
+                        <div class="time-value time-remaining">--:--</div>
+                    </div>
+                    <div class="time-group">
+                        <div class="time-label">Fin</div>
+                        <div class="time-value time-end">--:--</div>
+                    </div>
+                </div>
+            `;
+            this.container.appendChild(overlay);
 
-            // Scenario B: Vertical
-            const vSlotH = H / count;
-            const vValid = getSquishedDimensions(W, vSlotH);
-            const vTotalArea = vValid.area * count;
+            // Store element references
+            this.elements = {
+                overlay: overlay,
+                title: overlay.querySelector('.show-title'),
+                progress: overlay.querySelector('.progress-fill-mini'),
+                elapsed: overlay.querySelector('.time-elapsed'),
+                remaining: overlay.querySelector('.time-remaining'),
+                end: overlay.querySelector('.time-end'),
+                icon: overlay.querySelector('.playback-icon'),
+                iconPlay: overlay.querySelector('.icon-play'),
+                iconPause: overlay.querySelector('.icon-pause'),
+                iconStop: overlay.querySelector('.icon-stop')
+            };
 
-            // Decision
-            let bestLayout = (hTotalArea >= vTotalArea) ? 'horizontal' : 'vertical';
-            let finalDims = (hTotalArea >= vTotalArea) ? hValid : vValid;
+            console.log(`Timeline overlay rendered for ${this.theaterSlug}, S${this.theaterNumber}`);
+        }
 
-            // Apply
-            appContainer.style.flexDirection = (bestLayout === 'horizontal') ? 'row' : 'column';
-            appContainer.style.width = (bestLayout === 'horizontal') ? '100vw' : `${finalDims.w}px`;
-            appContainer.style.height = (bestLayout === 'vertical') ? '100vh' : `${finalDims.h}px`;
+        async update() {
+            if (!this.elements) {
+                console.warn('Elements not ready yet');
+                return;
+            }
 
-            players.forEach(p => {
-                p.wrapper.style.width = `${finalDims.w}px`;
-                p.wrapper.style.height = `${finalDims.h}px`;
+            try {
+                console.log(`Fetching playback for ${this.theaterSlug}`);
+                const response = await api.getPlayback(this.theaterSlug);
+                
+                console.log(`Response for ${this.theaterSlug}:`, response);
+                
+                if (response && response.success && response.playback) {
+                    this.updateUI(response.playback);
+                } else {
+                    console.warn(`Invalid response structure for ${this.theaterSlug}`, response);
+                    this.showError();
+                }
+            } catch (error) {
+                console.error(`Timeline update error for ${this.theaterSlug}:`, error);
+                this.showError();
+            }
+        }
+
+        updateUI(playback) {
+            if (!this.elements) return;
+
+            try {
+                const state = playback.stateInfo || 'Unknown';
+                console.log(`Updating UI for ${this.theaterSlug}: state=${state}, title=${playback.splTitle}`);
+                
+                // Update icon visibility
+                this.elements.iconPlay.style.display = 'none';
+                this.elements.iconPause.style.display = 'none';
+                this.elements.iconStop.style.display = 'none';
+                
+                // Reset classes
+                this.elements.icon.className = 'playback-icon';
+                this.elements.progress.className = 'progress-fill-mini';
+                
+                if (state === 'Play') {
+                    this.elements.iconPlay.style.display = 'block';
+                    this.elements.icon.classList.add('playing');
+                    
+                    const cpl = playback.cplTitle || '';
+                    if (cpl.includes('_FTR') || cpl.includes('_SHR')) {
+                        this.elements.progress.classList.add('feature');
+                    }
+                } else if (state === 'Pause') {
+                    this.elements.iconPause.style.display = 'block';
+                    this.elements.icon.classList.add('paused');
+                    this.elements.progress.classList.add('paused');
+                } else {
+                    // Stop or any other state
+                    this.elements.iconStop.style.display = 'block';
+                    this.elements.icon.classList.add('stopped');
+                    this.elements.progress.classList.add('stopped');
+                }
+
+                // Update title
+                const title = playback.splTitle || 'Sans titre';
+                this.elements.title.textContent = title;
+                this.elements.title.title = title;
+
+                // Calculate times - ensure we parse as integers
+                const position = parseInt(playback.splPosition, 10) || 0;
+                const duration = parseInt(playback.splDuration, 10) || 1;
+                const remaining = Math.max(0, duration - position);
+                const percentage = Math.min(100, Math.max(0, (position / duration) * 100));
+
+                // Update progress bar
+                this.elements.progress.style.width = `${percentage}%`;
+
+                // Update time displays
+                this.elements.elapsed.textContent = this.formatTime(position);
+                this.elements.remaining.textContent = this.formatTime(remaining);
+                
+                // Calculate end time
+                const now = new Date();
+                const endTime = new Date(now.getTime() + (remaining * 1000));
+                this.elements.end.textContent = this.formatClock(endTime);
+
+                console.log(`UI updated: ${title}, ${position}/${duration} (${percentage.toFixed(1)}%)`);
+            } catch (error) {
+                console.error('Error in updateUI:', error);
+                this.showError();
+            }
+        }
+
+        showError() {
+            if (!this.elements) return;
+            
+            this.elements.title.textContent = 'Erreur';
+            this.elements.progress.style.width = '0%';
+            this.elements.elapsed.textContent = '--:--';
+            this.elements.remaining.textContent = '--:--';
+            this.elements.end.textContent = '--:--';
+        }
+
+        updateClock() {
+            if (this.clockElement) {
+                const now = new Date();
+                this.clockElement.textContent = now.toLocaleTimeString('fr-FR');
+            }
+        }
+
+        formatTime(seconds) {
+            const h = Math.floor(seconds / 3600);
+            const m = Math.floor((seconds % 3600) / 60);
+            const s = Math.floor(seconds % 60);
+            
+            if (h > 0) {
+                return `${h}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+            } else {
+                return `${m}:${String(s).padStart(2, '0')}`;
+            }
+        }
+
+        formatClock(date) {
+            return date.toLocaleTimeString('fr-FR', { 
+                hour: '2-digit', 
+                minute: '2-digit' 
             });
         }
 
-        function getSquishedDimensions(slotW, slotH) {
-            const slotAR = slotW / slotH;
+        destroy() {
+            if (this.updateInterval) {
+                clearInterval(this.updateInterval);
+            }
+        }
+    }
+
+    // --- WebRTC Player Class ---
+    class WebRTCFeed {
+        constructor(container, theaterSlug, theaterNumber, isFirst) {
+            this.container = container;
+            this.slug = theaterSlug;
+            this.pc = null;
             
-            // If within tolerance, fill completely
-            if (slotAR >= MIN_AR && slotAR <= MAX_AR) {
-                return { w: slotW, h: slotH, area: slotW * slotH };
-            }
-            // Slot too narrow/tall: constrain by Width
-            if (slotAR < MIN_AR) { 
-                const h = slotW / MIN_AR; 
-                return { w: slotW, h: h, area: slotW * h }; 
-            }
-            // Slot too wide/short: constrain by Height
-            if (slotAR > MAX_AR) { 
-                const w = slotH * MAX_AR; 
-                return { w: w, h: slotH, area: w * slotH }; 
-            }
-            return { w: slotW, h: slotH, area: 0 };
+            this.spinner = document.createElement('div');
+            this.spinner.className = 'spinner';
+            this.container.appendChild(this.spinner);
+
+            this.video = document.createElement('video');
+            this.video.muted = true;
+            this.video.autoplay = true;
+            this.video.playsInline = true;
+            this.video.style.opacity = '0'; 
+            this.video.style.transition = 'opacity 0.5s ease';
+            this.container.appendChild(this.video);
+
+            // Timeline Overlay - pass slug and actual theater number
+            this.timeline = new TimelineOverlay(container, theaterSlug, theaterNumber, isFirst);
+
+            this.video.onplaying = () => {
+                this.spinner.style.display = 'none';
+                this.video.style.opacity = '1';
+            };
+
+            this.video.onwaiting = () => {
+                this.spinner.style.display = 'block';
+            };
+            
+            this.reloadInterval = setInterval(() => {
+                logger.log(`[${this.slug}] Scheduled reload...`);
+                this.restart();
+            }, 10 * 60 * 1000);
         }
 
-        init();
-    </script>
+        async start() {
+            try {
+                this.spinner.style.display = 'block';
+                const whepUrl = `/api/whep/${this.slug}`;
+                logger.log(`Starting WebRTC for ${this.slug}`);
+
+                this.pc = new RTCPeerConnection({ iceServers: [] });
+                
+                this.pc.onconnectionstatechange = () => {
+                    const state = this.pc.connectionState;
+                    logger.log(`[${this.slug}] Connection State: ${state}`);
+                    if (state === 'failed' || state === 'disconnected') {
+                        logger.log(`[${this.slug}] Connection failed. Restarting...`);
+                        this.restart();
+                    }
+                };
+
+                this.pc.addTransceiver('video', { direction: 'recvonly' });
+                
+                const remoteStream = new MediaStream();
+                this.video.srcObject = remoteStream;
+
+                this.pc.ontrack = (ev) => {
+                    ev.streams[0].getTracks().forEach(track => remoteStream.addTrack(track));
+                };
+
+                const offer = await this.pc.createOffer();
+                await this.pc.setLocalDescription(offer);
+                await this.waitIceComplete();
+
+                const res = await fetch(whepUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/sdp' },
+                    body: this.pc.localDescription.sdp
+                });
+
+                if (!res.ok) throw new Error(`WHEP Error ${res.status}`);
+                
+                const answer = await res.text();
+                await this.pc.setRemoteDescription({ type: 'answer', sdp: answer });
+                
+            } catch (e) {
+                logger.error(`Stream Error (${this.slug}): ${e.message}`);
+                setTimeout(() => this.restart(), 5000);
+            }
+        }
+
+        waitIceComplete() {
+            return new Promise(resolve => {
+                if (this.pc.iceGatheringState === 'complete') return resolve();
+                const check = () => {
+                    if (this.pc.iceGatheringState === 'complete') {
+                        this.pc.removeEventListener('icegatheringstatechange', check);
+                        resolve();
+                    }
+                };
+                this.pc.addEventListener('icegatheringstatechange', check);
+                setTimeout(resolve, 1000);
+            });
+        }
+
+        restart() {
+            this.video.style.opacity = '0';
+            this.spinner.style.display = 'block';
+            
+            if (this.pc) {
+                this.pc.close();
+                this.pc = null;
+            }
+            setTimeout(() => this.start(), 500);
+        }
+    }
+
+    // --- Main Logic ---
+    async function init() {
+        try {
+            const data = await api.getTheaters();
+            const allTheaters = data.theaters || [];
+            
+            if (allTheaters.length === 0) return logger.error("Aucune salle trouvée");
+
+            const urlParams = new URLSearchParams(window.location.search);
+            const requestedIndices = [];
+            
+            for (const key of urlParams.keys()) {
+                const num = parseInt(key);
+                if (!isNaN(num) && num > 0) {
+                    requestedIndices.push(num - 1);
+                }
+            }
+
+            let targets = [];
+            let targetIndices = [];
+            
+            if (requestedIndices.length > 0) {
+                // Keep track of original indices
+                requestedIndices.forEach(idx => {
+                    if (idx < allTheaters.length) {
+                        targets.push(allTheaters[idx]);
+                        targetIndices.push(idx + 1); // 1-based for display
+                    }
+                });
+                
+                if (targets.length === 0) {
+                    return logger.error(`Salles ${requestedIndices.map(i=>i+1).join(', ')} introuvables.`);
+                }
+                logger.log(`Affichage des salles: ${targets.map(t => t.name).join(', ')}`);
+            } else {
+                // Default: First 3
+                targets = allTheaters.slice(0, 3);
+                targetIndices = [1, 2, 3].slice(0, targets.length);
+                logger.log(`Affichage multiview par défaut (3 premières salles)`);
+            }
+
+            // Create players with correct theater numbers
+            targets.forEach((t, arrIndex) => {
+                const wrapper = document.createElement('div');
+                wrapper.className = 'cam-wrapper';
+                appContainer.appendChild(wrapper);
+
+                const theaterNumber = targetIndices[arrIndex];
+                const feed = new WebRTCFeed(wrapper, t.slug, theaterNumber, arrIndex === 0);
+                feed.start();
+
+                players.push({ wrapper, feed });
+            });
+
+            window.addEventListener('resize', calculateLayout);
+            calculateLayout();
+
+        } catch (err) {
+            logger.error(`Erreur d'initialisation: ${err.message}`);
+        }
+    }
+
+    function calculateLayout() {
+        if (players.length === 0) return;
+
+        const W = window.innerWidth;
+        const H = window.innerHeight;
+        const count = players.length;
+
+        const hSlotW = W / count;
+        const hValid = getSquishedDimensions(hSlotW, H);
+        const hTotalArea = hValid.area * count;
+
+        const vSlotH = H / count;
+        const vValid = getSquishedDimensions(W, vSlotH);
+        const vTotalArea = vValid.area * count;
+
+        let bestLayout = (hTotalArea >= vTotalArea) ? 'horizontal' : 'vertical';
+        let finalDims = (hTotalArea >= vTotalArea) ? hValid : vValid;
+
+        appContainer.style.flexDirection = (bestLayout === 'horizontal') ? 'row' : 'column';
+        appContainer.style.width = (bestLayout === 'horizontal') ? '100vw' : `${finalDims.w}px`;
+        appContainer.style.height = (bestLayout === 'vertical') ? '100vh' : `${finalDims.h}px`;
+
+        players.forEach(p => {
+            p.wrapper.style.width = `${finalDims.w}px`;
+            p.wrapper.style.height = `${finalDims.h}px`;
+        });
+    }
+
+    function getSquishedDimensions(slotW, slotH) {
+        const slotAR = slotW / slotH;
+        
+        if (slotAR >= MIN_AR && slotAR <= MAX_AR) {
+            return { w: slotW, h: slotH, area: slotW * slotH };
+        }
+        if (slotAR < MIN_AR) { 
+            const h = slotW / MIN_AR; 
+            return { w: slotW, h: h, area: slotW * h }; 
+        }
+        if (slotAR > MAX_AR) { 
+            const w = slotH * MAX_AR; 
+            return { w: w, h: slotH, area: w * slotH }; 
+        }
+        return { w: slotW, h: slotH, area: 0 };
+    }
+
+    init();
+</script>
+
 </body>
 </html>
