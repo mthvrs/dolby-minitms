@@ -5,6 +5,7 @@ const expressWs = require('express-ws');
 const config = require('./config');
 const webrtcGateway = require('./services/webrtcGateway');
 const Logger = require('./services/logger');
+const playbackRouter = require('./routes/playback');
 
 // Initialize Logger
 const logger = new Logger('Server');
@@ -28,6 +29,7 @@ app.use(require('./routes/streams'));
 const theaters = require('./routes/theaters');
 app.use(theaters.router);
 app.use('/api/macros', require('./routes/macros'));
+app.use(playbackRouter);
 
 // Multiview Route
 app.get('/cams', (req, res) => {

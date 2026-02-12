@@ -221,22 +221,30 @@ class App {
       tabContent.className = 'tab-content';
       tabContent.id = `${safeId}-content`;
       tabContent.innerHTML = `
-        <div class="theater-detail">
-          <div class="controls-section" id="controls-${safeId}">
-            <div class="loading">Chargement...</div>
-          </div>
-          <div class="right-panel">
-            <h3 class="panel-title">Vue en direct</h3>
-            
-            <div class="video-player-container" id="video-${safeId}"></div>
-          </div>
-        </div>
-      `;
+  <div class="theater-detail">
+    <div class="controls-section" id="controls-${safeId}">
+      <div class="loading">Chargement...</div>
+    </div>
+    <div class="right-panel">
+      <h3 class="panel-title">Vue en direct</h3>
+      
+      <div class="video-player-container" id="video-${safeId}"></div>
+      
+      <div class="playback-timeline-container" id="timeline-${safeId}"></div>
+    </div>
+  </div>
+`;
       contentContainer.appendChild(tabContent);
 
       const videoContainer = tabContent.querySelector(`#video-${safeId}`);
       const videoPlayer = new VideoPlayer(videoContainer, name);
       videoPlayer.initialize();
+
+      const timelineContainer = tabContent.querySelector(`#timeline-${safeId}`);
+const playbackTimeline = new PlaybackTimeline(timelineContainer, name, false);
+playbackTimeline.initialize();
+
+this.theaterPanels[safeId] = { videoPlayer, macroPanel, playbackTimeline };
 
       const controlsContainer = tabContent.querySelector(`#controls-${safeId}`);
       const macroPanel = new MacroPanel(controlsContainer, name);

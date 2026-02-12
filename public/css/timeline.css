@@ -1,0 +1,137 @@
+/* Playback Timeline Styles */
+.playback-timeline-container {
+    margin-top: 1rem;
+}
+
+.playback-timeline {
+    background: var(--card-bg);
+    border-radius: 8px;
+    padding: 1rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.playback-timeline.compact {
+    padding: 0.75rem;
+}
+
+.timeline-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 0.75rem;
+}
+
+.playback-state {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 600;
+    min-width: 80px;
+}
+
+.state-icon {
+    font-size: 1.2em;
+}
+
+.playback-timeline.playing .state-icon {
+    color: var(--success-color, #4caf50);
+}
+
+.playback-timeline.paused .state-icon {
+    color: var(--warning-color, #ff9800);
+}
+
+.playback-timeline.stopped .state-icon {
+    color: var(--error-color, #f44336);
+}
+
+.playback-title {
+    flex: 1;
+    font-size: 0.95em;
+    color: var(--text-secondary, #888);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.timeline-progress {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.progress-bar {
+    width: 100%;
+    height: 8px;
+    background: var(--progress-bg, #333);
+    border-radius: 4px;
+    overflow: hidden;
+    position: relative;
+}
+
+.progress-fill {
+    height: 100%;
+    background: var(--primary-color, #2196f3);
+    transition: width 0.3s ease;
+    border-radius: 4px;
+}
+
+.playback-timeline.playing .progress-fill {
+    background: linear-gradient(90deg, #4caf50, #66bb6a);
+}
+
+.timeline-info {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.85em;
+    color: var(--text-secondary, #888);
+    font-family: 'Courier New', monospace;
+}
+
+.time-separator {
+    margin: 0 0.25rem;
+}
+
+/* Compact variant for overview cards */
+.playback-timeline.compact .timeline-header {
+    margin-bottom: 0.5rem;
+}
+
+.playback-timeline.compact .playback-title {
+    font-size: 0.85em;
+}
+
+.playback-timeline.compact .progress-bar {
+    height: 6px;
+}
+
+.playback-timeline.compact .timeline-info {
+    font-size: 0.75em;
+}
+
+/* Theater card adjustments */
+.theater-card .playback-timeline-container {
+    margin-top: 0.5rem;
+}
+
+/* Detail page timeline */
+.theater-detail .right-panel .playback-timeline-container {
+    margin-top: 1rem;
+}
+
+/* Dark/Light theme support */
+[data-theme="light"] .playback-timeline {
+    background: #f5f5f5;
+}
+
+[data-theme="light"] .progress-bar {
+    background: #e0e0e0;
+}
+
+[data-theme="dark"] .playback-timeline {
+    background: #1e1e1e;
+}
+
+[data-theme="dark"] .progress-bar {
+    background: #333;
+}

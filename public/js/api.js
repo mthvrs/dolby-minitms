@@ -75,6 +75,11 @@ class API {
       method: 'POST'
     });
   }
+
+  // Playback
+  getPlayback(theaterNameOrSlug) {
+    return this.request(`/api/playback/${encodeURIComponent(theaterNameOrSlug)}`);
+}
 }
 
 // Expose as global for classic scripts
