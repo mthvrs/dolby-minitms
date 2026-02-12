@@ -232,12 +232,12 @@ button {
 }
 
 /* =========================================
-   5. Overview Grid & Cards
+   5. Overview Grid & Cards (HORIZONTAL LAYOUT)
    ========================================= */
 .overview-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
     width: 100%;
 }
 
@@ -246,12 +246,13 @@ button {
     border: 1px solid var(--color-border);
     border-radius: 8px;
     overflow: hidden;
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    grid-template-rows: auto 1fr;
     cursor: pointer;
     transition: transform 0.2s, box-shadow 0.2s;
-    height: 100%;
     box-shadow: var(--shadow-sm);
+    min-height: 120px;
 }
 
 .theater-card:hover {
@@ -261,18 +262,36 @@ button {
 }
 
 .theater-info {
-    padding: 1rem;
-    text-align: center;
-    border-bottom: 1px solid var(--color-border);
+    padding: 0.75rem 1rem;
+    text-align: left;
+    border-right: 1px solid var(--color-border);
+    grid-column: 1;
+    grid-row: 1 / -1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 120px;
 }
 
 .theater-info h2 {
     font-size: 1.1rem;
     margin: 0;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    writing-mode: horizontal-tb;
     color: var(--color-text);
+    text-align: center;
+}
+
+.video-player-container {
+    grid-column: 2;
+    grid-row: 1;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+}
+
+.playback-timeline-container {
+    grid-column: 2;
+    grid-row: 2;
+    padding: 0.75rem 1rem;
 }
 
 /* Playback info */
@@ -575,13 +594,52 @@ button {
     font-style: italic;
 }
 
-/* Responsive Grid Logic */
-@media (max-width: 1200px) {
-    .overview-grid { grid-template-columns: repeat(2, 1fr); }
+/* Responsive Grid Logic for Overview - Mobile */
+@media (max-width: 600px) {
+    .overview-grid {
+        gap: 0.75rem;
+    }
+    
+    .theater-card {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto auto auto;
+    }
+    
+    .theater-info {
+        grid-column: 1;
+        grid-row: 1;
+        border-right: none;
+        border-bottom: 1px solid var(--color-border);
+        min-width: unset;
+        padding: 0.75rem;
+    }
+    
+    .video-player-container {
+        grid-column: 1;
+        grid-row: 2;
+    }
+    
+    .playback-timeline-container {
+        grid-column: 1;
+        grid-row: 3;
+    }
 }
 
-/* iPad Landscape / Portrait Mobile Breakpoint */
-@media (max-width: 900px) {
+/* iPad Landscape / Portrait Breakpoint - USE DESKTOP LAYOUT */
+@media (min-width: 768px) and (max-width: 1024px) and (orientation: landscape) {
+    /* Keep desktop layout for iPad landscape */
+    .theater-detail {
+        grid-template-columns: 1fr 400px;
+        height: calc(100vh - 120px);
+    }
+    
+    .right-panel {
+        order: 0; /* Keep on right */
+    }
+}
+
+/* iPad Portrait and smaller tablets */
+@media (max-width: 767px) {
     .theater-detail {
         grid-template-columns: 1fr;
         height: auto;
@@ -595,11 +653,8 @@ button {
 }
 
 @media (max-width: 600px) {
-    .overview-grid { grid-template-columns: 1fr; }
-
     .header {
         padding: 0.75rem 1rem;
-        /* Mobile: Header is top, so we want border bottom. Handled by generic class above. */
     }
     
     .tabs {
