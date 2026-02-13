@@ -202,7 +202,7 @@
     white-space: nowrap;
 }
 
-/* CPL Title - Full display but with proper overflow handling */
+/* CPL Title - Can be truncated, SPL has priority */
 .cpl-title-wrapper {
     padding: 0.5rem 0.25rem 0 0.25rem;
     border-top: 1px solid rgba(255, 255, 255, 0.1);
@@ -215,10 +215,59 @@
     font-size: 0.95em;
     font-weight: 500;
     color: var(--text-secondary, #bbb);
-    word-wrap: break-word;
-    overflow-wrap: break-word;
-    line-height: 1.4;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
     max-width: 100%;
+}
+
+/* === AMÉLIORATIONS POUR ÉCRANS 7 POUCES === */
+
+/* Titres SPL beaucoup plus grands et toujours prioritaires */
+.playback-title.spl-title {
+    font-size: 1.8em !important;
+    font-weight: 800;
+    flex-shrink: 0;
+}
+
+/* Timeline plus épaisse */
+.progress-bar {
+    height: 14px !important;
+    border-radius: 7px;
+}
+
+.progress-fill {
+    border-radius: 7px;
+}
+
+/* Minuteurs CONSIDÉRABLEMENT plus grands */
+.time-value {
+    font-size: 1.8em !important;
+    font-weight: 800;
+}
+
+.time-label {
+    font-size: 0.85em !important;
+    font-weight: 700;
+}
+
+.timeline-info {
+    gap: 1.5rem;
+    padding: 1rem;
+}
+
+/* Icônes de statut beaucoup plus visibles */
+.state-icon {
+    width: 28px !important;
+    height: 28px !important;
+    opacity: 0.9;
+}
+
+.playback-timeline.playing .state-icon-play,
+.playback-timeline.paused .state-icon-pause,
+.playback-timeline.stopped .state-icon-stop {
+    opacity: 1;
+    filter: drop-shadow(0 0 4px currentColor);
 }
 
 /* Mobile optimizations */
