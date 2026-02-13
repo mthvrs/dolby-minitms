@@ -10,6 +10,7 @@ class MacroPanel {
             const response = await api.getMacros(this.theaterName);
             this.macros = response.macros;
             this.render();
+            this.addScrollControls();
         } catch (error) {
             this.container.innerHTML = '<div class="loading">Erreur chargement macros</div>';
         }
@@ -48,6 +49,40 @@ class MacroPanel {
         // Attach event listeners
         this.container.querySelectorAll('.macro-btn').forEach(btn => {
             btn.addEventListener('click', () => this.handleMacroClick(btn));
+        });
+    }
+
+    addScrollControls() {
+        // Remove existing scroll controls if any
+        const existing = this.container.querySelector('.macro-scroll-controls');
+        if (existing) existing.remove();
+
+        const scrollContainer = document.createElement('div');
+        scrollContainer.className = 'macro-scroll-controls';
+        scrollContainer.innerHTML = `
+            <button class="scroll-btn scroll-up" aria-label="Défiler vers le haut">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z"/>
+                </svg>
+            </button>
+            <button class="scroll-btn scroll-down" aria-label="Défiler vers le bas">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/>
+                </svg>
+            </button>
+        `;
+        
+        this.container.appendChild(scrollContainer);
+        
+        // Calculate scroll amount: height of one macro group (approximately)
+        const groupHeight = 250;
+        
+        scrollContainer.querySelector('.scroll-up').addEventListener('click', () => {
+            this.container.scrollBy({ top: -groupHeight, behavior: 'smooth' });
+        });
+        
+        scrollContainer.querySelector('.scroll-down').addEventListener('click', () => {
+            this.container.scrollBy({ top: groupHeight, behavior: 'smooth' });
         });
     }
 
