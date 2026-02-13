@@ -9,6 +9,19 @@ class PlaybackTimeline {
         this.isDestroyed = false;
     }
 
+    // Nettoie le titre SPL en retirant les dates au format YYMMDD
+    cleanSplTitle(title) {
+        if (!title) return title;
+        
+        const currentYear = new Date().getFullYear();
+        const yearSuffix = String(currentYear).slice(-2); // "26" pour 2026
+        
+        // Regex: commence par 2 chiffres (année) + 4 chiffres (mois/jour) + espace
+        const datePattern = new RegExp(`^${yearSuffix}\\d{4}\\s+`);
+        
+        return title.replace(datePattern, '');
+    }
+
     async initialize() {
         this.render();
         await this.update();
@@ -148,12 +161,12 @@ class PlaybackTimeline {
             timeline.classList.add('feature');
         }
 
-        // Update SPL title (Show Playlist - prominent)
-        const displaySplTitle = playback.splTitle || 'Aucun titre';
+        // Update SPL title (Show Playlist - prominent) - Clean date prefix
+        const displaySplTitle = this.cleanSplTitle(playback.splTitle) || 'Aucun titre';
         splTitle.textContent = displaySplTitle;
         splTitle.title = displaySplTitle;
 
-        // Update CPL title - no truncation, show full title
+        // Update CPL title - can be truncated if needed
         const displayCplTitle = playback.cplTitle || '--';
         cplTitle.textContent = displayCplTitle;
         cplTitle.title = displayCplTitle;
