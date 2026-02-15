@@ -50,7 +50,7 @@ class TheaterCard {
     this.playbackTimeline.initialize();
 
     // 2. Setup Observer to sync Timeline State -> Status Strip Color
-    // The PlaybackTimeline adds classes .playing, .paused, .stopped to its container (usually).
+    // The PlaybackTimeline adds classes .playing, .paused, .stopped, .feature to its container.
     // We observe the timeline container for class changes.
     const timelineEl = timelineContainer.querySelector('.playback-timeline') || timelineContainer;
     const statusStrip = card.querySelector('.theater-status-strip');
@@ -68,7 +68,7 @@ class TheaterCard {
                         const classes = mutation.target.classList;
                         
                         // Reset
-                        statusStrip.classList.remove('playing', 'paused', 'stopped');
+                        statusStrip.classList.remove('playing', 'paused', 'stopped', 'feature');
                         iconPlay.style.display = 'none';
                         iconPause.style.display = 'none';
                         iconStop.style.display = 'none';
@@ -77,6 +77,11 @@ class TheaterCard {
                         if (classes.contains('playing')) {
                             statusStrip.classList.add('playing');
                             iconPlay.style.display = 'block';
+                            
+                            // Check for feature/short content (blue color)
+                            if (classes.contains('feature')) {
+                                statusStrip.classList.add('feature');
+                            }
                         } else if (classes.contains('paused')) {
                             statusStrip.classList.add('paused');
                             iconPause.style.display = 'block';
