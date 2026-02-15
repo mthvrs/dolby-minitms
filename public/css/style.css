@@ -282,64 +282,77 @@ button { font-family: inherit; }
 
 
 /* =========================================
-   7. Theater Detail View - NEW RESPONSIVE LAYOUT
+   7. Theater Detail View - TWO COLUMN SPLIT
    ========================================= */
 .theater-detail {
     display: grid;
-    grid-template-columns: 1fr;
-    grid-template-rows: auto 1fr;
+    grid-template-columns: 1fr 1fr;
     gap: 1rem;
     height: calc(100vh - 140px);
     overflow: hidden;
 }
 
-/* Top Section: Video + Timeline Side by Side */
-.right-panel {
+/* LEFT COLUMN - SCROLLABLE MACROS */
+.controls-section { 
+    grid-column: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding-right: 0.5rem;
     background-color: var(--color-panel);
-    padding: 1rem;
     border-radius: 12px;
     border: 2px solid var(--color-border);
-    display: grid;
-    grid-template-columns: minmax(400px, 1fr) 1.5fr;
-    grid-template-rows: auto 1fr;
-    gap: 1rem;
+    padding: 1.5rem;
+}
+
+/* RIGHT COLUMN - THEATER STATUS (FIXED, NO SCROLL) */
+.right-panel {
+    grid-column: 2;
+    background-color: var(--color-panel);
+    padding: 1.5rem;
+    border-radius: 12px;
+    border: 2px solid var(--color-border);
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
     overflow: hidden;
+    height: 100%;
 }
 
 .panel-title {
-    grid-column: 1 / -1;
     font-size: 1.5rem;
     font-weight: 800;
     margin: 0;
     text-align: center;
-    padding-bottom: 0.5rem;
+    padding-bottom: 0.75rem;
     border-bottom: 2px solid var(--color-border);
+    flex-shrink: 0;
 }
 
+/* Video Container - MAINTAINS ASPECT RATIO */
 .right-panel .video-player-container {
-    grid-column: 1;
-    grid-row: 2;
     width: 100%;
-    height: 100%;
-    max-height: 400px;
+    height: auto;
+    aspect-ratio: 16 / 9;
     background: #000;
     border-radius: 8px;
     overflow: hidden;
+    border: 3px solid var(--color-border);
+    flex-shrink: 0;
 }
 
+/* Timeline Container - TAKES REMAINING SPACE */
 .right-panel .playback-timeline-container {
-    grid-column: 2;
-    grid-row: 2;
-    padding: 1rem;
+    flex: 1;
+    padding: 1.5rem;
     display: flex;
     align-items: center;
-    overflow: hidden;
-}
-
-/* Controls Section Below */
-.controls-section { 
-    overflow-y: auto; 
-    padding-right: 0.5rem;
+    justify-content: center;
+    overflow-y: auto;
+    overflow-x: hidden;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    border: 2px solid var(--color-border);
+    min-height: 0;
 }
 
 /* =========================================
@@ -489,60 +502,37 @@ button { font-family: inherit; }
 }
 
 /* =========================================
-   RESPONSIVE LAYOUTS
+   RESPONSIVE LAYOUTS - TWO COLUMN APPROACH
    ========================================= */
 
-/* Large Desktop (1920px+) - Ultra Wide */
+/* Large Desktop (1920px+) - Keep 50/50 split */
 @media (min-width: 1920px) {
     .theater-detail {
-        grid-template-columns: 1fr 500px;
-        grid-template-rows: 1fr;
+        grid-template-columns: 1fr 1fr;
     }
     
-    .right-panel {
-        grid-column: 2;
-        grid-row: 1;
-        grid-template-columns: 1fr;
-        grid-template-rows: auto 1fr 1fr;
-        max-height: none;
-    }
-    
-    .right-panel .video-player-container {
-        grid-column: 1;
-        grid-row: 2;
-    }
-    
-    .right-panel .playback-timeline-container {
-        grid-column: 1;
-        grid-row: 3;
-    }
-    
-    .controls-section {
-        grid-column: 1;
-        grid-row: 1;
+    .macro-buttons {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
     }
 }
 
-/* Desktop (1400px - 1919px) - Standard Wide */
+/* Desktop (1400px - 1919px) - Favor macros slightly */
 @media (min-width: 1400px) and (max-width: 1919px) {
-    .right-panel {
-        grid-template-columns: minmax(350px, 1fr) 1.75fr;
+    .theater-detail {
+        grid-template-columns: 1.2fr 1fr;
     }
 }
 
-/* Laptop / Smaller Desktop (1024px - 1399px) */
+/* Laptop (1024px - 1399px) - Adjust column proportions */
 @media (min-width: 1024px) and (max-width: 1399px) {
     .theater-detail {
-        height: calc(100vh - 130px);
+        grid-template-columns: 1fr 1fr;
+        gap: 0.75rem;
     }
     
+    .controls-section,
     .right-panel {
-        grid-template-columns: minmax(320px, 1fr) 1.5fr;
-        padding: 0.75rem;
-    }
-    
-    .right-panel .video-player-container {
-        max-height: 300px;
+        padding: 1rem;
     }
     
     .macro-buttons {
@@ -557,40 +547,33 @@ button { font-family: inherit; }
     }
 }
 
-/* Horizontal Tablet / iPad (768px - 1023px) */
+/* Tablet Landscape (768px - 1023px) - Stack vertically */
 @media (min-width: 768px) and (max-width: 1023px) {
     .theater-detail {
-        grid-template-rows: minmax(280px, auto) 1fr;
-        height: calc(100vh - 120px);
+        grid-template-columns: 1fr;
+        grid-template-rows: 1fr 1fr;
         gap: 0.75rem;
     }
     
+    .controls-section {
+        grid-column: 1;
+        grid-row: 2;
+        max-height: 50vh;
+    }
+    
     .right-panel {
-        grid-template-columns: 1fr 1fr;
-        grid-template-rows: auto 1fr;
-        padding: 0.75rem;
-        gap: 0.75rem;
+        grid-column: 1;
+        grid-row: 1;
+        max-height: 50vh;
     }
     
     .panel-title {
         font-size: 1.2rem;
-        padding-bottom: 0.4rem;
-    }
-    
-    .right-panel .video-player-container {
-        grid-column: 1;
-        grid-row: 2;
-        max-height: 240px;
+        padding-bottom: 0.5rem;
     }
     
     .right-panel .playback-timeline-container {
-        grid-column: 2;
-        grid-row: 2;
-        padding: 0.5rem;
-    }
-    
-    .controls-section {
-        padding-right: 0.25rem;
+        padding: 1rem;
     }
     
     .macro-buttons {
@@ -614,23 +597,34 @@ button { font-family: inherit; }
     }
 }
 
-/* Vertical Tablet / Large Phone (481px - 767px) */
+/* Tablet Portrait / Large Phone (481px - 767px) - Full stack */
 @media (max-width: 767px) {
     .content {
-        padding: 0.5rem;
+        padding: 0.75rem;
     }
     
     .theater-detail {
+        grid-template-columns: 1fr;
         grid-template-rows: auto 1fr;
-        height: calc(100vh - 110px);
-        gap: 0.5rem;
+        height: auto;
+        min-height: calc(100vh - 110px);
+        gap: 0.75rem;
+    }
+    
+    .controls-section {
+        grid-column: 1;
+        grid-row: 2;
+        max-height: none;
+        padding: 1rem;
     }
     
     .right-panel {
-        grid-template-columns: 1fr;
-        grid-template-rows: auto auto auto;
-        padding: 0.75rem;
-        gap: 0.75rem;
+        grid-column: 1;
+        grid-row: 1;
+        max-height: none;
+        height: auto;
+        padding: 1rem;
+        gap: 1rem;
     }
     
     .panel-title {
@@ -638,21 +632,9 @@ button { font-family: inherit; }
         padding-bottom: 0.4rem;
     }
     
-    .right-panel .video-player-container {
-        grid-column: 1;
-        grid-row: 2;
-        max-height: 220px;
-        width: 100%;
-    }
-    
     .right-panel .playback-timeline-container {
-        grid-column: 1;
-        grid-row: 3;
-        padding: 0.75rem;
-    }
-    
-    .controls-section {
-        padding-right: 0;
+        padding: 1rem;
+        min-height: 280px;
     }
     
     .macro-buttons {
@@ -686,27 +668,28 @@ button { font-family: inherit; }
     }
 }
 
-/* Mobile Phone (320px - 480px) */
+/* Mobile Phone (320px - 480px) - Full stack, compact */
 @media (max-width: 480px) {
     .theater-detail {
-        height: calc(100vh - 100px);
+        gap: 0.5rem;
+    }
+    
+    .controls-section,
+    .right-panel {
+        padding: 0.75rem;
     }
     
     .right-panel {
-        padding: 0.5rem;
-        gap: 0.6rem;
+        gap: 0.75rem;
     }
     
     .panel-title {
         font-size: 1rem;
     }
     
-    .right-panel .video-player-container {
-        max-height: 180px;
-    }
-    
     .right-panel .playback-timeline-container {
-        padding: 0.5rem;
+        padding: 0.75rem;
+        min-height: 260px;
     }
     
     .macro-buttons {
