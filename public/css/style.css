@@ -248,12 +248,13 @@ button { font-family: inherit; }
     position: relative;
 }
 
-.playback-timeline-container {
+/* Overview Timeline - ADD PADDING */
+.theater-card .playback-timeline-container {
     flex: 1;
     display: flex;
     align-items: stretch;
     min-width: 0;
-    padding: 0.75rem 1rem;
+    padding: 0.75rem 1.5rem 0.75rem 1rem;
 }
 
 /* =========================================
@@ -714,8 +715,40 @@ button { font-family: inherit; }
     }
 }
 
+/* =========================================
+   iPAD SPECIFIC FIXES
+   ========================================= */
 /* Tablets (iPad) - Compact to fit 3 rooms + menu */
 @media (max-width: 1024px) {
+    /* MAKE HEADER THINNER */
+    .header {
+        padding: 0.5rem 0.75rem;
+        gap: 1rem;
+    }
+    
+    .clock {
+        font-size: 1.5rem;
+        letter-spacing: 1px;
+    }
+    
+    .theme-btn {
+        width: 36px;
+        height: 36px;
+        padding: 0.35rem;
+    }
+    
+    .theme-btn svg {
+        width: 20px;
+        height: 20px;
+    }
+    
+    /* MAKE TABS THINNER */
+    .tab {
+        padding: 0.75rem 1.25rem;
+        font-size: 1.1rem;
+        border-bottom: 3px solid transparent;
+    }
+    
     .content {
         padding: 0.5rem;
     }
@@ -724,30 +757,37 @@ button { font-family: inherit; }
         gap: 0.5rem;
     }
     
+    /* ADJUST CARD HEIGHT AND VIDEO SIZE */
     .theater-card {
-        height: 180px;
+        height: 200px;
     }
     
-    .video-player-container {
-        width: 160px;
+    /* LET VIDEO BE FULL 16:9 */
+    .theater-card .video-player-container {
+        width: auto;
+        height: 100%;
+        flex-shrink: 0;
     }
     
     .theater-status-strip {
-        width: 55px;
+        width: 50px;
     }
     
     .theater-name-vertical {
-        font-size: 1.1rem;
+        font-size: 1rem;
         letter-spacing: 1px;
     }
     
     .status-icon-large svg {
-        width: 36px;
-        height: 36px;
+        width: 32px;
+        height: 32px;
     }
     
-    .playback-timeline-container {
+    /* REDUCE TIMELINE SPACE TO MAKE ROOM FOR VIDEO */
+    .theater-card .playback-timeline-container {
         padding: 0.5rem 0.75rem;
+        flex: 0 1 auto;
+        min-width: 250px;
     }
 }
 
