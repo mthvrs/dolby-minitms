@@ -344,58 +344,75 @@
 }
 
 /* =========================================
-   RESPONSIVE - iPad COMPACT
+   RESPONSIVE - iPad COMPACT FOR OVERVIEW CARDS
    ========================================= */
 @media (max-width: 1024px) {
-    .playback-timeline {
-        gap: 0.4rem;
+    /* OVERVIEW CARDS - COMPACT EVERYTHING */
+    .theater-card .playback-timeline {
+        gap: 0.3rem;
+        padding: 0.5rem 0;
     }
     
-    .playback-title.spl-title {
-        font-size: 1.5rem;
+    .theater-card .timeline-header {
+        margin-bottom: 0.2rem;
     }
     
-    .timeline-main {
+    .theater-card .playback-title.spl-title {
+        font-size: 1.2rem;
+        line-height: 1.2;
+    }
+    
+    .theater-card .timeline-main {
         display: flex !important;
-        margin-bottom: 0.4rem;
-        gap: 0.5rem;
-    }
-    
-    .state-icon svg {
-        width: 24px;
-        height: 24px;
-    }
-    
-    .progress-bar {
-        height: 16px;
-    }
-    
-    .timeline-end-time {
-        font-size: 1.1rem;
-    }
-    
-    .timeline-info {
+        margin-bottom: 0.3rem;
         gap: 0.4rem;
     }
     
-    .time-item {
-        padding: 0.6rem 0.4rem;
-        gap: 0.25rem;
+    .theater-card .state-icon svg {
+        width: 18px;
+        height: 18px;
     }
     
-    .time-value {
-        font-size: 1.8rem;
+    .theater-card .progress-bar {
+        height: 14px;
     }
     
-    .time-label {
-        font-size: 0.7rem;
+    .theater-card .timeline-end-time {
+        font-size: 0.95rem;
+        letter-spacing: 0.5px;
     }
     
-    .cpl-title {
-        font-size: 1.3rem;
+    .theater-card .timeline-info {
+        gap: 0.3rem;
     }
     
-    /* Theater detail adjustments for tablet */
+    .theater-card .time-item {
+        padding: 0.4rem 0.3rem;
+        gap: 0.15rem;
+        border-width: 2px;
+    }
+    
+    .theater-card .time-value {
+        font-size: 1.4rem;
+        line-height: 1;
+    }
+    
+    .theater-card .time-label {
+        font-size: 0.6rem;
+        letter-spacing: 0.5px;
+    }
+    
+    .theater-card .cpl-title-wrapper {
+        padding-top: 0.2rem;
+        margin-top: 0.2rem;
+    }
+    
+    .theater-card .cpl-title {
+        font-size: 1rem;
+        line-height: 1.2;
+    }
+    
+    /* THEATER DETAIL adjustments for tablet */
     .theater-detail .playback-title.spl-title {
         font-size: 1.5rem;
     }
