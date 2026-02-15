@@ -308,22 +308,22 @@ button { font-family: inherit; }
 .right-panel {
     grid-column: 2;
     background-color: var(--color-panel);
-    padding: 1.5rem;
+    padding: 1rem;
     border-radius: 12px;
     border: 2px solid var(--color-border);
     display: flex;
     flex-direction: column;
-    gap: 1.5rem;
+    gap: 1rem;
     overflow: hidden;
     height: 100%;
 }
 
 .panel-title {
-    font-size: 1.5rem;
+    font-size: 1.3rem;
     font-weight: 800;
     margin: 0;
     text-align: center;
-    padding-bottom: 0.75rem;
+    padding-bottom: 0.5rem;
     border-bottom: 2px solid var(--color-border);
     flex-shrink: 0;
 }
@@ -340,18 +340,17 @@ button { font-family: inherit; }
     flex-shrink: 0;
 }
 
-/* Timeline Container - TAKES REMAINING SPACE */
+/* Timeline Container - TAKES REMAINING SPACE, NO SCROLL */
 .right-panel .playback-timeline-container {
     flex: 1;
-    padding: 1.5rem;
+    padding: 1rem;
     display: flex;
     align-items: center;
     justify-content: center;
-    overflow-y: auto;
-    overflow-x: hidden;
-    background: rgba(0, 0, 0, 0.2);
-    border-radius: 8px;
-    border: 2px solid var(--color-border);
+    overflow: visible;
+    background: transparent;
+    border-radius: 0;
+    border: none;
     min-height: 0;
 }
 
@@ -535,6 +534,10 @@ button { font-family: inherit; }
         padding: 1rem;
     }
     
+    .right-panel .playback-timeline-container {
+        padding: 0.75rem;
+    }
+    
     .macro-buttons {
         grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
         gap: 0.75rem;
@@ -573,7 +576,7 @@ button { font-family: inherit; }
     }
     
     .right-panel .playback-timeline-container {
-        padding: 1rem;
+        padding: 0.75rem;
     }
     
     .macro-buttons {
@@ -633,8 +636,7 @@ button { font-family: inherit; }
     }
     
     .right-panel .playback-timeline-container {
-        padding: 1rem;
-        min-height: 280px;
+        padding: 0.75rem;
     }
     
     .macro-buttons {
@@ -688,8 +690,7 @@ button { font-family: inherit; }
     }
     
     .right-panel .playback-timeline-container {
-        padding: 0.75rem;
-        min-height: 260px;
+        padding: 0.5rem;
     }
     
     .macro-buttons {
