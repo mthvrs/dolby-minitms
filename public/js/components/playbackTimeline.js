@@ -43,6 +43,7 @@ class PlaybackTimeline {
                     <div class="progress-bar">
                         <div class="progress-fill" style="width: 0%"></div>
                     </div>
+                    <div class="timeline-end-time">--:--</div>
                 </div>
                 <div class="timeline-info">
                     <div class="time-item">
@@ -52,10 +53,6 @@ class PlaybackTimeline {
                     <div class="time-item">
                         <span class="time-label">Restant</span>
                         <span class="time-value time-remaining">--:--</span>
-                    </div>
-                    <div class="time-item">
-                        <span class="time-label">Heure de fin</span>
-                        <span class="time-value time-end">--:--</span>
                     </div>
                 </div>
                 <div class="cpl-title-wrapper">
@@ -89,7 +86,7 @@ class PlaybackTimeline {
         const progressFill = this.container.querySelector('.progress-fill');
         const timeCurrent = this.container.querySelector('.time-current');
         const timeRemaining = this.container.querySelector('.time-remaining');
-        const timeEnd = this.container.querySelector('.time-end');
+        const timeEnd = this.container.querySelector('.timeline-end-time');
         const timeline = this.container.querySelector('.playback-timeline');
         
         const iconPlay = this.container.querySelector('.state-icon-play');
@@ -126,14 +123,11 @@ class PlaybackTimeline {
             timeline.classList.add('feature');
         }
 
-        // Update SPL title (Show Playlist - prominent)
+        // Update SPL title
         let displaySplTitle = playback.splTitle || 'Aucun titre';
 
-        // --- FILTER LOGIC: Remove leading date ID (e.g., "260215 " for 2026) ---
-        // Format: YYMMDD followed by a space. We verify YY matches current year.
         try {
-            const currentYearShort = new Date().getFullYear().toString().slice(-2); // e.g. "26"
-            // Regex: Starts with current YY, followed by 4 digits, followed by space(s)
+            const currentYearShort = new Date().getFullYear().toString().slice(-2);
             const datePrefixRegex = new RegExp(`^${currentYearShort}\\d{4}\\s+`);
             
             if (datePrefixRegex.test(displaySplTitle)) {
@@ -146,7 +140,7 @@ class PlaybackTimeline {
         splTitle.textContent = displaySplTitle;
         splTitle.title = displaySplTitle;
 
-        // Update CPL title - show full title, handled by CSS for truncation
+        // Update CPL title
         const displayCplTitle = playback.cplTitle || '--';
         cplTitle.textContent = displayCplTitle;
         cplTitle.title = displayCplTitle;
@@ -178,7 +172,7 @@ class PlaybackTimeline {
         const progressFill = this.container.querySelector('.progress-fill');
         const timeCurrent = this.container.querySelector('.time-current');
         const timeRemaining = this.container.querySelector('.time-remaining');
-        const timeEnd = this.container.querySelector('.time-end');
+        const timeEnd = this.container.querySelector('.timeline-end-time');
         
         if (splTitle) splTitle.textContent = message;
         if (cplTitle) cplTitle.textContent = '--';
