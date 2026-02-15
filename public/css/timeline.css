@@ -273,7 +273,7 @@
 }
 
 /* =========================================
-   THEATER DETAIL VIEW - COMPACT, NO SCROLL
+   THEATER DETAIL VIEW - VERTICAL STACKED TIMERS
    ========================================= */
 .theater-detail .playback-timeline {
     padding: 0;
@@ -306,10 +306,10 @@
     height: 24px;
 }
 
-/* COMPACT TIMERS - NO BOXES, 2X BIGGER */
+/* VERTICAL STACKED TIMERS - NO BOXES */
 .theater-detail .timeline-info {
     flex-direction: row;
-    gap: 2rem;
+    gap: 1.5rem;
     justify-content: center;
     margin: 0.5rem 0;
 }
@@ -318,12 +318,13 @@
     background: transparent;
     border: none;
     padding: 0;
-    gap: 0.75rem;
+    gap: 0.25rem;
     flex: 0 0 auto;
+    flex-direction: column;
 }
 
 .theater-detail .time-label {
-    font-size: 0.8rem;
+    font-size: 0.75rem;
     opacity: 0.8;
 }
 
@@ -355,7 +356,7 @@
    RESPONSIVE - iPad COMPACT FOR OVERVIEW CARDS
    ========================================= */
 @media (max-width: 1024px) {
-    /* OVERVIEW CARDS - COMPACT EVERYTHING */
+    /* OVERVIEW CARDS - COMPACT EVERYTHING - KEEP HORIZONTAL */
     .theater-card .playback-timeline {
         gap: 0.3rem;
         padding: 0.5rem 0;
@@ -398,6 +399,7 @@
         padding: 0.5rem 0.6rem;
         gap: 0.5rem;
         border-width: 2px;
+        flex-direction: row;
     }
     
     .theater-card .time-value {
@@ -421,9 +423,13 @@
         line-height: 1.2;
     }
     
-    /* THEATER DETAIL adjustments for tablet */
+    /* THEATER DETAIL - KEEP VERTICAL */
     .theater-detail .playback-title.spl-title {
         font-size: 1.5rem;
+    }
+    
+    .theater-detail .time-item {
+        flex-direction: column;
     }
     
     .theater-detail .time-value {
@@ -444,6 +450,7 @@
     
     .time-item {
         padding: 0.7rem 1rem;
+        flex-direction: row;
     }
     
     .time-value {
@@ -466,10 +473,14 @@
         font-size: 1rem;
     }
     
-    /* Keep theater detail timers horizontal on mobile */
+    /* Theater detail timers stay vertical on mobile */
     .theater-detail .timeline-info {
         flex-direction: row;
         gap: 1.5rem;
+    }
+    
+    .theater-detail .time-item {
+        flex-direction: column;
     }
     
     .theater-detail .time-value {
