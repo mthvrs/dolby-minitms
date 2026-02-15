@@ -99,15 +99,6 @@ class PlaybackTimeline {
         // Update state
         const state = playback.stateInfo || 'Unknown';
         
-        // Calculate times for glow effects
-        const position = parseInt(playback.splPosition || 0);
-        const duration = parseInt(playback.splDuration || 1);
-        const remaining = Math.max(0, duration - position);
-        const percentage = Math.min(100, Math.max(0, (position / duration) * 100));
-        
-        // Remove all glow classes
-        timeline.classList.remove('glow-paused', 'glow-stopped', 'glow-ending-blue', 'glow-ending-green');
-        
         // Update state icons visibility
         iconPlay.style.display = 'none';
         iconPause.style.display = 'none';
@@ -121,25 +112,12 @@ class PlaybackTimeline {
         if (state === 'Play') {
             iconPlay.style.display = 'block';
             timeline.classList.add('playing');
-            
-            // Check if less than 10 minutes remaining
-            if (remaining < 600) { // 600 seconds = 10 minutes
-                // Use blue for feature content, green for other content
-                const cplTitleText = playback.cplTitle || '';
-                if (cplTitleText.includes('_FTR') || cplTitleText.includes('_SHR')) {
-                    timeline.classList.add('glow-ending-blue');
-                } else {
-                    timeline.classList.add('glow-ending-green');
-                }
-            }
         } else if (state === 'Pause') {
             iconPause.style.display = 'block';
             timeline.classList.add('paused');
-            timeline.classList.add('glow-paused'); // Orange glow
         } else {
             iconStop.style.display = 'block';
             timeline.classList.add('stopped');
-            timeline.classList.add('glow-stopped'); // Red glow
         }
 
         // Check if CPL contains _FTR or _SHR for feature/short detection
@@ -149,14 +127,35 @@ class PlaybackTimeline {
         }
 
         // Update SPL title (Show Playlist - prominent)
-        const displaySplTitle = playback.splTitle || 'Aucun titre';
+        let displaySplTitle = playback.splTitle || 'Aucun titre';
+
+        // --- FILTER LOGIC: Remove leading date ID (e.g., "260215 " for 2026) ---
+        // Format: YYMMDD followed by a space. We verify YY matches current year.
+        try {
+            const currentYearShort = new Date().getFullYear().toString().slice(-2); // e.g. "26"
+            // Regex: Starts with current YY, followed by 4 digits, followed by space(s)
+            const datePrefixRegex = new RegExp(`^${currentYearShort}\\d{4}\\s+`);
+            
+            if (datePrefixRegex.test(displaySplTitle)) {
+                displaySplTitle = displaySplTitle.replace(datePrefixRegex, '');
+            }
+        } catch (e) {
+            console.warn('Error processing SPL title date filter', e);
+        }
+        
         splTitle.textContent = displaySplTitle;
         splTitle.title = displaySplTitle;
 
-        // Update CPL title - no truncation, show full title
+        // Update CPL title - show full title, handled by CSS for truncation
         const displayCplTitle = playback.cplTitle || '--';
         cplTitle.textContent = displayCplTitle;
         cplTitle.title = displayCplTitle;
+
+        // Calculate times
+        const position = parseInt(playback.splPosition || 0);
+        const duration = parseInt(playback.splDuration || 1);
+        const remaining = Math.max(0, duration - position);
+        const percentage = Math.min(100, Math.max(0, (position / duration) * 100));
         
         // Calculate end time
         const now = new Date();
@@ -180,12 +179,6 @@ class PlaybackTimeline {
         const timeCurrent = this.container.querySelector('.time-current');
         const timeRemaining = this.container.querySelector('.time-remaining');
         const timeEnd = this.container.querySelector('.time-end');
-        const timeline = this.container.querySelector('.playback-timeline');
-        
-        // Remove glow effects on error
-        if (timeline) {
-            timeline.classList.remove('glow-paused', 'glow-stopped', 'glow-ending-blue', 'glow-ending-green');
-        }
         
         if (splTitle) splTitle.textContent = message;
         if (cplTitle) cplTitle.textContent = '--';

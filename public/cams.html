@@ -131,6 +131,7 @@
             align-items: center;
             gap: 8px;
             margin-bottom: 8px;
+            width: 100%;
         }
 
         .playback-icon {
@@ -151,22 +152,13 @@
             color: #f44336;
         }
 
-        .show-title {
-            font-size: 14px;
-            font-weight: 700;
-            color: #fff;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            flex: 1;
-        }
-
         .title-container {
             display: flex;
             align-items: center;
             gap: 8px;
             flex: 1;
-            min-width: 0;
+            min-width: 0; /* Important for truncation in flex items */
+            overflow: hidden;
         }
 
         .show-title {
@@ -176,7 +168,12 @@
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
-            flex-shrink: 0;
+            /* FLEX FIX: 
+               flex-shrink: 0 ensures SPL does not shrink for CPL.
+               max-width: 100% ensures it doesn't push parents too wide if alone.
+            */
+            flex: 0 0 auto; 
+            max-width: 100%;
         }
 
         .cpl-title-mini {
@@ -187,7 +184,11 @@
             overflow: hidden;
             text-overflow: ellipsis;
             font-style: italic;
-            flex: 1;
+            /* FLEX FIX:
+               flex: 1 1 auto allows CPL to take remaining space AND shrink to 0 
+               if SPL takes all the room.
+            */
+            flex: 1 1 auto;
             min-width: 0;
         }
 
@@ -197,60 +198,6 @@
             border-radius: 3px;
             overflow: hidden;
             margin-bottom: 6px;
-            position: relative;
-        }
-
-        /* Pulsating glow animations for progress bar */
-        @keyframes pulse-glow-orange {
-            0%, 100% {
-                box-shadow: 0 0 0 rgba(245, 158, 11, 0);
-            }
-            50% {
-                box-shadow: 0 0 10px rgba(245, 158, 11, 0.8), 0 0 20px rgba(245, 158, 11, 0.4);
-            }
-        }
-
-        @keyframes pulse-glow-red {
-            0%, 100% {
-                box-shadow: 0 0 0 rgba(239, 68, 68, 0);
-            }
-            50% {
-                box-shadow: 0 0 10px rgba(239, 68, 68, 0.8), 0 0 20px rgba(239, 68, 68, 0.4);
-            }
-        }
-
-        @keyframes pulse-glow-blue {
-            0%, 100% {
-                box-shadow: 0 0 0 rgba(33, 150, 243, 0);
-            }
-            50% {
-                box-shadow: 0 0 10px rgba(33, 150, 243, 0.8), 0 0 20px rgba(33, 150, 243, 0.4);
-            }
-        }
-
-        @keyframes pulse-glow-green {
-            0%, 100% {
-                box-shadow: 0 0 0 rgba(16, 185, 129, 0);
-            }
-            50% {
-                box-shadow: 0 0 10px rgba(16, 185, 129, 0.8), 0 0 20px rgba(16, 185, 129, 0.4);
-            }
-        }
-
-        .progress-bar-mini.glow-paused {
-            animation: pulse-glow-orange 2s ease-in-out infinite;
-        }
-
-        .progress-bar-mini.glow-stopped {
-            animation: pulse-glow-red 2s ease-in-out infinite;
-        }
-
-        .progress-bar-mini.glow-ending-blue {
-            animation: pulse-glow-blue 2s ease-in-out infinite;
-        }
-
-        .progress-bar-mini.glow-ending-green {
-            animation: pulse-glow-green 2s ease-in-out infinite;
         }
 
         .progress-fill-mini {
@@ -343,7 +290,6 @@
     <div id="error-log"></div>
     <div id="app-container"></div>
 
-    <!-- Hover Controls -->
     <div id="hover-controls">
         <button class="control-btn" id="reload-btn">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -491,7 +437,6 @@
 
                 const title = overlay.querySelector('.show-title');
                 const cplTitleMini = overlay.querySelector('.cpl-title-mini');
-                const progressBar = overlay.querySelector('.progress-bar-mini');
                 const progress = overlay.querySelector('.progress-fill-mini');
                 const elapsed = overlay.querySelector('.time-elapsed');
                 const remaining = overlay.querySelector('.time-remaining');
@@ -503,21 +448,12 @@
 
                 const state = playback.stateInfo || 'Unknown';
                 
-                // Calculate times for glow effects
-                const position = parseInt(playback.splPosition || 0);
-                const duration = parseInt(playback.splDuration || 1);
-                const remainingTime = Math.max(0, duration - position);
-                const percentage = Math.min(100, Math.max(0, (position / duration) * 100));
-                
-                // Remove all glow classes from progress bar
-                progressBar.classList.remove('glow-paused', 'glow-stopped', 'glow-ending-blue', 'glow-ending-green');
-                
                 // Update icon
                 iconPlay.style.display = 'none';
                 iconPause.style.display = 'none';
                 iconStop.style.display = 'none';
                 
-                // Reset SVG classes using classList (not className)
+                // Reset SVG classes using classList
                 icon.classList.remove('playing', 'paused', 'stopped');
                 progress.classList.remove('feature', 'paused', 'stopped');
                 
@@ -529,30 +465,31 @@
                     if (cpl.includes('_FTR') || cpl.includes('_SHR')) {
                         progress.classList.add('feature');
                     }
-                    
-                    // Check if less than 10 minutes remaining
-                    if (remainingTime < 600) { // 600 seconds = 10 minutes
-                        // Use blue for feature content, green for other content
-                        if (cpl.includes('_FTR') || cpl.includes('_SHR')) {
-                            progressBar.classList.add('glow-ending-blue');
-                        } else {
-                            progressBar.classList.add('glow-ending-green');
-                        }
-                    }
                 } else if (state === 'Pause') {
                     iconPause.style.display = 'block';
                     icon.classList.add('paused');
                     progress.classList.add('paused');
-                    progressBar.classList.add('glow-paused'); // Orange glow
                 } else {
                     iconStop.style.display = 'block';
                     icon.classList.add('stopped');
                     progress.classList.add('stopped');
-                    progressBar.classList.add('glow-stopped'); // Red glow
                 }
 
                 // Update SPL title
-                const displayTitle = playback.splTitle || 'Sans titre';
+                let displayTitle = playback.splTitle || 'Sans titre';
+                
+                // --- FILTER LOGIC: Remove leading date ID (e.g., "260215 " for 2026) ---
+                try {
+                    const currentYearShort = new Date().getFullYear().toString().slice(-2); // e.g. "26"
+                    const datePrefixRegex = new RegExp(`^${currentYearShort}\\d{4}\\s+`);
+                    
+                    if (datePrefixRegex.test(displayTitle)) {
+                        displayTitle = displayTitle.replace(datePrefixRegex, '');
+                    }
+                } catch (e) {
+                    console.warn('Error filtering SPL title date', e);
+                }
+
                 title.textContent = displayTitle;
                 title.title = displayTitle;
 
@@ -565,6 +502,12 @@
                 } else {
                     cplTitleMini.style.display = 'none';
                 }
+
+                // Calculate times
+                const position = parseInt(playback.splPosition || 0);
+                const duration = parseInt(playback.splDuration || 1);
+                const remainingTime = Math.max(0, duration - position);
+                const percentage = Math.min(100, Math.max(0, (position / duration) * 100));
 
                 // Update progress
                 progress.style.width = `${percentage}%`;
@@ -583,16 +526,10 @@
                 if (!overlay) return;
 
                 const title = overlay.querySelector('.show-title');
-                const progressBar = overlay.querySelector('.progress-bar-mini');
                 const progress = overlay.querySelector('.progress-fill-mini');
                 const elapsed = overlay.querySelector('.time-elapsed');
                 const remaining = overlay.querySelector('.time-remaining');
                 const end = overlay.querySelector('.time-end');
-                
-                // Remove glow effects on error
-                if (progressBar) {
-                    progressBar.classList.remove('glow-paused', 'glow-stopped', 'glow-ending-blue', 'glow-ending-green');
-                }
                 
                 if (title) title.textContent = 'Erreur';
                 if (progress) progress.style.width = '0%';
