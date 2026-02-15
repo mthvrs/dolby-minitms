@@ -1,55 +1,51 @@
-/* Playback Timeline Styles */
+/* =========================================
+   PLAYBACK TIMELINE - ULTRA HIGH VISIBILITY
+   ========================================= */
+
 .playback-timeline-container {
-    margin-top: 1rem;
+    width: 100%;
+    background: transparent;
+    padding: 0.5rem;
 }
 
 .playback-timeline {
-    background: var(--card-bg);
-    border-radius: 8px;
     padding: 1rem;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    max-width: 100%;
-    overflow: hidden;
+    width: 100%;
+    height: 100%;
     display: flex;
     flex-direction: column;
+    justify-content: center;
+    gap: 1rem;
 }
 
-.playback-timeline.compact {
-    padding: 0.75rem;
-}
-
-/* Header with SPL Title */
+/* =========================================
+   SPL TITLE - PROMINENT
+   ========================================= */
 .timeline-header {
-    margin-bottom: 0.75rem;
-    min-width: 0;
-    max-width: 100%;
-    /* CRITICAL CHANGE: Prevent header from shrinking, ensure it takes priority */
-    flex-shrink: 0; 
+    overflow: hidden;
+    flex-shrink: 0;
 }
 
-/* SPL Title - Prominent, main title - ALWAYS truncate, never overflow */
 .playback-title.spl-title {
-    font-size: 1.2em;
-    font-weight: 700;
-    color: var(--text-primary, #fff);
+    font-size: 1.6rem;
+    font-weight: 800;
+    color: var(--color-text);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    line-height: 1.3;
-    max-width: 100%;
-    min-width: 0;
-    display: block;
+    line-height: 1.2;
+    text-transform: uppercase;
+    letter-spacing: 1px;
 }
 
-/* Main timeline area with state icon and progress bar */
+/* =========================================
+   PROGRESS BAR - THICK AND VISIBLE
+   ========================================= */
 .timeline-main {
     display: flex;
     align-items: center;
-    gap: 0.75rem;
-    margin-bottom: 0.75rem;
-    min-width: 0;
-    max-width: 100%;
-    flex-shrink: 0; /* Keep timeline controls stable */
+    gap: 1rem;
+    flex-shrink: 0;
 }
 
 .playback-state {
@@ -62,240 +58,338 @@
     opacity: 0.6;
 }
 
-.playback-timeline.playing .state-icon-play {
-    color: var(--success-color, #4caf50);
+.state-icon svg {
+    width: 48px;
+    height: 48px;
+}
+
+.playback-timeline.playing .state-icon-play { 
+    color: var(--color-success); 
     opacity: 1;
 }
 
-.playback-timeline.paused .state-icon-pause {
-    color: var(--warning-color, #ff9800);
+.playback-timeline.paused .state-icon-pause { 
+    color: var(--color-warning); 
     opacity: 1;
 }
 
-.playback-timeline.stopped .state-icon-stop {
-    color: var(--error-color, #f44336);
+.playback-timeline.stopped .state-icon-stop { 
+    color: var(--color-error); 
     opacity: 1;
 }
 
 .progress-bar {
     flex: 1;
-    height: 8px;
-    background: var(--progress-bg, #333);
-    border-radius: 4px;
+    height: 20px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
     overflow: hidden;
-    position: relative;
-    min-width: 0;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    min-width: 100px;
 }
 
 .progress-fill {
     height: 100%;
-    background: var(--primary-color, #2196f3);
-    transition: width 0.3s ease;
-    border-radius: 4px;
+    transition: width 0.2s linear;
+    box-shadow: inset 0 0 10px rgba(255,255,255,0.3);
 }
 
-/* Green for normal playback */
-.playback-timeline.playing .progress-fill {
-    background: linear-gradient(90deg, #4caf50, #66bb6a);
+.playback-timeline.playing .progress-fill { 
+    background: var(--color-success); 
+    box-shadow: 0 0 15px var(--color-success);
 }
 
-/* Blue for feature/short content */
-.playback-timeline.playing.feature .progress-fill {
-    background: linear-gradient(90deg, #2196f3, #42a5f5);
+.playback-timeline.playing.feature .progress-fill { 
+    background: #2979ff; 
+    box-shadow: 0 0 15px #2979ff;
 }
 
-/* Orange for paused */
-.playback-timeline.paused .progress-fill {
-    background: linear-gradient(90deg, #ff9800, #ffa726);
+.playback-timeline.paused .progress-fill { 
+    background: var(--color-warning);
+    box-shadow: 0 0 15px var(--color-warning);
 }
 
-/* RED for stopped */
-.playback-timeline.stopped .progress-fill {
-    background: linear-gradient(90deg, #f44336, #e57373);
+.playback-timeline.stopped .progress-fill { 
+    background: var(--color-error);
+    box-shadow: 0 0 15px var(--color-error);
 }
 
-/* Time information - highly visible */
+/* =========================================
+   TIME INFORMATION - ULTRA DISTINGUISHABLE
+   ========================================= */
 .timeline-info {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    display: flex;
     gap: 1rem;
-    margin-bottom: 0.5rem;
-    padding: 0.75rem;
-    background: rgba(0, 0, 0, 0.2);
-    border-radius: 6px;
-    max-width: 100%;
-    overflow: hidden;
-    flex-shrink: 0; /* Ensure time doesn't collapse */
+    justify-content: space-between;
+    flex-shrink: 0;
+    flex-wrap: wrap;
 }
 
 .time-item {
+    flex: 1;
+    min-width: 120px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 0.25rem;
-    min-width: 0;
+    gap: 0.5rem;
+    padding: 1rem;
+    background: rgba(0, 0, 0, 0.4);
+    border-radius: 12px;
+    border: 3px solid transparent;
+    transition: all 0.3s ease;
+}
+
+/* DISTINGUISHABLE COLORS FOR EACH TIMER */
+.time-item:nth-child(1) {
+    border-color: var(--color-success);
+    background: linear-gradient(135deg, rgba(0, 230, 118, 0.15), rgba(0, 0, 0, 0.4));
+}
+
+.time-item:nth-child(2) {
+    border-color: var(--color-warning);
+    background: linear-gradient(135deg, rgba(255, 145, 0, 0.15), rgba(0, 0, 0, 0.4));
+}
+
+.time-item:nth-child(3) {
+    border-color: var(--color-accent);
+    background: linear-gradient(135deg, rgba(0, 120, 212, 0.15), rgba(0, 0, 0, 0.4));
+}
+
+[data-theme="light"] .time-item {
+    background: rgba(255, 255, 255, 0.6);
+}
+
+[data-theme="light"] .time-item:nth-child(1) {
+    background: linear-gradient(135deg, rgba(0, 200, 83, 0.15), rgba(255, 255, 255, 0.6));
+}
+
+[data-theme="light"] .time-item:nth-child(2) {
+    background: linear-gradient(135deg, rgba(255, 109, 0, 0.15), rgba(255, 255, 255, 0.6));
+}
+
+[data-theme="light"] .time-item:nth-child(3) {
+    background: linear-gradient(135deg, rgba(0, 90, 158, 0.15), rgba(255, 255, 255, 0.6));
 }
 
 .time-label {
-    font-size: 0.75em;
-    font-weight: 600;
+    font-size: 0.85rem;
+    font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 0.5px;
-    color: var(--text-secondary, #888);
+    letter-spacing: 1.5px;
+    color: var(--color-text);
     white-space: nowrap;
+    opacity: 0.9;
 }
 
 .time-value {
-    font-size: 1.1em;
-    font-weight: 700;
+    font-size: 2.5rem;
+    font-weight: 900;
     font-family: 'Courier New', monospace;
-    color: var(--text-primary, #fff);
+    color: var(--color-text);
+    line-height: 1;
+    letter-spacing: 2px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
     white-space: nowrap;
 }
 
-/* CPL Title - Full display but with proper overflow handling */
+/* =========================================
+   CPL TITLE
+   ========================================= */
 .cpl-title-wrapper {
-    padding: 0.5rem 0.25rem 0 0.25rem;
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
-    margin-top: 0.5rem;
-    max-width: 100%;
+    padding-top: 0.75rem;
+    border-top: 2px solid rgba(255, 255, 255, 0.15);
     overflow: hidden;
-    /* Allow CPL container to shrink if needed, but prefer truncation */
-    min-height: 0;
+    flex-shrink: 0;
 }
 
 .cpl-title {
-    font-size: 0.95em;
-    font-weight: 500;
-    color: var(--text-secondary, #bbb);
-    line-height: 1.4;
-    max-width: 100%;
-    
-    /* MODIFIED: Force single line and ellipsis to save vertical space for SPL */
+    font-size: 1.5rem;
+    color: var(--color-text-dim);
+    font-style: italic;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    display: block;
+    text-align: center;
 }
 
-/* Mobile optimizations */
-@media (max-width: 768px) {
-    .playback-timeline {
-        padding: 0.75rem;
-    }
-    
-    .playback-title.spl-title {
-        font-size: 1em;
-    }
-    
-    .timeline-info {
-        gap: 0.5rem;
-        padding: 0.5rem;
-    }
-    
-    .time-label {
-        font-size: 0.65em;
-    }
-    
-    .time-value {
-        font-size: 0.95em;
-    }
-    
-    .cpl-title {
-        font-size: 0.8em;
-    }
+/* =========================================
+   COMPACT VARIANT (for overview cards)
+   ========================================= */
+.playback-timeline.compact {
+    padding: 0.75rem;
 }
 
-/* Compact variant for overview cards */
-.playback-timeline.compact .spl-title {
-    font-size: 1em;
+.playback-timeline.compact .playback-title.spl-title { 
+    font-size: 2rem; 
 }
 
-.playback-timeline.compact .timeline-info {
-    grid-template-columns: repeat(3, 1fr);
-    gap: 0.5rem;
-    padding: 0.5rem;
+.playback-timeline.compact .time-value { 
+    font-size: 2rem; 
 }
 
-.playback-timeline.compact .time-label {
-    font-size: 0.65em;
+.playback-timeline.compact .time-label { 
+    font-size: 0.75rem; 
 }
 
-.playback-timeline.compact .time-value {
-    font-size: 0.9em;
+.playback-timeline.compact .progress-bar { 
+    height: 16px; 
 }
 
-.playback-timeline.compact .progress-bar {
-    height: 6px;
+.playback-timeline.compact .cpl-title { 
+    font-size: 2rem; 
 }
 
-.playback-timeline.compact .cpl-title {
-    font-size: 0.75em;
+.playback-timeline.compact .time-item {
+    padding: 0.75rem;
 }
 
-.playback-timeline.compact .cpl-title-wrapper {
-    padding: 0.35rem 0.25rem 0 0.25rem;
-    margin-top: 0.35rem;
+/* =========================================
+   THEATER DETAIL VIEW - Prevent overlapping
+   ========================================= */
+.theater-detail .playback-timeline {
+    padding: 1.5rem;
 }
 
-/* Theater card adjustments */
-.theater-card .playback-timeline-container {
-    margin-top: 0.5rem;
-}
-
-/* Detail page timeline - more vertical space */
-.theater-detail .right-panel {
-    display: flex;
+.theater-detail .timeline-info {
     flex-direction: column;
     gap: 1rem;
 }
 
-.theater-detail .right-panel .playback-timeline-container {
-    margin-top: 0;
+.theater-detail .time-item {
+    width: 100%;
+    min-width: auto;
 }
 
-.theater-detail .video-player-container {
-    flex-shrink: 0;
+.theater-detail .time-value {
+    font-size: 2.8rem;
 }
 
-/* Dark/Light theme support */
+.theater-detail .playback-title.spl-title {
+    font-size: 1.8rem;
+}
+
+/* =========================================
+   RESPONSIVE ADJUSTMENTS
+   ========================================= */
+
+/* Tablets */
+@media (max-width: 1024px) {
+    .timeline-info {
+        gap: 0.75rem;
+    }
+    
+    .time-value {
+        font-size: 2rem;
+    }
+    
+    .playback-title.spl-title {
+        font-size: 1.4rem;
+    }
+    
+    .progress-bar {
+        height: 16px;
+    }
+    
+    /* In card view on tablet, show timeline info in a single column */
+    .theater-card .timeline-info {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    
+    .theater-card .time-item {
+        width: 100%;
+        padding: 0.5rem;
+    }
+    
+    .theater-card .time-value {
+        font-size: 1.6rem;
+    }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+    .timeline-info {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    
+    .time-item {
+        width: 100%;
+        min-width: auto;
+    }
+    
+    .time-value {
+        font-size: 1.8rem;
+    }
+    
+    .playback-title.spl-title {
+        font-size: 1.2rem;
+    }
+    
+    .progress-bar {
+        height: 14px;
+    }
+}
+
+/* Very small devices */
+@media (max-width: 480px) {
+    .time-value {
+        font-size: 1.5rem;
+    }
+    
+    .time-label {
+        font-size: 0.7rem;
+    }
+    
+    .playback-title.spl-title {
+        font-size: 1rem;
+    }
+}
+
+/* =========================================
+   THEME SUPPORT
+   ========================================= */
 [data-theme="light"] .playback-timeline {
-    background: #f5f5f5;
+    background: transparent;
 }
 
 [data-theme="light"] .progress-bar {
-    background: #e0e0e0;
+    background: rgba(0, 0, 0, 0.1);
+    border-color: rgba(0, 0, 0, 0.2);
 }
 
-[data-theme="light"] .spl-title {
+[data-theme="light"] .spl-title,
+[data-theme="light"] .time-value {
     color: #000;
+    text-shadow: 0 1px 2px rgba(255, 255, 255, 0.5);
+}
+
+[data-theme="light"] .time-label {
+    color: #333;
 }
 
 [data-theme="light"] .cpl-title {
-    color: #444;
-}
-
-[data-theme="light"] .time-value {
-    color: #000;
-}
-
-[data-theme="light"] .timeline-info {
-    background: rgba(0, 0, 0, 0.05);
+    color: #666;
 }
 
 [data-theme="light"] .cpl-title-wrapper {
-    border-top-color: rgba(0, 0, 0, 0.1);
+    border-top-color: rgba(0, 0, 0, 0.15);
 }
 
 [data-theme="dark"] .playback-timeline {
-    background: #1e1e1e;
+    background: transparent;
 }
 
 [data-theme="dark"] .progress-bar {
-    background: #333;
+    background: rgba(255, 255, 255, 0.1);
 }
 
-[data-theme="dark"] .spl-title {
+[data-theme="dark"] .spl-title,
+[data-theme="dark"] .time-value {
+    color: #fff;
+}
+
+[data-theme="dark"] .time-label {
     color: #fff;
 }
 
@@ -303,139 +397,6 @@
     color: #bbb;
 }
 
-[data-theme="dark"] .time-value {
-    color: #fff;
-}
-
-[data-theme="dark"] .timeline-info {
-    background: rgba(255, 255, 255, 0.05);
-}
-
 [data-theme="dark"] .cpl-title-wrapper {
-    border-top-color: rgba(255, 255, 255, 0.1);
+    border-top-color: rgba(255, 255, 255, 0.15);
 }
-
-/* Playback Timeline Styles - HIGH VISIBILITY EDITION */
-.playback-timeline-container {
-    width: 100%;
-    background: var(--color-panel);
-    /* No margin top needed inside the new flex card layout */
-}
-
-.playback-timeline {
-    padding: 1rem;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-}
-
-/* SPL Title - GIGANTIC */
-.timeline-header {
-    margin-bottom: 1rem;
-    overflow: hidden;
-}
-
-.playback-title.spl-title {
-    font-size: 2.2rem; /* Was 1.2em */
-    font-weight: 800;
-    color: var(--color-text);
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    line-height: 1.2;
-}
-
-/* Progress Bar - THICKER */
-.timeline-main {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    margin-bottom: 1.5rem;
-}
-
-/* The small icons inside timeline (hidden in card view via style.css, shown in detail) */
-.state-icon svg {
-    width: 48px;
-    height: 48px;
-}
-.playback-timeline.playing .state-icon-play { color: var(--color-success); }
-.playback-timeline.paused .state-icon-pause { color: var(--color-warning); }
-.playback-timeline.stopped .state-icon-stop { color: var(--color-error); }
-
-.progress-bar {
-    flex: 1;
-    height: 24px; /* Was 8px - Now Huge */
-    background: rgba(255, 255, 255, 0.15);
-    border-radius: 12px;
-    overflow: hidden;
-    border: 2px solid rgba(255, 255, 255, 0.1);
-}
-
-.progress-fill {
-    height: 100%;
-    transition: width 0.2s linear;
-}
-
-/* High Contrast Neon Colors */
-.playback-timeline.playing .progress-fill { background: var(--color-success); box-shadow: 0 0 10px var(--color-success); }
-.playback-timeline.playing.feature .progress-fill { background: #2979ff; box-shadow: 0 0 10px #2979ff; }
-.playback-timeline.paused .progress-fill { background: var(--color-warning); }
-.playback-timeline.stopped .progress-fill { background: var(--color-error); }
-
-/* Time information - CONSIDERABLY BIGGER */
-.timeline-info {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 0.5rem;
-    background: rgba(0,0,0,0.3);
-    border-radius: 8px;
-    padding: 0.5rem;
-    border: 1px solid rgba(255,255,255,0.1);
-}
-
-.time-item {
-    text-align: center;
-}
-
-.time-label {
-    font-size: 1rem; /* Was 0.75em */
-    font-weight: 700;
-    color: var(--color-text-dim);
-    text-transform: uppercase;
-    margin-bottom: 0.25rem;
-}
-
-.time-value {
-    font-size: 2.2rem; /* Was 1.1em - HUGE */
-    font-weight: 900;
-    font-family: 'Courier New', monospace;
-    color: var(--color-text);
-    line-height: 1;
-    letter-spacing: 1px;
-}
-
-/* CPL Title */
-.cpl-title-wrapper {
-    margin-top: 0.75rem;
-    padding-top: 0.5rem;
-    border-top: 2px solid rgba(255,255,255,0.1);
-}
-
-.cpl-title {
-    font-size: 1.2rem;
-    color: var(--color-text-dim);
-    font-style: italic;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-/* Compact Adjustments (for the card view) */
-.playback-timeline.compact {
-    padding: 0.75rem;
-}
-.playback-timeline.compact .playback-title.spl-title { font-size: 1.8rem; }
-.playback-timeline.compact .time-value { font-size: 1.8rem; }
-.playback-timeline.compact .progress-bar { height: 18px; }

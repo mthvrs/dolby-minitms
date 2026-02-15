@@ -3,19 +3,19 @@
    ========================================= */
 :root {
     /* Default Dark Theme */
-    --color-bg: #000000; /* Fond noir pur pour contraste max */
+    --color-bg: #000000;
     --color-panel: #1a1a1a;
     --color-border: #444;
     
     --color-text: #ffffff;
-    --color-text-dim: #bbbbbb; /* Plus clair pour lisibilité */
+    --color-text-dim: #bbbbbb;
     
     --color-accent: #0078d4;
     --color-accent-hover: #0063b1;
     
-    --color-success: #00e676; /* Vert néon */
-    --color-warning: #ff9100; /* Orange vif */
-    --color-error: #ff1744;   /* Rouge vif */
+    --color-success: #00e676;
+    --color-warning: #ff9100;
+    --color-error: #ff1744;
     
     --color-button: #333333;
     --color-button-hover: #444444;
@@ -65,7 +65,7 @@ body {
     background-color: var(--color-bg);
     color: var(--color-text);
     overflow-x: hidden;
-    font-size: 16px; /* Base size up */
+    font-size: 16px;
 }
 
 #app {
@@ -96,7 +96,7 @@ button { font-family: inherit; }
 }
 
 .clock {
-    font-size: 2rem; /* HUGE CLOCK */
+    font-size: 2rem;
     font-weight: 800;
     font-family: 'Courier New', monospace;
     color: var(--color-text);
@@ -117,10 +117,10 @@ button { font-family: inherit; }
     border: none;
     color: var(--color-text-dim);
     padding: 1.25rem 2rem;
-    font-size: 1.4rem; /* HUGE TABS */
+    font-size: 1.4rem;
     font-weight: 700;
     cursor: pointer;
-    border-bottom: 5px solid transparent; /* Thicker border */
+    border-bottom: 5px solid transparent;
 }
 
 .tab.active {
@@ -145,6 +145,7 @@ button { font-family: inherit; }
     padding: 0.5rem;
     border-radius: 8px;
     width: 48px; height: 48px;
+    cursor: pointer;
 }
 .theme-btn svg { width: 28px; height: 28px; }
 
@@ -167,52 +168,57 @@ button { font-family: inherit; }
 .tab-content.active { display: block; }
 
 /* =========================================
-   5. Overview Grid & Cards - REDESIGNED
+   5. Overview Grid & Cards - HORIZONTAL LAYOUT
    ========================================= */
 .overview-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); /* Wider cards */
+    display: flex;
+    flex-direction: column;
     gap: 1.5rem;
     width: 100%;
 }
 
 .theater-card {
     background-color: var(--color-panel);
-    border: 2px solid var(--color-border);
+    border: 3px solid var(--color-border);
     border-radius: 12px;
     overflow: hidden;
-    display: flex; /* Horizontal Layout */
+    display: flex;
     flex-direction: row;
-    height: 320px; /* Fixed height for consistency */
+    min-height: 180px;
     cursor: pointer;
-    box-shadow: var(--shadow-sm);
+    box-shadow: var(--shadow-md);
+    transition: transform 0.2s, border-color 0.2s;
 }
 
-/* THE NEW STATUS STRIP (Left Side) */
+.theater-card:hover {
+    transform: translateY(-2px);
+    border-color: var(--color-accent);
+}
+
+/* THE STATUS STRIP (Left Side) */
 .theater-status-strip {
-    width: 100px; /* Large strip */
+    width: 120px;
     flex-shrink: 0;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background-color: var(--color-button); /* Default (Offline/Unknown) */
+    background-color: var(--color-button);
     color: #fff;
     transition: background-color 0.3s ease;
     padding: 10px;
     text-align: center;
 }
 
-/* Colors based on state (applied via JS) */
 .theater-status-strip.playing { background-color: var(--color-success); color: #000; }
 .theater-status-strip.paused { background-color: var(--color-warning); color: #000; }
 .theater-status-strip.stopped { background-color: var(--color-error); color: #fff; }
 
 .theater-name-vertical {
-    font-size: 1.8rem;
+    font-size: 2rem;
     font-weight: 900;
     margin-bottom: 1rem;
-    writing-mode: vertical-rl; /* Vertical Text */
+    writing-mode: vertical-rl;
     text-orientation: mixed;
     transform: rotate(180deg);
     text-transform: uppercase;
@@ -226,19 +232,27 @@ button { font-family: inherit; }
     filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
 }
 
-/* Content Area (Right Side) */
+/* Content Area (Right Side) - HORIZONTAL LAYOUT */
 .theater-card-content {
     flex: 1;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     overflow: hidden;
+    gap: 1rem;
 }
 
 .video-player-container {
-    flex: 1; /* Takes available space */
+    width: 320px;
+    flex-shrink: 0;
     background: #000;
-    min-height: 0; /* Flexbox fix */
     position: relative;
+}
+
+.playback-timeline-container {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    min-width: 0;
 }
 
 /* =========================================
@@ -279,6 +293,7 @@ button { font-family: inherit; }
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
+    overflow-y: auto;
 }
 
 .panel-title {
@@ -319,11 +334,12 @@ button { font-family: inherit; }
     color: var(--color-text);
     padding: 1.5rem;
     border-radius: 12px;
-    font-size: 1.3rem; /* Bigger font */
+    font-size: 1.3rem;
     font-weight: 700;
     cursor: pointer;
-    min-height: 120px; /* Bigger target */
+    min-height: 120px;
     box-shadow: var(--shadow-sm);
+    transition: all 0.2s;
 }
 
 .macro-btn:hover {
@@ -341,20 +357,140 @@ button { font-family: inherit; }
 }
 
 /* =========================================
+   9. Confirmation Modal
+   ========================================= */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.85);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    backdrop-filter: blur(4px);
+}
+
+.modal.hidden {
+    display: none;
+}
+
+.modal-content {
+    background: var(--color-panel);
+    padding: 2.5rem;
+    border-radius: 16px;
+    border: 3px solid var(--color-border);
+    max-width: 500px;
+    width: 90%;
+    box-shadow: var(--shadow-md);
+}
+
+.modal-content h2 {
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
+    color: var(--color-text);
+    text-align: center;
+}
+
+.macro-name {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--color-accent);
+    text-align: center;
+    margin-bottom: 2rem;
+    padding: 1rem;
+    background: rgba(0, 120, 212, 0.1);
+    border-radius: 8px;
+}
+
+.modal-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+}
+
+.btn-confirm,
+.btn-cancel {
+    padding: 1rem 2.5rem;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.2rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+    min-width: 120px;
+}
+
+.btn-confirm {
+    background: var(--color-success);
+    color: #000;
+}
+
+.btn-confirm:hover {
+    background: #00c853;
+    transform: translateY(-2px);
+}
+
+.btn-cancel {
+    background: var(--color-button);
+    color: var(--color-text);
+    border: 2px solid var(--color-border);
+}
+
+.btn-cancel:hover {
+    background: var(--color-button-hover);
+    transform: translateY(-2px);
+}
+
+/* =========================================
    Responsive
    ========================================= */
-@media (max-width: 900px) {
-    .overview-grid { grid-template-columns: 1fr; }
+
+/* Tablets (iPad) - Force vertical layout */
+
+
+/* Mobile */
+@media (max-width: 768px) {
+    .theater-card {
+        flex-direction: column;
+    }
     
+    .video-player-container {
+        height: 200px;
+    }
+    
+    .theater-status-strip {
+        height: 60px;
+        padding: 0 1rem;
+        gap: 1rem;
+    }
+    
+    .theater-name-vertical {
+        font-size: 1.4rem;
+    }
+    
+    .status-icon-large svg {
+        width: 36px;
+        height: 36px;
+    }
+}
+
+/* Theater Detail Responsive */
+@media (max-width: 1024px) {
     .theater-detail {
         grid-template-columns: 1fr;
         height: auto;
     }
-    .right-panel { order: -1; }
+    
+    .right-panel { 
+        order: -1;
+        max-height: 70vh;
+    }
 }
 
-/* Hide the default small icons in timeline inside the card, 
-   because we have the big one in the strip now */
+/* Hide the default small icons in timeline inside the card */
 .theater-card .timeline-main .playback-state {
     display: none;
 }
