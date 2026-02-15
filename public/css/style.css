@@ -3,56 +3,52 @@
    ========================================= */
 :root {
     /* Default Dark Theme */
-    --color-bg: #1a1a1a;
-    --color-panel: #2d2d2d;
-    --color-border: #3d3d3d;
+    --color-bg: #000000; /* Fond noir pur pour contraste max */
+    --color-panel: #1a1a1a;
+    --color-border: #444;
     
     --color-text: #ffffff;
-    --color-text-dim: #9ca3af;
+    --color-text-dim: #bbbbbb; /* Plus clair pour lisibilité */
     
     --color-accent: #0078d4;
     --color-accent-hover: #0063b1;
     
-    --color-success: #10b981;
-    --color-warning: #f59e0b;
-    --color-error: #ef4444;
+    --color-success: #00e676; /* Vert néon */
+    --color-warning: #ff9100; /* Orange vif */
+    --color-error: #ff1744;   /* Rouge vif */
     
-    --color-button: #374151;
-    --color-button-hover: #4b5563;
+    --color-button: #333333;
+    --color-button-hover: #444444;
     
-    --color-emergency: #dc2626;
-    --color-emergency-hover: #b91c1c;
+    --color-emergency: #d50000;
+    --color-emergency-hover: #b71c1c;
     
-    --shadow-sm: 0 2px 4px rgba(0,0,0,0.2);
-    --shadow-md: 0 4px 12px rgba(0,0,0,0.3);
+    --shadow-sm: 0 2px 8px rgba(0,0,0,0.5);
+    --shadow-md: 0 6px 16px rgba(0,0,0,0.6);
     
     --video-bg: #000000;
 }
 
-/* Light Theme Override */
+/* Light Theme Override - High Contrast */
 [data-theme="light"] {
-    --color-bg: #f3f4f6;
+    --color-bg: #f0f0f0;
     --color-panel: #ffffff;
-    --color-border: #e5e7eb;
+    --color-border: #999;
     
-    --color-text: #111827;
-    --color-text-dim: #6b7280;
+    --color-text: #000000;
+    --color-text-dim: #333333;
     
-    --color-accent: #0078d4;
-    --color-accent-hover: #005a9e;
+    --color-accent: #005a9e;
 
-    --color-success: #059669;    
-    --color-warning: #d97706;
-    --color-error: #dc2626;
+    --color-success: #00c853;    
+    --color-warning: #ff6d00;
+    --color-error: #d50000;
     
-    --color-button: #e5e7eb;
-    --color-button-hover: #d1d5db;
+    --color-button: #e0e0e0;
+    --color-button-hover: #cccccc;
     
-    --color-emergency: #ef4444;
-    --color-emergency-hover: #dc2626;
-    
-    --shadow-sm: 0 1px 3px rgba(0,0,0,0.1);
-    --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1);
+    --color-emergency: #ff1744;
+    --color-emergency-hover: #d50000;
 }
 
 /* =========================================
@@ -69,7 +65,7 @@ body {
     background-color: var(--color-bg);
     color: var(--color-text);
     overflow-x: hidden;
-    transition: background-color 0.3s ease, color 0.3s ease;
+    font-size: 16px; /* Base size up */
 }
 
 #app {
@@ -78,31 +74,33 @@ body {
     flex-direction: column;
 }
 
-button {
-    font-family: inherit;
-}
+button { font-family: inherit; }
 
 /* =========================================
    3. Header & Navigation
    ========================================= */
-/* Container for merging Tabs and Header */
 .top-nav-container {
     background-color: var(--color-panel);
-    border-bottom: 1px solid var(--color-border);
-    transition: background-color 0.3s ease;
+    border-bottom: 2px solid var(--color-border);
     display: flex;
-    flex-direction: column; /* Default: Stacked (Mobile) */
+    flex-direction: column;
 }
 
-/* Header (Buttons + Time) */
 .header {
     background-color: var(--color-panel);
-    padding: 0.75rem 1rem;
+    padding: 1rem;
     display: flex;
-    justify-content: flex-end; /* Mobile: Align right, or center if preferred */
+    justify-content: flex-end;
     align-items: center;
     gap: 1.5rem;
-    border-bottom: 1px solid var(--color-border); /* Separator on mobile */
+}
+
+.clock {
+    font-size: 2rem; /* HUGE CLOCK */
+    font-weight: 800;
+    font-family: 'Courier New', monospace;
+    color: var(--color-text);
+    letter-spacing: 2px;
 }
 
 /* Tabs */
@@ -110,29 +108,19 @@ button {
     background-color: var(--color-panel);
     display: flex;
     padding: 0 1rem;
-    gap: 0.5rem;
+    gap: 1rem;
     overflow-x: auto;
-    scrollbar-width: none;
-    /* No bottom border here, container handles it */
 }
-.tabs::-webkit-scrollbar { display: none; }
 
 .tab {
     background: none;
     border: none;
     color: var(--color-text-dim);
-    padding: 1rem 1.5rem;
-    font-size: 1rem;
-    font-weight: 600;
+    padding: 1.25rem 2rem;
+    font-size: 1.4rem; /* HUGE TABS */
+    font-weight: 700;
     cursor: pointer;
-    transition: all 0.2s;
-    border-bottom: 3px solid transparent;
-    white-space: nowrap;
-}
-
-.tab:hover {
-    color: var(--color-text);
-    background-color: rgba(128, 128, 128, 0.1);
+    border-bottom: 5px solid transparent; /* Thicker border */
 }
 
 .tab.active {
@@ -140,263 +128,132 @@ button {
     border-bottom-color: var(--color-accent);
 }
 
-/* DESKTOP NAV LAYOUT: Side-by-Side */
 @media (min-width: 800px) {
     .top-nav-container {
         flex-direction: row;
         align-items: center;
         justify-content: space-between;
     }
-    
-    .tabs {
-        flex: 1; 
-        order: 1; /* Force Tabs to Left */
-        border-bottom: none !important; 
-    }
-
-    .header {
-        flex-shrink: 0;
-        order: 2; /* Force Header to Right */
-        border-bottom: none !important;
-        padding-left: 1rem !important;
-        border-left: 1px solid var(--color-border);
-    }
+    .tabs { flex: 1; order: 1; border-bottom: none !important; }
+    .header { flex-shrink: 0; order: 2; border-left: 2px solid var(--color-border); }
 }
 
-/* THEME & ACTION BUTTONS */
+/* Buttons */
 .theme-btn {
-    background: none;
-    border: none;
-    cursor: pointer;
-    color: var(--color-text-dim);
-    padding: 0.25rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    transition: color 0.2s, background-color 0.2s;
+    background: var(--color-button);
+    border: 2px solid var(--color-border);
+    padding: 0.5rem;
+    border-radius: 8px;
+    width: 48px; height: 48px;
 }
+.theme-btn svg { width: 28px; height: 28px; }
 
-.theme-btn:hover {
-    color: var(--color-text);
-    background-color: var(--color-button);
-}
-
-/* LOCK BUTTON STYLES */
-.lock-btn {
-    transition: all 0.3s ease;
-}
-
-.lock-btn.confirm {
-    color: var(--color-success);
-}
-
-.lock-btn.instant {
-    color: var(--color-warning);
-    animation: pulse-orange 1.5s infinite;
-}
-
-@keyframes pulse-orange {
-    0% { transform: scale(1); filter: drop-shadow(0 0 0 rgba(245, 158, 11, 0)); }
-    50% { transform: scale(1.15); filter: drop-shadow(0 0 8px rgba(245, 158, 11, 0.6)); }
-    100% { transform: scale(1); filter: drop-shadow(0 0 0 rgba(245, 158, 11, 0)); }
-}
-
+/* Lock Button */
 [data-theme="dark"] .icon-moon { display: block; }
 [data-theme="dark"] .icon-sun { display: none; }
 [data-theme="light"] .icon-moon { display: none; }
 [data-theme="light"] .icon-sun { display: block; }
-
-.clock {
-    font-size: 1.2rem;
-    font-weight: 700;
-    font-family: 'Courier New', monospace;
-    color: var(--color-text);
-}
 
 /* =========================================
    4. Main Content Area
    ========================================= */
 .content {
     flex: 1;
-    padding: 1.5rem;
+    padding: 1rem;
     overflow-y: auto;
 }
 
 .tab-content { display: none; }
-.tab-content.active { display: block; animation: fadeIn 0.3s ease; }
-
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(5px); }
-    to { opacity: 1; transform: translateY(0); }
-}
+.tab-content.active { display: block; }
 
 /* =========================================
-   5. Overview Grid & Cards (HORIZONTAL LAYOUT)
+   5. Overview Grid & Cards - REDESIGNED
    ========================================= */
 .overview-grid {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); /* Wider cards */
+    gap: 1.5rem;
     width: 100%;
 }
 
 .theater-card {
     background-color: var(--color-panel);
-    border: 1px solid var(--color-border);
-    border-radius: 8px;
+    border: 2px solid var(--color-border);
+    border-radius: 12px;
     overflow: hidden;
-    display: grid;
-    grid-template-columns: 120px 280px 1fr;
-    grid-template-rows: 1fr;
+    display: flex; /* Horizontal Layout */
+    flex-direction: row;
+    height: 320px; /* Fixed height for consistency */
     cursor: pointer;
-    transition: transform 0.2s, box-shadow 0.2s;
     box-shadow: var(--shadow-sm);
-    min-height: 160px;
 }
 
-.theater-card:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-md);
-    border-color: var(--color-accent);
-}
-
-.theater-info {
-    padding: 1rem;
-    text-align: center;
-    border-right: 1px solid var(--color-border);
-    grid-column: 1;
-    grid-row: 1;
+/* THE NEW STATUS STRIP (Left Side) */
+.theater-status-strip {
+    width: 100px; /* Large strip */
+    flex-shrink: 0;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
+    background-color: var(--color-button); /* Default (Offline/Unknown) */
+    color: #fff;
+    transition: background-color 0.3s ease;
+    padding: 10px;
+    text-align: center;
 }
 
-.theater-info h2 {
-    font-size: 1.1rem;
-    margin: 0;
-    color: var(--color-text);
-    text-align: center;
-    word-break: break-word;
+/* Colors based on state (applied via JS) */
+.theater-status-strip.playing { background-color: var(--color-success); color: #000; }
+.theater-status-strip.paused { background-color: var(--color-warning); color: #000; }
+.theater-status-strip.stopped { background-color: var(--color-error); color: #fff; }
+
+.theater-name-vertical {
+    font-size: 1.8rem;
+    font-weight: 900;
+    margin-bottom: 1rem;
+    writing-mode: vertical-rl; /* Vertical Text */
+    text-orientation: mixed;
+    transform: rotate(180deg);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.status-icon-large svg {
+    width: 64px;
+    height: 64px;
+    fill: currentColor;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+}
+
+/* Content Area (Right Side) */
+.theater-card-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
 }
 
 .video-player-container {
-    grid-column: 2;
-    grid-row: 1;
-    width: 100%;
-    height: 100%;
-    border-right: 1px solid var(--color-border);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: var(--video-bg);
-}
-
-.video-player-container .video-container {
-    width: 100%;
-    height: 100%;
-    max-height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.video-player-container .video-canvas,
-.video-player-container .video-el {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-}
-
-.playback-timeline-container {
-    grid-column: 3;
-    grid-row: 1;
-    padding: 1rem 1.5rem;
-    display: flex;
-    align-items: stretch;
-    width: 100%;
-}
-
-.playback-timeline-container .playback-timeline {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-}
-
-/* Playback info */
-.playback-info-container {
-    padding: 0.75rem 1rem;
-    font-size: 0.85rem;
-    background-color: var(--color-panel);
-}
-
-.spl-title {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    margin-bottom: 6px;
-    font-weight: 600;
-    color: var(--color-accent);
-}
-
-.playback-progress-track {
-    background-color: var(--color-button);
-    height: 4px;
-    border-radius: 2px;
-    width: 100%;
-    margin-bottom: 6px;
-    overflow: hidden;
-}
-
-.playback-progress-fill {
-    background-color: var(--color-success);
-    height: 100%;
-    transition: width 0.5s linear;
-}
-
-.playback-times {
-    display: flex;
-    justify-content: space-between;
-    font-size: 0.75rem;
-    color: var(--color-text-dim);
+    flex: 1; /* Takes available space */
+    background: #000;
+    min-height: 0; /* Flexbox fix */
+    position: relative;
 }
 
 /* =========================================
    6. Video Player
    ========================================= */
-.video-player-container { 
-    width: 100%; 
-    background: transparent;
-    display: block; 
-}
-
 .video-container {
-    background-color: var(--video-bg);
-    position: relative;
-    width: 100%;
-    aspect-ratio: 16 / 9;
-}
-
-.video-el,
-.video-canvas {
     width: 100%;
     height: 100%;
-    display: block;
-    background: var(--video-bg);
-    object-fit: fill; 
+    position: relative;
 }
 
-.video-loading {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    color: #fff;
-    font-size: 0.9rem;
-    background: rgba(0,0,0,0.5);
-    padding: 0.5rem 1rem;
-    border-radius: 4px;
+.video-el, .video-canvas {
+    width: 100%;
+    height: 100%;
+    object-fit: fill; 
 }
 
 /* =========================================
@@ -404,363 +261,100 @@ button {
    ========================================= */
 .theater-detail {
     display: grid;
-    grid-template-columns: 1fr 500px;
-    gap: 1.5rem;
-    height: calc(100vh - 120px);
-    padding: 1.5rem;
+    grid-template-columns: 1fr 450px;
+    gap: 2rem;
+    height: calc(100vh - 140px);
 }
 
 .controls-section { 
     overflow-y: auto; 
-    padding-right: 0.5rem;
+    padding-right: 1rem;
 }
-
-.controls-section::-webkit-scrollbar { width: 8px; }
-.controls-section::-webkit-scrollbar-track { background: transparent; }
-.controls-section::-webkit-scrollbar-thumb { background: var(--color-button); border-radius: 4px; }
-.controls-section::-webkit-scrollbar-thumb:hover { background: var(--color-button-hover); }
 
 .right-panel {
     background-color: var(--color-panel);
     padding: 1.5rem;
-    border-radius: 8px;
-    box-shadow: var(--shadow-sm);
+    border-radius: 12px;
+    border: 2px solid var(--color-border);
     display: flex;
     flex-direction: column;
-    gap: 1rem;
-    height: fit-content;
+    gap: 1.5rem;
 }
 
 .panel-title {
-    font-size: 1rem;
-    font-weight: 700;
+    font-size: 1.5rem;
+    font-weight: 800;
     margin-bottom: 1rem;
-    color: var(--color-text);
-}
-
-.right-panel .video-player-container {
-    flex-shrink: 0;
-    aspect-ratio: 16 / 9;
-    background: #000;
-    border-radius: 8px;
-    overflow: hidden;
-}
-
-.right-panel .playback-timeline-container {
-    flex-shrink: 0;
+    text-align: center;
 }
 
 /* =========================================
-   8. Macro Buttons
+   8. Macro Buttons - HUGE
    ========================================= */
-.macro-group { margin-bottom: 2rem; }
+.macro-group { margin-bottom: 3rem; }
 
 .group-header {
     background-color: var(--color-button);
-    padding: 0.75rem 1rem;
-    margin-bottom: 1rem;
-    border-radius: 4px;
-    color: var(--color-text);
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+    border-radius: 8px;
+    border-left: 8px solid var(--color-accent);
 }
 
 .group-title {
-    font-size: 1rem;
-    font-weight: 700;
+    font-size: 1.4rem;
+    font-weight: 800;
     text-transform: uppercase;
-    letter-spacing: 0.5px;
 }
 
-/* --- BUTTON SIZING LOGIC --- */
-
-/* DEFAULT (Mobile / Tablet): Big Chunky Buttons */
 .macro-buttons {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-    gap: 1rem;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1.5rem;
 }
 
 .macro-btn {
     background-color: var(--color-panel);
-    border: 1px solid var(--color-border);
+    border: 3px solid var(--color-border);
     color: var(--color-text);
-    padding: 1.5rem 1rem;
-    border-radius: 8px;
-    font-size: 1.1rem;
+    padding: 1.5rem;
+    border-radius: 12px;
+    font-size: 1.3rem; /* Bigger font */
     font-weight: 700;
     cursor: pointer;
-    transition: all 0.2s;
+    min-height: 120px; /* Bigger target */
     box-shadow: var(--shadow-sm);
-    text-align: center;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 90px; /* Big height */
-    position: relative;
-    word-break: break-word;
-    line-height: 1.3;
-}
-
-/* DESKTOP (Large Screens > 1200px): Compact Buttons to avoid scrolling */
-@media (min-width: 1200px) {
-    .macro-buttons {
-        grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
-        gap: 0.75rem;
-    }
-    
-    .macro-btn {
-        padding: 1rem 0.5rem;
-        font-size: 0.95rem;
-        min-height: 60px; /* Standard height */
-    }
-}
-
-/* iPad Landscape: Use bigger buttons like tablet */
-@media (min-width: 768px) and (max-width: 1199px) and (orientation: landscape) {
-    .macro-buttons {
-        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-        gap: 0.9rem;
-    }
-    
-    .macro-btn {
-        padding: 1.25rem 0.75rem;
-        font-size: 1rem;
-        min-height: 75px;
-    }
 }
 
 .macro-btn:hover {
     background-color: var(--color-button);
     border-color: var(--color-accent);
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-md);
-}
-
-.macro-btn:active { transform: translateY(0); }
-
-/* WARNING BORDER IN INSTANT MODE */
-[data-lock-mode="instant"] .macro-btn {
-    border-color: var(--color-warning);
+    transform: translateY(-4px);
 }
 
 .macro-btn.emergency { 
     background-color: var(--color-emergency); 
     color: white; 
-    border-color: var(--color-emergency);
-    font-size: 1.2rem;
-}
-.macro-btn.emergency:hover { background-color: var(--color-emergency-hover); }
-
-.macro-btn.executing { 
-    background-color: var(--color-warning); 
-    color: #000;
-    border-color: var(--color-warning);
-    cursor: wait;
-}
-
-.macro-btn.success { 
-    background-color: var(--color-success); 
-    color: white;
-    border-color: var(--color-success);
-}
-
-.macro-btn.error { 
-    background-color: var(--color-error); 
-    color: white;
-    border-color: var(--color-error);
-}
-
-/* =========================================
-   9. Modals
-   ========================================= */
-.modal {
-    position: fixed;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    background-color: rgba(0,0,0,0.7);
-    backdrop-filter: blur(2px);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 1000;
-}
-.modal.hidden { display: none; }
-
-.modal-content {
-    background-color: var(--color-panel);
-    padding: 2.5rem;
-    border-radius: 12px;
-    min-width: 400px;
-    max-width: 90%;
-    text-align: center;
-    box-shadow: var(--shadow-md);
-    border: 1px solid var(--color-border);
-}
-
-.modal-content h2 {
-    margin-bottom: 1rem;
-    font-size: 1.4rem;
-    color: var(--color-text);
-}
-
-.macro-name {
+    border-color: #fff;
     font-size: 1.5rem;
-    font-weight: 700;
-    color: var(--color-accent);
-    margin: 1.5rem 0;
-    word-break: break-word;
+    text-transform: uppercase;
 }
-
-.modal-buttons {
-    display: flex;
-    gap: 1rem;
-    justify-content: center;
-    margin-top: 2rem;
-}
-
-.btn-confirm,
-.btn-cancel {
-    padding: 0.75rem 2rem;
-    border: none;
-    border-radius: 6px;
-    font-size: 1rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s;
-    min-width: 120px;
-}
-
-.btn-confirm {
-    background-color: var(--color-success);
-    color: white;
-}
-.btn-confirm:hover { filter: brightness(1.1); }
-
-.btn-cancel {
-    background-color: var(--color-button);
-    color: var(--color-text);
-}
-.btn-cancel:hover { background-color: var(--color-button-hover); }
 
 /* =========================================
-   10. Utilities & Responsive
+   Responsive
    ========================================= */
-.loading {
-    text-align: center;
-    padding: 3rem;
-    color: var(--color-text-dim);
-    font-style: italic;
-}
-
-/* Responsive Grid Logic for Overview - Mobile */
-@media (max-width: 600px) {
-    .overview-grid {
-        gap: 0.75rem;
-    }
+@media (max-width: 900px) {
+    .overview-grid { grid-template-columns: 1fr; }
     
-    .theater-card {
-        grid-template-columns: 1fr;
-        grid-template-rows: auto auto auto;
-        min-height: auto;
-    }
-    
-    .theater-info {
-        grid-column: 1;
-        grid-row: 1;
-        border-right: none;
-        border-bottom: 1px solid var(--color-border);
-        padding: 0.75rem;
-    }
-    
-    .video-player-container {
-        grid-column: 1;
-        grid-row: 2;
-        border-right: none;
-    }
-    
-    .video-player-container .video-container {
-        aspect-ratio: 16 / 9;
-    }
-    
-    .playback-timeline-container {
-        grid-column: 1;
-        grid-row: 3;
-    }
-}
-
-/* iPad Landscape - KEEP DESKTOP LAYOUT FOR THEATER DETAIL */
-@media (min-width: 768px) and (max-width: 1199px) and (orientation: landscape) {
-    .theater-detail {
-        grid-template-columns: 1fr 400px;
-        grid-template-rows: 1fr;
-        height: calc(100vh - 120px);
-    }
-    
-    .right-panel {
-        order: 0;
-        margin-bottom: 0;
-    }
-    
-    .controls-section {
-        order: 0;
-    }
-}
-
-/* iPad Portrait and smaller tablets */
-@media (max-width: 767px) {
     .theater-detail {
         grid-template-columns: 1fr;
         height: auto;
     }
-    
-    .right-panel {
-        order: -1;
-        margin-bottom: 1.5rem;
-        width: 100%;
-    }
+    .right-panel { order: -1; }
 }
 
-@media (max-width: 600px) {
-    .header {
-        padding: 0.75rem 1rem;
-    }
-    
-    .tabs {
-        padding: 0 1rem;
-    }
-    
-    .content {
-        padding: 1rem;
-    }
-    
-    .modal-content {
-        min-width: auto;
-        padding: 1.5rem;
-    }
-}
-
-/* Responsive adjustments for theater detail */
-@media (max-width: 1400px) {
-    .theater-detail {
-        grid-template-columns: 1fr 450px;
-    }
-}
-
-@media (max-width: 1199px) and (orientation: portrait) {
-    .theater-detail {
-        grid-template-columns: 1fr;
-        grid-template-rows: auto 1fr;
-    }
-    
-    .right-panel {
-        order: -1;
-    }
-}
-
-/* Ensure timeline doesn't compress */
-.playback-timeline {
-    min-height: 180px;
-}
-
-.playback-timeline.compact {
-    min-height: auto;
+/* Hide the default small icons in timeline inside the card, 
+   because we have the big one in the strip now */
+.theater-card .timeline-main .playback-state {
+    display: none;
 }

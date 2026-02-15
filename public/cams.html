@@ -9,7 +9,7 @@
             background-color: #000;
             margin: 0;
             overflow: hidden;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Segoe UI', sans-serif;
             height: 100vh;
             width: 100vw;
             display: flex;
@@ -26,12 +26,13 @@
         }
 
         .cam-wrapper {
-            background: #000;
+            background: #111;
             overflow: hidden;
             display: flex;
             justify-content: center;
             align-items: center;
             position: relative;
+            border: 1px solid #333;
         }
 
         video {
@@ -42,11 +43,11 @@
         }
 
         .spinner {
-            border: 4px solid rgba(255, 255, 255, 0.1);
+            border: 6px solid rgba(255, 255, 255, 0.2);
             border-left-color: #ffffff;
             border-radius: 50%;
-            width: 40px;
-            height: 40px;
+            width: 80px;
+            height: 80px;
             animation: spin 1s linear infinite;
             position: absolute;
             z-index: 10;
@@ -58,18 +59,147 @@
             100% { transform: rotate(360deg); }
         }
 
-        #error-log {
+        /* --- HIGH VISIBILITY TIMELINE OVERLAY --- */
+        .timeline-overlay {
             position: absolute;
-            top: 0;
+            bottom: 0;
             left: 0;
-            color: red;
-            background: rgba(0,0,0,0.8);
-            padding: 5px;
-            display: none;
-            z-index: 1000;
+            right: 0;
+            background: rgba(0, 0, 0, 0.85); /* Much darker background */
+            padding: 15px 20px;
+            z-index: 100;
+            backdrop-filter: blur(4px);
+            border-top: 2px solid #444;
         }
 
-        /* Hover Controls */
+        .timeline-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 10px;
+        }
+
+        /* Huge Playback Icon */
+        .playback-icon {
+            width: 48px;
+            height: 48px;
+            flex-shrink: 0;
+        }
+        .playback-icon.playing { color: #00e676; filter: drop-shadow(0 0 5px #00e676); }
+        .playback-icon.paused { color: #ff9100; }
+        .playback-icon.stopped { color: #ff1744; }
+
+        .title-container {
+            flex: 1;
+            min-width: 0;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Huge Titles */
+        .show-title {
+            font-size: 32px; /* Was 14px */
+            font-weight: 800;
+            color: #fff;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            line-height: 1.2;
+            text-shadow: 2px 2px 4px #000;
+        }
+
+        .cpl-title-mini {
+            font-size: 18px;
+            font-weight: 600;
+            color: #ccc;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* Thick Progress Bar */
+        .progress-bar-mini {
+            height: 16px;
+            background: #333;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 10px;
+            border: 1px solid #555;
+        }
+
+        .progress-fill-mini {
+            height: 100%;
+            background: #00e676;
+            transition: width 0.3s linear;
+        }
+        .progress-fill-mini.feature { background: #2979ff; }
+        .progress-fill-mini.paused { background: #ff9100; }
+        .progress-fill-mini.stopped { background: #ff1744; }
+
+        /* Huge Timers */
+        .timeline-times {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .time-group {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .time-label {
+            font-size: 12px;
+            color: #aaa;
+            text-transform: uppercase;
+            font-weight: 700;
+        }
+
+        .time-value {
+            font-size: 28px; /* Was 11px */
+            font-weight: 900;
+            color: #fff;
+            font-family: 'Courier New', monospace;
+            text-shadow: 2px 2px 4px #000;
+        }
+
+        /* Large Badges */
+        .theater-badge {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.85);
+            border: 2px solid #fff;
+            border-radius: 8px;
+            padding: 8px 16px;
+            z-index: 100;
+        }
+
+        .badge-id {
+            font-size: 24px;
+            font-weight: 900;
+            color: #fff;
+        }
+
+        .world-clock {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(0, 0, 0, 0.85);
+            border: 2px solid #fff;
+            border-radius: 8px;
+            padding: 8px 16px;
+            z-index: 100;
+        }
+
+        .clock-time {
+            font-size: 24px;
+            font-weight: 900;
+            color: #fff;
+            font-family: 'Courier New', monospace;
+        }
+
+        /* Controls */
         #hover-controls {
             position: fixed;
             bottom: 20px;
@@ -77,235 +207,28 @@
             display: flex;
             gap: 10px;
             opacity: 0;
-            transition: opacity 0.3s ease;
             z-index: 2000;
-            pointer-events: none;
         }
-
-        body:hover #hover-controls {
-            opacity: 1;
-            pointer-events: all;
-        }
-
+        body:hover #hover-controls { opacity: 1; }
+        
         .control-btn {
-            background: rgba(40, 40, 40, 0.95);
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            border-radius: 8px;
-            padding: 12px 16px;
+            background: #333;
             color: #fff;
+            border: 1px solid #fff;
+            padding: 15px 30px;
+            font-size: 18px;
             cursor: pointer;
-            font-size: 14px;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            transition: all 0.2s;
-            backdrop-filter: blur(10px);
-        }
-
-        .control-btn:hover {
-            background: rgba(60, 60, 60, 0.95);
-            border-color: rgba(255, 255, 255, 0.5);
-            transform: translateY(-2px);
-        }
-
-        .control-btn svg {
-            width: 18px;
-            height: 18px;
-        }
-
-        /* Timeline Overlay */
-        .timeline-overlay {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: linear-gradient(to top, rgba(0, 0, 0, 0.95) 0%, rgba(0, 0, 0, 0.9) 80%, transparent 100%);
-            padding: 12px 16px 16px 16px;
-            z-index: 100;
-            backdrop-filter: blur(5px);
-        }
-
-        .timeline-header {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-bottom: 8px;
-            width: 100%;
-        }
-
-        .playback-icon {
-            width: 12px;
-            height: 12px;
-            flex-shrink: 0;
-        }
-
-        .playback-icon.playing {
-            color: #4caf50;
-        }
-
-        .playback-icon.paused {
-            color: #ff9800;
-        }
-
-        .playback-icon.stopped {
-            color: #f44336;
-        }
-
-        .title-container {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            flex: 1;
-            min-width: 0; /* Important for truncation in flex items */
-            overflow: hidden;
-        }
-
-        .show-title {
-            font-size: 14px;
-            font-weight: 700;
-            color: #fff;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            /* FLEX FIX: 
-               flex-shrink: 0 ensures SPL does not shrink for CPL.
-               max-width: 100% ensures it doesn't push parents too wide if alone.
-            */
-            flex: 0 0 auto; 
-            max-width: 100%;
-        }
-
-        .cpl-title-mini {
-            font-size: 10px;
-            font-weight: 500;
-            color: rgba(255, 255, 255, 0.5);
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            font-style: italic;
-            /* FLEX FIX:
-               flex: 1 1 auto allows CPL to take remaining space AND shrink to 0 
-               if SPL takes all the room.
-            */
-            flex: 1 1 auto;
-            min-width: 0;
-        }
-
-        .progress-bar-mini {
-            height: 6px;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 3px;
-            overflow: hidden;
-            margin-bottom: 6px;
-        }
-
-        .progress-fill-mini {
-            height: 100%;
-            background: #4caf50;
-            border-radius: 3px;
-            transition: width 0.3s ease;
-        }
-
-        .progress-fill-mini.feature {
-            background: #2196f3;
-        }
-
-        .progress-fill-mini.paused {
-            background: #ff9800;
-        }
-
-        .progress-fill-mini.stopped {
-            background: #f44336;
-        }
-
-        .timeline-times {
-            display: flex;
-            justify-content: space-between;
-            font-size: 11px;
-            font-weight: 600;
-            color: #fff;
-            font-family: 'Courier New', monospace;
-        }
-
-        .time-group {
-            display: flex;
-            flex-direction: column;
-            gap: 2px;
-        }
-
-        .time-label {
-            font-size: 9px;
-            color: rgba(255, 255, 255, 0.6);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        /* Theater Badge - Smaller, top right */
-        .theater-badge {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background: rgba(0, 0, 0, 0.75);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            border-radius: 4px;
-            padding: 4px 8px;
-            z-index: 100;
-            backdrop-filter: blur(5px);
-        }
-
-        .badge-id {
-            font-size: 12px;
-            font-weight: 700;
-            color: #fff;
-            text-align: center;
-            line-height: 1;
-        }
-
-        /* Clock - Top left */
-        .world-clock {
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            background: rgba(0, 0, 0, 0.75);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            border-radius: 4px;
-            padding: 4px 10px;
-            z-index: 100;
-            backdrop-filter: blur(5px);
-        }
-
-        .clock-time {
-            font-size: 13px;
-            font-weight: 600;
-            color: #fff;
-            font-family: 'Courier New', monospace;
-            letter-spacing: 1px;
-            line-height: 1;
         }
     </style>
 </head>
 <body>
 
-    <div id="error-log"></div>
+    <div id="error-log" style="display:none; position:absolute; top:0; left:0; background:red; color:white; z-index:9999; font-size:20px; padding:10px;"></div>
     <div id="app-container"></div>
 
     <div id="hover-controls">
-        <button class="control-btn" id="reload-btn">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <polyline points="23 4 23 10 17 10"></polyline>
-                <polyline points="1 20 1 14 7 14"></polyline>
-                <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
-            </svg>
-            Recharger
-        </button>
-        <button class="control-btn" id="restart-btn">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M18.36 6.64a9 9 0 1 1-12.73 0"></path>
-                <line x1="12" y1="2" x2="12" y2="12"></line>
-            </svg>
-            Redémarrer
-        </button>
+        <button class="control-btn" id="reload-btn">Recharger</button>
+        <button class="control-btn" id="restart-btn">Redémarrer</button>
     </div>
 
     <script src="/js/api.js"></script>
@@ -328,27 +251,18 @@
         const MIN_AR = TARGET_AR * (1 - TOLERANCE);
         const MAX_AR = TARGET_AR * (1 + TOLERANCE);
 
-        // Setup controls
-        document.getElementById('reload-btn').addEventListener('click', () => {
-            window.location.reload();
-        });
-
+        document.getElementById('reload-btn').addEventListener('click', () => window.location.reload());
         document.getElementById('restart-btn').addEventListener('click', async () => {
             if (confirm('Redémarrer le serveur ?')) {
-                try {
-                    await api.restartService();
-                    setTimeout(() => window.location.reload(), 5000);
-                } catch (err) {
-                    alert('Échec du redémarrage : ' + err.message);
-                }
+                try { await api.restartService(); setTimeout(() => window.location.reload(), 5000); } 
+                catch (err) { alert('Échec: ' + err.message); }
             }
         });
 
-        // Timeline Overlay Component - EXACTLY like playbackTimeline.js
         class TimelineOverlay {
             constructor(container, theaterName, theaterNumber, showClock = false) {
                 this.container = container;
-                this.theaterName = theaterName; // Use NAME not slug, like the main component
+                this.theaterName = theaterName;
                 this.theaterNumber = theaterNumber;
                 this.showClock = showClock;
                 this.updateInterval = null;
@@ -364,13 +278,13 @@
             }
 
             render() {
-                // Theater badge (top right)
+                // Theater Badge
                 const badge = document.createElement('div');
                 badge.className = 'theater-badge';
                 badge.innerHTML = `<div class="badge-id">S${this.theaterNumber}</div>`;
                 this.container.appendChild(badge);
 
-                // World clock (top left, only if showClock is true)
+                // Clock
                 if (this.showClock) {
                     const clock = document.createElement('div');
                     clock.className = 'world-clock';
@@ -379,7 +293,7 @@
                     this.clockElement = clock.querySelector('.clock-time');
                 }
 
-                // Timeline overlay
+                // Timeline
                 const overlay = document.createElement('div');
                 overlay.className = 'timeline-overlay';
                 overlay.innerHTML = `
@@ -417,16 +331,13 @@
 
             async update() {
                 try {
-                    // Use theaterName like the main component does
                     const response = await api.getPlayback(this.theaterName);
-                    
                     if (response.success && response.playback) {
                         this.updateUI(response.playback);
                     } else {
                         this.showError();
                     }
                 } catch (error) {
-                    console.error('Timeline error:', error);
                     this.showError();
                 }
             }
@@ -448,19 +359,15 @@
 
                 const state = playback.stateInfo || 'Unknown';
                 
-                // Update icon
                 iconPlay.style.display = 'none';
                 iconPause.style.display = 'none';
                 iconStop.style.display = 'none';
-                
-                // Reset SVG classes using classList
                 icon.classList.remove('playing', 'paused', 'stopped');
                 progress.classList.remove('feature', 'paused', 'stopped');
                 
                 if (state === 'Play') {
                     iconPlay.style.display = 'block';
                     icon.classList.add('playing');
-                    
                     const cpl = playback.cplTitle || '';
                     if (cpl.includes('_FTR') || cpl.includes('_SHR')) {
                         progress.classList.add('feature');
@@ -475,44 +382,18 @@
                     progress.classList.add('stopped');
                 }
 
-                // Update SPL title
-                let displayTitle = playback.splTitle || 'Sans titre';
+                title.textContent = playback.splTitle || 'Sans titre';
                 
-                // --- FILTER LOGIC: Remove leading date ID (e.g., "260215 " for 2026) ---
-                try {
-                    const currentYearShort = new Date().getFullYear().toString().slice(-2); // e.g. "26"
-                    const datePrefixRegex = new RegExp(`^${currentYearShort}\\d{4}\\s+`);
-                    
-                    if (datePrefixRegex.test(displayTitle)) {
-                        displayTitle = displayTitle.replace(datePrefixRegex, '');
-                    }
-                } catch (e) {
-                    console.warn('Error filtering SPL title date', e);
-                }
-
-                title.textContent = displayTitle;
-                title.title = displayTitle;
-
-                // Update CPL title (small and grey)
                 const displayCplTitle = playback.cplTitle || '';
-                if (displayCplTitle) {
-                    cplTitleMini.textContent = displayCplTitle;
-                    cplTitleMini.title = displayCplTitle;
-                    cplTitleMini.style.display = 'inline';
-                } else {
-                    cplTitleMini.style.display = 'none';
-                }
+                cplTitleMini.textContent = displayCplTitle;
+                cplTitleMini.style.display = displayCplTitle ? 'block' : 'none';
 
-                // Calculate times
                 const position = parseInt(playback.splPosition || 0);
                 const duration = parseInt(playback.splDuration || 1);
                 const remainingTime = Math.max(0, duration - position);
                 const percentage = Math.min(100, Math.max(0, (position / duration) * 100));
 
-                // Update progress
                 progress.style.width = `${percentage}%`;
-
-                // Update times
                 elapsed.textContent = this.formatTime(position);
                 remaining.textContent = this.formatTime(remainingTime);
                 
@@ -522,26 +403,14 @@
             }
 
             showError() {
+                // Keep simplified for space
                 const overlay = this.container.querySelector('.timeline-overlay');
-                if (!overlay) return;
-
-                const title = overlay.querySelector('.show-title');
-                const progress = overlay.querySelector('.progress-fill-mini');
-                const elapsed = overlay.querySelector('.time-elapsed');
-                const remaining = overlay.querySelector('.time-remaining');
-                const end = overlay.querySelector('.time-end');
-                
-                if (title) title.textContent = 'Erreur';
-                if (progress) progress.style.width = '0%';
-                if (elapsed) elapsed.textContent = '--:--';
-                if (remaining) remaining.textContent = '--:--';
-                if (end) end.textContent = '--:--';
+                if (overlay) overlay.querySelector('.show-title').textContent = 'OFFLINE';
             }
 
             updateClock() {
                 if (this.clockElement) {
-                    const now = new Date();
-                    this.clockElement.textContent = now.toLocaleTimeString('fr-FR');
+                    this.clockElement.textContent = new Date().toLocaleTimeString('fr-FR');
                 }
             }
 
@@ -549,29 +418,19 @@
                 const h = Math.floor(seconds / 3600);
                 const m = Math.floor((seconds % 3600) / 60);
                 const s = Math.floor(seconds % 60);
-                
-                if (h > 0) {
-                    return `${h}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
-                } else {
-                    return `${m}:${String(s).padStart(2, '0')}`;
-                }
+                if (h > 0) return `${h}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+                return `${m}:${String(s).padStart(2, '0')}`;
             }
 
             formatClock(date) {
-                return date.toLocaleTimeString('fr-FR', { 
-                    hour: '2-digit', 
-                    minute: '2-digit' 
-                });
+                return date.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
             }
 
             destroy() {
-                if (this.updateInterval) {
-                    clearInterval(this.updateInterval);
-                }
+                if (this.updateInterval) clearInterval(this.updateInterval);
             }
         }
 
-        // --- WebRTC Player Class ---
         class WebRTCFeed {
             constructor(container, theaterSlug, theaterName, theaterNumber, isFirst) {
                 this.container = container;
@@ -590,49 +449,31 @@
                 this.video.style.transition = 'opacity 0.5s ease';
                 this.container.appendChild(this.video);
 
-                // Timeline Overlay - pass NAME not slug
                 this.timeline = new TimelineOverlay(container, theaterName, theaterNumber, isFirst);
 
                 this.video.onplaying = () => {
                     this.spinner.style.display = 'none';
                     this.video.style.opacity = '1';
                 };
-
-                this.video.onwaiting = () => {
-                    this.spinner.style.display = 'block';
-                };
+                this.video.onwaiting = () => this.spinner.style.display = 'block';
                 
-                this.reloadInterval = setInterval(() => {
-                    logger.log(`[${this.slug}] Scheduled reload...`);
-                    this.restart();
-                }, 10 * 60 * 1000);
+                this.reloadInterval = setInterval(() => this.restart(), 10 * 60 * 1000);
             }
 
             async start() {
                 try {
                     this.spinner.style.display = 'block';
                     const whepUrl = `/api/whep/${this.slug}`;
-                    logger.log(`Starting WebRTC for ${this.slug}`);
 
                     this.pc = new RTCPeerConnection({ iceServers: [] });
-                    
                     this.pc.onconnectionstatechange = () => {
-                        const state = this.pc.connectionState;
-                        logger.log(`[${this.slug}] Connection State: ${state}`);
-                        if (state === 'failed' || state === 'disconnected') {
-                            logger.log(`[${this.slug}] Connection failed. Restarting...`);
-                            this.restart();
-                        }
+                        if (['failed', 'disconnected'].includes(this.pc.connectionState)) this.restart();
                     };
-
                     this.pc.addTransceiver('video', { direction: 'recvonly' });
                     
                     const remoteStream = new MediaStream();
                     this.video.srcObject = remoteStream;
-
-                    this.pc.ontrack = (ev) => {
-                        ev.streams[0].getTracks().forEach(track => remoteStream.addTrack(track));
-                    };
+                    this.pc.ontrack = (ev) => ev.streams[0].getTracks().forEach(track => remoteStream.addTrack(track));
 
                     const offer = await this.pc.createOffer();
                     await this.pc.setLocalDescription(offer);
@@ -645,12 +486,9 @@
                     });
 
                     if (!res.ok) throw new Error(`WHEP Error ${res.status}`);
-                    
-                    const answer = await res.text();
-                    await this.pc.setRemoteDescription({ type: 'answer', sdp: answer });
+                    await this.pc.setRemoteDescription({ type: 'answer', sdp: await res.text() });
                     
                 } catch (e) {
-                    logger.error(`Stream Error (${this.slug}): ${e.message}`);
                     setTimeout(() => this.restart(), 5000);
                 }
             }
@@ -671,37 +509,25 @@
 
             restart() {
                 this.video.style.opacity = '0';
-                this.spinner.style.display = 'block';
-                
-                if (this.pc) {
-                    this.pc.close();
-                    this.pc = null;
-                }
+                if (this.pc) { this.pc.close(); this.pc = null; }
                 setTimeout(() => this.start(), 500);
             }
         }
 
-        // --- Main Logic ---
         async function init() {
             try {
                 const data = await api.getTheaters();
                 const allTheaters = data.theaters || [];
-                
                 if (allTheaters.length === 0) return logger.error("Aucune salle trouvée");
 
                 const urlParams = new URLSearchParams(window.location.search);
                 const requestedIndices = [];
-                
                 for (const key of urlParams.keys()) {
                     const num = parseInt(key);
-                    if (!isNaN(num) && num > 0) {
-                        requestedIndices.push(num - 1);
-                    }
+                    if (!isNaN(num) && num > 0) requestedIndices.push(num - 1);
                 }
 
-                let targets = [];
-                let targetIndices = [];
-                
+                let targets = [], targetIndices = [];
                 if (requestedIndices.length > 0) {
                     requestedIndices.forEach(idx => {
                         if (idx < allTheaters.length) {
@@ -709,55 +535,32 @@
                             targetIndices.push(idx + 1);
                         }
                     });
-                    
-                    if (targets.length === 0) {
-                        return logger.error(`Salles ${requestedIndices.map(i=>i+1).join(', ')} introuvables.`);
-                    }
-                    logger.log(`Affichage des salles: ${targets.map(t => t.name).join(', ')}`);
                 } else {
                     targets = allTheaters.slice(0, 3);
                     targetIndices = [1, 2, 3].slice(0, targets.length);
-                    logger.log(`Affichage multiview par défaut (3 premières salles)`);
                 }
 
-                // Create players - pass BOTH slug (for video) and name (for API)
                 targets.forEach((t, arrIndex) => {
                     const wrapper = document.createElement('div');
                     wrapper.className = 'cam-wrapper';
                     appContainer.appendChild(wrapper);
-
-                    const theaterNumber = targetIndices[arrIndex];
-                    const feed = new WebRTCFeed(wrapper, t.slug, t.name, theaterNumber, arrIndex === 0);
+                    const feed = new WebRTCFeed(wrapper, t.slug, t.name, targetIndices[arrIndex], arrIndex === 0);
                     feed.start();
-
                     players.push({ wrapper, feed });
                 });
 
                 window.addEventListener('resize', calculateLayout);
                 calculateLayout();
-
-            } catch (err) {
-                logger.error(`Erreur d'initialisation: ${err.message}`);
-            }
+            } catch (err) { logger.error(`Erreur: ${err.message}`); }
         }
 
         function calculateLayout() {
             if (players.length === 0) return;
-
-            const W = window.innerWidth;
-            const H = window.innerHeight;
-            const count = players.length;
-
-            const hSlotW = W / count;
-            const hValid = getSquishedDimensions(hSlotW, H);
-            const hTotalArea = hValid.area * count;
-
-            const vSlotH = H / count;
-            const vValid = getSquishedDimensions(W, vSlotH);
-            const vTotalArea = vValid.area * count;
-
-            let bestLayout = (hTotalArea >= vTotalArea) ? 'horizontal' : 'vertical';
-            let finalDims = (hTotalArea >= vTotalArea) ? hValid : vValid;
+            const W = window.innerWidth, H = window.innerHeight, count = players.length;
+            const hSlotW = W / count, hValid = getSquishedDimensions(hSlotW, H), hTotalArea = hValid.area * count;
+            const vSlotH = H / count, vValid = getSquishedDimensions(W, vSlotH), vTotalArea = vValid.area * count;
+            const bestLayout = (hTotalArea >= vTotalArea) ? 'horizontal' : 'vertical';
+            const finalDims = (hTotalArea >= vTotalArea) ? hValid : vValid;
 
             appContainer.style.flexDirection = (bestLayout === 'horizontal') ? 'row' : 'column';
             appContainer.style.width = (bestLayout === 'horizontal') ? '100vw' : `${finalDims.w}px`;
@@ -771,18 +574,9 @@
 
         function getSquishedDimensions(slotW, slotH) {
             const slotAR = slotW / slotH;
-            
-            if (slotAR >= MIN_AR && slotAR <= MAX_AR) {
-                return { w: slotW, h: slotH, area: slotW * slotH };
-            }
-            if (slotAR < MIN_AR) { 
-                const h = slotW / MIN_AR; 
-                return { w: slotW, h: h, area: slotW * h }; 
-            }
-            if (slotAR > MAX_AR) { 
-                const w = slotH * MAX_AR; 
-                return { w: w, h: slotH, area: w * slotH }; 
-            }
+            if (slotAR >= MIN_AR && slotAR <= MAX_AR) return { w: slotW, h: slotH, area: slotW * slotH };
+            if (slotAR < MIN_AR) { const h = slotW / MIN_AR; return { w: slotW, h: h, area: slotW * h }; }
+            if (slotAR > MAX_AR) { const w = slotH * MAX_AR; return { w: w, h: slotH, area: w * slotH }; }
             return { w: slotW, h: slotH, area: 0 };
         }
 

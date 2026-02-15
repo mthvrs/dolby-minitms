@@ -314,3 +314,128 @@
 [data-theme="dark"] .cpl-title-wrapper {
     border-top-color: rgba(255, 255, 255, 0.1);
 }
+
+/* Playback Timeline Styles - HIGH VISIBILITY EDITION */
+.playback-timeline-container {
+    width: 100%;
+    background: var(--color-panel);
+    /* No margin top needed inside the new flex card layout */
+}
+
+.playback-timeline {
+    padding: 1rem;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+/* SPL Title - GIGANTIC */
+.timeline-header {
+    margin-bottom: 1rem;
+    overflow: hidden;
+}
+
+.playback-title.spl-title {
+    font-size: 2.2rem; /* Was 1.2em */
+    font-weight: 800;
+    color: var(--color-text);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 1.2;
+}
+
+/* Progress Bar - THICKER */
+.timeline-main {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+/* The small icons inside timeline (hidden in card view via style.css, shown in detail) */
+.state-icon svg {
+    width: 48px;
+    height: 48px;
+}
+.playback-timeline.playing .state-icon-play { color: var(--color-success); }
+.playback-timeline.paused .state-icon-pause { color: var(--color-warning); }
+.playback-timeline.stopped .state-icon-stop { color: var(--color-error); }
+
+.progress-bar {
+    flex: 1;
+    height: 24px; /* Was 8px - Now Huge */
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 12px;
+    overflow: hidden;
+    border: 2px solid rgba(255, 255, 255, 0.1);
+}
+
+.progress-fill {
+    height: 100%;
+    transition: width 0.2s linear;
+}
+
+/* High Contrast Neon Colors */
+.playback-timeline.playing .progress-fill { background: var(--color-success); box-shadow: 0 0 10px var(--color-success); }
+.playback-timeline.playing.feature .progress-fill { background: #2979ff; box-shadow: 0 0 10px #2979ff; }
+.playback-timeline.paused .progress-fill { background: var(--color-warning); }
+.playback-timeline.stopped .progress-fill { background: var(--color-error); }
+
+/* Time information - CONSIDERABLY BIGGER */
+.timeline-info {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.5rem;
+    background: rgba(0,0,0,0.3);
+    border-radius: 8px;
+    padding: 0.5rem;
+    border: 1px solid rgba(255,255,255,0.1);
+}
+
+.time-item {
+    text-align: center;
+}
+
+.time-label {
+    font-size: 1rem; /* Was 0.75em */
+    font-weight: 700;
+    color: var(--color-text-dim);
+    text-transform: uppercase;
+    margin-bottom: 0.25rem;
+}
+
+.time-value {
+    font-size: 2.2rem; /* Was 1.1em - HUGE */
+    font-weight: 900;
+    font-family: 'Courier New', monospace;
+    color: var(--color-text);
+    line-height: 1;
+    letter-spacing: 1px;
+}
+
+/* CPL Title */
+.cpl-title-wrapper {
+    margin-top: 0.75rem;
+    padding-top: 0.5rem;
+    border-top: 2px solid rgba(255,255,255,0.1);
+}
+
+.cpl-title {
+    font-size: 1.2rem;
+    color: var(--color-text-dim);
+    font-style: italic;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Compact Adjustments (for the card view) */
+.playback-timeline.compact {
+    padding: 0.75rem;
+}
+.playback-timeline.compact .playback-title.spl-title { font-size: 1.8rem; }
+.playback-timeline.compact .time-value { font-size: 1.8rem; }
+.playback-timeline.compact .progress-bar { height: 18px; }
