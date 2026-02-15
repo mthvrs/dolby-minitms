@@ -132,7 +132,7 @@
 }
 
 /* =========================================
-   MINUTEURS - HORIZONTAL INLINE LAYOUT
+   MINUTEURS - HORIZONTAL INLINE LAYOUT - BIG VALUES
    ========================================= */
 .timeline-info {
     display: flex;
@@ -147,8 +147,8 @@
     flex-direction: row;
     align-items: center;
     justify-content: center;
-    gap: 0.5rem;
-    padding: 0.7rem 0.8rem;
+    gap: 0.75rem;
+    padding: 0.9rem 1rem;
     background: rgba(0, 0, 0, 0.7);
     border-radius: 4px;
     border: 3px solid transparent;
@@ -196,11 +196,11 @@
 }
 
 .time-value {
-    font-size: 2rem;
+    font-size: 5rem;
     font-weight: 900;
     font-family: 'Arial Black', sans-serif;
     line-height: 1;
-    letter-spacing: 1px;
+    letter-spacing: 2px;
     white-space: nowrap;
     flex-shrink: 0;
 }
@@ -306,10 +306,10 @@
     height: 24px;
 }
 
-/* COMPACT TIMERS - NO BOXES */
+/* COMPACT TIMERS - NO BOXES, BIGGER VALUES */
 .theater-detail .timeline-info {
     flex-direction: row;
-    gap: 1.5rem;
+    gap: 2rem;
     justify-content: center;
     margin: 0.5rem 0;
 }
@@ -318,17 +318,17 @@
     background: transparent;
     border: none;
     padding: 0;
-    gap: 0.5rem;
+    gap: 0.75rem;
     flex: 0 0 auto;
 }
 
 .theater-detail .time-label {
-    font-size: 0.75rem;
+    font-size: 0.8rem;
     opacity: 0.8;
 }
 
 .theater-detail .time-value {
-    font-size: 2rem;
+    font-size: 5rem;
 }
 
 /* Color the text directly without boxes */
@@ -395,14 +395,15 @@
     }
     
     .theater-card .time-item {
-        padding: 0.4rem 0.5rem;
-        gap: 0.4rem;
+        padding: 0.5rem 0.6rem;
+        gap: 0.5rem;
         border-width: 2px;
     }
     
     .theater-card .time-value {
-        font-size: 1.5rem;
+        font-size: 3.75rem;
         line-height: 1;
+        letter-spacing: 1px;
     }
     
     .theater-card .time-label {
@@ -426,7 +427,7 @@
     }
     
     .theater-detail .time-value {
-        font-size: 1.6rem;
+        font-size: 4rem;
     }
     
     .theater-detail .timeline-end-time {
@@ -442,15 +443,15 @@
     }
     
     .time-item {
-        padding: 0.6rem 0.8rem;
+        padding: 0.7rem 1rem;
     }
     
     .time-value {
-        font-size: 1.8rem;
+        font-size: 4.5rem;
     }
     
     .time-label {
-        font-size: 0.7rem;
+        font-size: 0.75rem;
     }
     
     .playback-title.spl-title {
@@ -468,11 +469,11 @@
     /* Keep theater detail timers horizontal on mobile */
     .theater-detail .timeline-info {
         flex-direction: row;
-        gap: 1rem;
+        gap: 1.5rem;
     }
     
     .theater-detail .time-value {
-        font-size: 1.5rem;
+        font-size: 3.5rem;
     }
 }
 
