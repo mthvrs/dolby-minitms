@@ -1,5 +1,6 @@
 const axios = require('axios');
 const config = require('../config');
+const generateUUID = require('../utils/uuid');
 
 class DolbySessionManager {
   constructor(theaterName, theaterConfig, logger) {
@@ -52,14 +53,6 @@ class DolbySessionManager {
     return false;
   }
 
-  generateUUID() {
-    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-      var r = Math.random() * 16 | 0,
-        v = c == 'x' ? r : (r & 0x3 | 0x8);
-      return v.toString(16);
-    });
-  }
-
   async checkSystemStatus() {
     if (!this.sessionId) return false;
 
@@ -70,7 +63,7 @@ class DolbySessionManager {
           <soapenv:Header/>
           <soapenv:Body>
               <v1:GetSystemStatus>
-                  <sessionId>${this.generateUUID()}</sessionId>
+                  <sessionId>${generateUUID()}</sessionId>
               </v1:GetSystemStatus>
           </soapenv:Body>
       </soapenv:Envelope>`;
