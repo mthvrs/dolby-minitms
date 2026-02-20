@@ -1,6 +1,9 @@
 // services/dolbyIMS3000Client.js
 const cheerio = require('cheerio');
 
+const AJAX_EXECUTE_ACTION_REGEX = /ajaxExecuteAction\('([^']+)'/;
+const AJAX_EXECUTE_CONTROL_REGEX = /ajaxExecuteControl\('([^']+)'/;
+
 class DolbyIMS3000Client {
     constructor(theaterName, sessionManager, logger) {
         this.name = theaterName;
@@ -91,7 +94,7 @@ class DolbyIMS3000Client {
             row.find('div.col-4[onclick^="ajaxExecuteAction"]').each((btnIdx, colEl) => {
                 const col = $(colEl);
                 const onclick = col.attr('onclick') || '';
-                const match = onclick.match(/ajaxExecuteAction\('([^']+)'/);
+                const match = onclick.match(AJAX_EXECUTE_ACTION_REGEX);
                 const macroName = match ? match[1] : null;
                 const label = col.find('button').first().text().trim();
 
@@ -129,7 +132,7 @@ class DolbyIMS3000Client {
             group.find(buttonSelector).each((bIdx, btnEl) => {
                 const btn = $(btnEl);
                 const onclick = btn.attr('onclick') || '';
-                const m = onclick.match(/ajaxExecuteControl\('([^']+)'/);
+                const m = onclick.match(AJAX_EXECUTE_CONTROL_REGEX);
                 const name = m ? m[1] : null;
                 const label = btn.find('span').first().text().trim();
 
