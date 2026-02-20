@@ -1,6 +1,8 @@
 const axios = require('axios');
 const config = require('../config');
 
+const COOKIE_REGEX = /([^=]+)=([^;]*)/;
+
 class DolbySessionManager {
   constructor(theaterName, theaterConfig, logger) {
     this.name = theaterName;
@@ -27,7 +29,7 @@ class DolbySessionManager {
     if (!setCookieHeader) return;
     const cookieArray = Array.isArray(setCookieHeader) ? setCookieHeader : [setCookieHeader];
     for (const cookieStr of cookieArray) {
-      const match = cookieStr.match(/([^=]+)=([^;]*)/);
+      const match = cookieStr.match(COOKIE_REGEX);
       if (match) {
         const key = match[1].trim();
         const value = match[2].trim();
