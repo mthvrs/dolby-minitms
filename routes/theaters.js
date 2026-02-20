@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const config = require('../config');
 const DolbyClientUnified = require('../services/dolbyClientUnified');
-const slugify = (s) => String(s).toLowerCase().replace(/\s+/g, '-');
+const { slugify } = require('../utils/stringUtils');
 
 const clients = {};
 const slugToName = {};
