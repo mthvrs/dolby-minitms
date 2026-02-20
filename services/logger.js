@@ -1,6 +1,9 @@
 const fs = require('fs');
 const path = require('path');
 
+// Global stream variable for the module
+let logStream = null;
+
 class Logger {
     constructor(context) {
         this.context = context || 'System';
@@ -10,6 +13,7 @@ class Logger {
         this.logFile = path.join(this.logDir, 'app.log');
 
         this._ensureLogDir();
+        this._ensureStream();
     }
 
     _ensureLogDir() {
@@ -18,6 +22,24 @@ class Logger {
                 fs.mkdirSync(this.logDir, { recursive: true });
             } catch (e) {
                 console.error('Could not create log directory:', e);
+            }
+        }
+    }
+
+    _ensureStream() {
+        if (!logStream) {
+            try {
+                // Create a write stream in append mode
+                logStream = fs.createWriteStream(this.logFile, { flags: 'a', encoding: 'utf8' });
+
+                logStream.on('error', (err) => {
+                    console.error('Logger stream error:', err);
+                    // Attempt to recover or just disable logging to file?
+                    // For simplicity, we might just null it out so next write tries to recreate or fails gracefully.
+                    logStream = null;
+                });
+            } catch (e) {
+                console.error('Could not create log stream:', e);
             }
         }
     }
@@ -37,11 +59,14 @@ class Logger {
             console.log(line);
         }
 
-        // File output (append)
-        try {
-            fs.appendFileSync(this.logFile, line + '\n', 'utf8');
-        } catch (e) {
-            // Fail silently on file write to avoid crash loops
+        // File output (stream)
+        if (logStream) {
+            logStream.write(line + '\n');
+        } else {
+             // Fallback or retry creating stream?
+             // Maybe try to re-create if it's null?
+             this._ensureStream();
+             if (logStream) logStream.write(line + '\n');
         }
     }
 
