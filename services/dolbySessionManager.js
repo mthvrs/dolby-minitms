@@ -14,6 +14,8 @@ class DolbySessionManager {
     this.cookies = {}; // Manual cookie storage
     this.checkInterval = null; // For keep-alive polling
     this.detectedType = null; // Stores 'IMS3000' or 'DCP2000' after successful login
+    this.soapSessionId = null; // Sync with SOAP client
+    this.persistentUuid = crypto.randomUUID(); // Fallback UUID for system checks
 
     this.session = axios.create({
       baseURL: theaterConfig.url,
@@ -55,6 +57,10 @@ class DolbySessionManager {
     return false;
   }
 
+  setSoapSessionId(id) {
+    this.soapSessionId = id;
+  }
+
   generateUUID() {
     return crypto.randomUUID();
   }
@@ -64,12 +70,16 @@ class DolbySessionManager {
 
     // A simple probe to check if session is valid. 
     // Using SystemOverview here as it is lightweight compared to ShowControl
+    // Use the official SOAP session ID if available, otherwise use a persistent UUID
+    // to avoid creating a new session on every poll.
+    const id = this.soapSessionId || this.persistentUuid;
+
     const soapBody = `<?xml version="1.0" encoding="UTF-8"?>
       <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:v1="http://www.doremilabs.com/dc/dcp/json/v1_0">
           <soapenv:Header/>
           <soapenv:Body>
               <v1:GetSystemStatus>
-                  <sessionId>${this.generateUUID()}</sessionId>
+                  <sessionId>${id}</sessionId>
               </v1:GetSystemStatus>
           </soapenv:Body>
       </soapenv:Envelope>`;
@@ -268,6 +278,13 @@ class DolbySessionManager {
   }
 
   async login() {
+    // Check if we can reuse the existing session
+    if (this.sessionId && await this.checkSystemStatus()) {
+        this.logger.info('Session valid, reusing existing login.');
+        if (!this.checkInterval) this.startPolling();
+        return true;
+    }
+
     if (this.sessionId) await this.logout();
     this.stopPolling();
 

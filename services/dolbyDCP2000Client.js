@@ -37,6 +37,7 @@ class DolbyDCP2000Client {
             // Try to use cached SOAP session ID first
             if (!this.soapSessionId) {
                 this.soapSessionId = await this.extractSoapSessionId();
+                if (this.soapSessionId) this.session.setSoapSessionId(this.soapSessionId);
             }
 
             if (!this.soapSessionId) {
@@ -64,6 +65,7 @@ class DolbyDCP2000Client {
                 // If we get "not authenticated", clear the cache and retry once
                 if (response.data.Fault.faultstring === 'not authenticated' && this.soapSessionId) {
                     this.soapSessionId = null;
+                    this.session.setSoapSessionId(null);
                     // Recursive retry
                     return await this.getPlaybackStatus();
                 }
