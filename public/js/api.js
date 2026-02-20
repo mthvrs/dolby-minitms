@@ -39,6 +39,23 @@ class API {
     return String(name).toLowerCase().replace(/\s+/g, '-');
   }
 
+  static formatSplTitle(title) {
+    if (!title) return '';
+    let displaySplTitle = title;
+    try {
+        const currentYearShort = new Date().getFullYear().toString().slice(-2);
+        // Matches "YYMMDD " at the start
+        const datePrefixRegex = new RegExp(`^${currentYearShort}\\d{4}\\s+`);
+
+        if (datePrefixRegex.test(displaySplTitle)) {
+            displaySplTitle = displaySplTitle.replace(datePrefixRegex, '');
+        }
+    } catch (e) {
+        console.warn('Error processing SPL title date filter', e);
+    }
+    return displaySplTitle;
+  }
+
   // Theaters (Salles)
   async getTheaters() {
     return this.request('/api/theaters');
