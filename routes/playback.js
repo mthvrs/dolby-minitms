@@ -12,11 +12,11 @@ const logger = {
     truncate: (str, len) => str.length > len ? str.substring(0, len) + '...' : str
 };
 
-// Cache for SOAP session IDs (keyed by theater name)
-const soapSessionCache = {};
-
 // Constant regex pattern for UUID extraction
 const uuidPattern = /([a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12})/i;
+
+// Cache for SOAP session IDs (keyed by theater name)
+const soapSessionCache = {};
 
 async function extractSoapSessionId(session, theaterConfig, theaterType) {
     // Determine playback URL based on theater type
