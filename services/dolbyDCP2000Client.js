@@ -1,6 +1,8 @@
 // services/dolbyDCP2000Client.js
 const cheerio = require('cheerio');
 
+const MACRO_REGEX = /ajaxExecuteMacroQC\('([^']+)'(?:,\s*(\d+))?\)/;
+
 class DolbyDCP2000Client {
     constructor(theaterName, sessionManager, logger) {
         this.name = theaterName;
@@ -33,7 +35,7 @@ class DolbyDCP2000Client {
                 const $btn = $(btnEl);
                 const onclick = $btn.attr('onclick') || '';
                 const label = $btn.find('span').first().text().trim();
-                const m = onclick.match(/ajaxExecuteMacroQC\('([^']+)'(?:,\s*(\d+))?\)/);
+                const m = onclick.match(MACRO_REGEX);
                 const macroName = m ? m[1] : null;
 
                 if (macroName && label) {
