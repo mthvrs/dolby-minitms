@@ -1,6 +1,5 @@
 const express = require('express');
 const router = express.Router();
-const DolbySessionManager = require('../services/dolbySessionManager');
 const { resolveName, clients } = require('./theaters');
 const config = require('../config');
 const Logger = require('../services/logger');
