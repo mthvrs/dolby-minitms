@@ -124,8 +124,18 @@ class PlaybackTimeline {
         }
 
         // Update SPL title
-        const rawSplTitle = playback.splTitle || 'Aucun titre';
-        const displaySplTitle = API.formatSplTitle(rawSplTitle);
+        let displaySplTitle = playback.splTitle || 'Aucun titre';
+
+        try {
+            const currentYearShort = new Date().getFullYear().toString().slice(-2);
+            const datePrefixRegex = new RegExp(`^${currentYearShort}\\d{4}\\s+`);
+
+            if (datePrefixRegex.test(displaySplTitle)) {
+                displaySplTitle = displaySplTitle.replace(datePrefixRegex, '');
+            }
+        } catch (e) {
+            console.warn('Error processing SPL title date filter', e);
+        }
         
         splTitle.textContent = displaySplTitle;
         splTitle.title = displaySplTitle;

@@ -26,22 +26,7 @@ class DolbyClientUnified {
     }
 
     async login() {
-        const success = await this.sessionManager.login();
-        if (success) {
-            // Attempt to pre-fetch SOAP session ID to ensure consistent session usage
-            try {
-                if (this.client.extractSoapSessionId) {
-                    const id = await this.client.extractSoapSessionId();
-                    if (id) {
-                        this.client.soapSessionId = id;
-                        this.sessionManager.setSoapSessionId(id);
-                    }
-                }
-            } catch (e) {
-                this.logger.warn(`Failed to pre-fetch SOAP session ID: ${e.message}`);
-            }
-        }
-        return success;
+        return await this.sessionManager.login();
     }
 
     async ensureLoggedIn() {
@@ -58,10 +43,6 @@ class DolbyClientUnified {
 
     async executeMacro(macroName) {
         return await this.client.executeMacro(macroName);
-    }
-
-    async getPlaybackStatus() {
-        return await this.client.getPlaybackStatus();
     }
 
     async destroy() {
