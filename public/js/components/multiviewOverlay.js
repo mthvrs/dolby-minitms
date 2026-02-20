@@ -123,7 +123,8 @@ class MultiviewOverlay {
             progress.classList.add('stopped');
         }
 
-        title.textContent = playback.splTitle || 'Sans titre';
+        const rawSplTitle = playback.splTitle || 'Sans titre';
+        title.textContent = API.formatSplTitle(rawSplTitle);
 
         const displayCplTitle = playback.cplTitle || '';
         cplTitleMini.textContent = displayCplTitle;
