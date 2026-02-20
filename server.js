@@ -46,13 +46,34 @@ app.post('/api/system/restart', (req, res) => {
     
     setTimeout(() => {
         logger.info('Stopping services and exiting process...');
-        
-        // [NEW] Explicitly stop the gateway before exiting
-        webrtcGateway.stop();
-        
-        process.exit(0); 
+        shutdown();
     }, 1000);
 });
+
+// Graceful Shutdown Logic
+async function shutdown() {
+    logger.info('Shutting down...');
+
+    // Stop WebRTC
+    webrtcGateway.stop();
+
+    // Stop all theater sessions
+    logger.info('Closing theater sessions...');
+    const { clients } = require('./routes/theaters');
+    for (const client of Object.values(clients)) {
+        try {
+            await client.destroy();
+            logger.info(`Session destroyed for ${client.name}`);
+        } catch (e) {
+            logger.error(`Error destroying session for ${client.name}: ${e.message}`);
+        }
+    }
+
+    process.exit(0);
+}
+
+process.on('SIGTERM', shutdown);
+process.on('SIGINT', shutdown);
 
 // Start Server
 const HOST = '0.0.0.0'; 
