@@ -28,12 +28,5 @@ module.exports = {
     TIMEOUTS: {
         http: 5000,
         checkInterval: 30000
-    },
-    
-    STREAM_OPTIONS: {
-        ffmpegPath: 'ffmpeg',
-        width: 640,
-        height: 360,
-        fps: 15
     }
 };
