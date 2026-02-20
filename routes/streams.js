@@ -3,7 +3,8 @@ const httpReq = require('http');
 const httpsReq = require('https');
 const { URL } = require('url');
 const config = require('../config');
-const { slugify, mediamtxHttpOrigin } = require('../services/webrtcGateway');
+const { mediamtxHttpOrigin } = require('../services/webrtcGateway');
+const { slugify } = require('../utils');
 
 const router = express.Router();
 
