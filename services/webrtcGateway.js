@@ -70,10 +70,6 @@ function stop() {
     }
 }
 
-function slugify(name) {
-    return String(name).toLowerCase().replace(/\s+/g, '-');
-}
-
 // [NEW] Safety net: Ensure child is killed if the parent process exits unexpectedly
 process.on('exit', () => {
     if (child) child.kill();
@@ -82,6 +78,5 @@ process.on('exit', () => {
 module.exports = {
     ensureRunning,
     stop, // Export the stop function
-    slugify,
     mediamtxHttpOrigin: 'http://127.0.0.1:8889',
 };
