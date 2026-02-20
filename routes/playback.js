@@ -3,14 +3,9 @@ const router = express.Router();
 const DolbySessionManager = require('../services/dolbySessionManager');
 const { resolveName, clients } = require('./theaters');
 const config = require('../config');
+const Logger = require('../services/logger');
 
-const logger = {
-    info: (msg) => console.log(`[Playback API] ${msg}`),
-    warn: (msg) => console.warn(`[Playback API] ${msg}`),
-    error: (msg) => console.error(`[Playback API] ${msg}`),
-    debug: (msg) => console.log(`[Playback API] ${msg}`),
-    truncate: (str, len) => str.length > len ? str.substring(0, len) + '...' : str
-};
+const logger = new Logger('Playback API');
 
 // API endpoint
 router.get('/api/playback/:id', async (req, res) => {
