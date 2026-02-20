@@ -27,9 +27,9 @@ async function setupEnvironment() {
     // If config.js doesn't exist in AppData, copy the default one from the bundle
     if (!fs.existsSync(destConfig)) {
         // Fallback for dev environment if source doesn't exist there
-        const devConfig = path.join(__dirname, 'config.js'); 
+        const devConfig = path.join(__dirname, 'config.js');
         const src = fs.existsSync(sourceConfig) ? sourceConfig : devConfig;
-        
+
         if (fs.existsSync(src)) {
             await fs.copy(src, destConfig);
             console.log('Copied default config to:', destConfig);
@@ -39,19 +39,19 @@ async function setupEnvironment() {
 
 function startServer() {
     const serverScript = path.join(__dirname, 'server.js');
-    
+
     // We pass the paths to the server via Environment Variables
     // This allows server.js to know where to read/write files
-    const env = { 
-        ...process.env, 
+    const env = {
+        ...process.env,
         ELECTRON_RUN: 'true',
         CONFIG_PATH: destConfig,
         LOGS_DIR: logsDir,
         // In Prod, mediamtx is in 'extra' folder. In Dev, it's root.
-        MEDIAMTX_PATH: app.isPackaged 
+        MEDIAMTX_PATH: app.isPackaged
             ? path.join(resourcesPath, 'extra', 'mediamtx.exe')
             : path.join(__dirname, 'mediamtx.exe'),
-        MEDIAMTX_CONFIG: app.isPackaged 
+        MEDIAMTX_CONFIG: app.isPackaged
             ? path.join(resourcesPath, 'extra', 'mediamtx.yml')
             : path.join(__dirname, 'mediamtx.yml')
     };

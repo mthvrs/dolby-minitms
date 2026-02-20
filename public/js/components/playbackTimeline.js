@@ -129,7 +129,7 @@ class PlaybackTimeline {
         try {
             const currentYearShort = new Date().getFullYear().toString().slice(-2);
             const datePrefixRegex = new RegExp(`^${currentYearShort}\\d{4}\\s+`);
-            
+
             if (datePrefixRegex.test(displaySplTitle)) {
                 displaySplTitle = displaySplTitle.replace(datePrefixRegex, '');
             }

@@ -1,6 +1,8 @@
 const axios = require('axios');
 const config = require('../config');
 
+const AUTH_FAILURE_REGEX = /authentication failure/i;
+
 class DolbySessionManager {
   constructor(theaterName, theaterConfig, logger) {
     this.name = theaterName;
@@ -47,7 +49,7 @@ class DolbySessionManager {
     if (!html || typeof html !== 'string') return false;
     if (html.includes('attr-page="login"')) return true;
     if (html.includes('name="loginForm"')) return true;
-    if (html.toLowerCase().includes('authentication failure')) return true;
+    if (AUTH_FAILURE_REGEX.test(html)) return true;
     if (html.includes("window.location.href = '/web/login.php'")) return true;
     return false;
   }

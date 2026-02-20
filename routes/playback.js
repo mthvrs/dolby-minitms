@@ -1,6 +1,5 @@
 const express = require('express');
 const router = express.Router();
-const DolbySessionManager = require('../services/dolbySessionManager');
 const { resolveName, clients } = require('./theaters');
 const config = require('../config');
 
@@ -17,30 +16,30 @@ const soapSessionCache = {};
 
 async function extractSoapSessionId(session, theaterConfig, theaterType) {
     // Determine playback URL based on theater type
-    const playbackUrl = theaterType === 'IMS3000' 
+    const playbackUrl = theaterType === 'IMS3000'
         ? '/web/index.php?page=sys_control/cinelister/playback.php'
         : '/web/sys_control/cinelister/playback.php';
-    
+
     const pageResp = await session.request('GET', playbackUrl, null, {
         'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8'
     });
 
     const html = typeof pageResp.data === 'string' ? pageResp.data : '';
-    
+
     // Search for UUID pattern
     const uuidPattern = /([a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12})/i;
     const match = html.match(uuidPattern);
-    
+
     if (match) {
         return match[1];
     }
-    
+
     return null;
 }
 
-async function getPlaybackStatus(theaterName) {
+async function getPlaybackStatus(theaterName, retry = false) {
     const theaterConfig = config.THEATERS[theaterName];
-    
+
     if (!theaterConfig) {
         throw new Error(`Theater "${theaterName}" not found in config`);
     }
@@ -54,7 +53,7 @@ async function getPlaybackStatus(theaterName) {
 
         // Try to use cached SOAP session ID first
         let soapSessionId = soapSessionCache[theaterName];
-        
+
         // If no cache or expired, extract new one
         if (!soapSessionId) {
             soapSessionId = await extractSoapSessionId(session, theaterConfig, theaterConfig.type);
@@ -91,10 +90,10 @@ async function getPlaybackStatus(theaterName) {
             return response.data.GetShowStatusResponse.showStatus;
         } else if (response.data?.Fault) {
             // If we get "not authenticated", clear the cache and retry once
-            if (response.data.Fault.faultstring === 'not authenticated' && soapSessionCache[theaterName]) {
+            if (response.data.Fault.faultstring === 'not authenticated' && soapSessionCache[theaterName] && !retry) {
                 delete soapSessionCache[theaterName];
                 // Recursive retry
-                return await getPlaybackStatus(theaterName);
+                return await getPlaybackStatus(theaterName, true);
             }
             throw new Error(`SOAP Fault: ${response.data.Fault.faultstring}`);
         } else {

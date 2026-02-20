@@ -46,11 +46,11 @@ app.post('/api/system/restart', (req, res) => {
     
     setTimeout(() => {
         logger.info('Stopping services and exiting process...');
-        
+
         // [NEW] Explicitly stop the gateway before exiting
         webrtcGateway.stop();
-        
-        process.exit(0); 
+
+        process.exit(0);
     }, 1000);
 });
 
