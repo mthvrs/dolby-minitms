@@ -15,6 +15,9 @@ const logger = {
 // Cache for SOAP session IDs (keyed by theater name)
 const soapSessionCache = {};
 
+// Constant regex pattern for UUID extraction
+const uuidPattern = /([a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12})/i;
+
 async function extractSoapSessionId(session, theaterConfig, theaterType) {
     // Determine playback URL based on theater type
     const playbackUrl = theaterType === 'IMS3000' 
@@ -28,7 +31,6 @@ async function extractSoapSessionId(session, theaterConfig, theaterType) {
     const html = typeof pageResp.data === 'string' ? pageResp.data : '';
     
     // Search for UUID pattern
-    const uuidPattern = /([a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12})/i;
     const match = html.match(uuidPattern);
     
     if (match) {
