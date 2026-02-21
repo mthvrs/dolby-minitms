@@ -1,11 +1,84 @@
 // services/dolbyIMS3000Client.js
 const cheerio = require('cheerio');
 
+const AJAX_EXECUTE_ACTION_REGEX = /ajaxExecuteAction\('([^']+)'/;
+const AJAX_EXECUTE_CONTROL_REGEX = /ajaxExecuteControl\('([^']+)'/;
+
 class DolbyIMS3000Client {
     constructor(theaterName, sessionManager, logger) {
         this.name = theaterName;
         this.session = sessionManager;
         this.logger = logger;
+        this.soapSessionId = null;
+    }
+
+    async extractSoapSessionId() {
+        const playbackUrl = '/web/index.php?page=sys_control/cinelister/playback.php';
+
+        const pageResp = await this.session.request('GET', playbackUrl, null, {
+            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8'
+        });
+
+        const html = typeof pageResp.data === 'string' ? pageResp.data : '';
+
+        // Search for UUID pattern
+        const uuidPattern = /([a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12})/i;
+        const match = html.match(uuidPattern);
+
+        if (match) {
+            return match[1];
+        }
+
+        return null;
+    }
+
+    async getPlaybackStatus() {
+        try {
+            // Ensure authenticated
+            await this.session.ensureLoggedIn();
+
+            // Try to use cached SOAP session ID first
+            if (!this.soapSessionId) {
+                this.soapSessionId = await this.extractSoapSessionId();
+                if (this.soapSessionId) this.session.setSoapSessionId(this.soapSessionId);
+            }
+
+            if (!this.soapSessionId) {
+                throw new Error('Could not extract SOAP session ID');
+            }
+
+            // Build SOAP request
+            const soapBody = `<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:v1="http://www.doremilabs.com/dc/dcp/json/v1_0"><soapenv:Header/><soapenv:Body><v1:GetShowStatus><sessionId>${this.soapSessionId}</sessionId></v1:GetShowStatus></soapenv:Body></soapenv:Envelope>`;
+
+            // Request playback status
+            const response = await this.session.request('POST', '/dc/dcp/json/v1/ShowControl', soapBody, {
+                'Content-Type': 'text/xml',
+                'Accept': '*/*',
+                'Accept-Language': 'en-US,en;q=0.9,fr;q=0.8',
+                'Connection': 'keep-alive',
+                'X-Requested-With': 'XMLHttpRequest',
+                'Origin': this.session.config.url,
+                'Referer': `${this.session.config.url}/web/index.php?page=sys_control/cinelister/playback.php`
+            });
+
+            // Parse response
+            if (response.status === 200 && response.data?.GetShowStatusResponse?.showStatus) {
+                return response.data.GetShowStatusResponse.showStatus;
+            } else if (response.data?.Fault) {
+                // If we get "not authenticated", clear the cache and retry once
+                if (response.data.Fault.faultstring === 'not authenticated' && this.soapSessionId) {
+                    this.soapSessionId = null;
+                    this.session.setSoapSessionId(null);
+                    // Recursive retry
+                    return await this.getPlaybackStatus();
+                }
+                throw new Error(`SOAP Fault: ${response.data.Fault.faultstring}`);
+            } else {
+                throw new Error(`Unexpected response`);
+            }
+        } catch (error) {
+            throw error;
+        }
     }
 
     parseQuickControlHTML(html) {
@@ -23,7 +96,7 @@ class DolbyIMS3000Client {
             row.find('div.col-4[onclick^="ajaxExecuteAction"]').each((btnIdx, colEl) => {
                 const col = $(colEl);
                 const onclick = col.attr('onclick') || '';
-                const match = onclick.match(/ajaxExecuteAction\('([^']+)'/);
+                const match = onclick.match(AJAX_EXECUTE_ACTION_REGEX);
                 const macroName = match ? match[1] : null;
                 const label = col.find('button').first().text().trim();
 
@@ -61,7 +134,7 @@ class DolbyIMS3000Client {
             group.find(buttonSelector).each((bIdx, btnEl) => {
                 const btn = $(btnEl);
                 const onclick = btn.attr('onclick') || '';
-                const m = onclick.match(/ajaxExecuteControl\('([^']+)'/);
+                const m = onclick.match(AJAX_EXECUTE_CONTROL_REGEX);
                 const name = m ? m[1] : null;
                 const label = btn.find('span').first().text().trim();
 
