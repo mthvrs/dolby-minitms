@@ -6,7 +6,7 @@ const config = require('./config');
 const webrtcGateway = require('./services/webrtcGateway');
 const Logger = require('./services/logger');
 const playbackRouter = require('./routes/playback');
-
+const timersRouter = require('./routes/timers');
 const logger = new Logger('Server');
 const app = express();
 expressWs(app);
@@ -22,7 +22,7 @@ const theaters = require('./routes/theaters');
 app.use(theaters.router);
 app.use('/api/macros', require('./routes/macros'));
 app.use(playbackRouter);
-
+app.use(timersRouter);
 app.get('/cams', (req, res) => {
     logger.info(`Client requesting Multiview Page (/cams) from ${req.ip}`);
     res.sendFile(path.join(__dirname, 'public', 'cams.html'));

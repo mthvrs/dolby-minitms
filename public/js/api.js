@@ -87,6 +87,14 @@ class API {
     });
   }
 
+  //Timers
+async getTimers(theaterName) {
+  const id   = encodeURIComponent(theaterName);
+  const resp = await fetch(`/api/timers/${id}`);
+  if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+  return resp.json();
+}
+
   async restartService() {
     return this.request('/api/system/restart', {
       method: 'POST'
@@ -100,6 +108,9 @@ getPlayback(theaterNameOrSlug) {
 }
 
 }
+
+
+
 
 // Expose as global for classic scripts
 window.api = new API();
