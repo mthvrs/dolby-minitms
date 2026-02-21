@@ -1,11 +1,11 @@
 const { expect } = require('chai');
 const proxyquire = require('proxyquire');
+const { slugify } = require('../utils');
 
 describe('WebRTC Gateway Service', function() {
     let webrtcGateway;
 
     before(function() {
-        // Mock Logger class
         class MockLogger {
             constructor(context) {}
             info(msg) {}
@@ -14,7 +14,6 @@ describe('WebRTC Gateway Service', function() {
             debug(msg) {}
         }
 
-        // Mock dependencies
         webrtcGateway = proxyquire('../services/webrtcGateway', {
             './logger': MockLogger,
             'fs': {
@@ -33,35 +32,49 @@ describe('WebRTC Gateway Service', function() {
         });
     });
 
-    describe('slugify()', function() {
-        it('should convert spaces to hyphens', function() {
-            expect(webrtcGateway.slugify('Salle 1')).to.equal('salle-1');
+    describe('ensureRunning() / stop()', function() {
+        it('should export ensureRunning as a function', function() {
+            expect(webrtcGateway.ensureRunning).to.be.a('function');
         });
 
-        it('should convert mixed case to lowercase', function() {
-            expect(webrtcGateway.slugify('Mixed Case')).to.equal('mixed-case');
+        it('should export stop as a function', function() {
+            expect(webrtcGateway.stop).to.be.a('function');
         });
 
-        it('should handle multiple spaces', function() {
-            // Documenting current behavior: replaces each sequence of spaces with a single hyphen
-            expect(webrtcGateway.slugify('  Multiple   Spaces  ')).to.equal('-multiple-spaces-');
+        it('should NOT export slugify (moved to utils.js)', function() {
+            expect(webrtcGateway.slugify).to.be.undefined;
         });
+    });
+});
 
-        it('should return empty string for empty input', function() {
-            expect(webrtcGateway.slugify('')).to.equal('');
-        });
+// slugify is now in utils.js — test it there
+describe('slugify utility (utils.js)', function() {
+    it('should convert spaces to hyphens', function() {
+        expect(slugify('Salle 1')).to.equal('salle-1');
+    });
 
-        it('should handle numbers by converting to string', function() {
-            expect(webrtcGateway.slugify(123)).to.equal('123');
-        });
+    it('should convert mixed case to lowercase', function() {
+        expect(slugify('Mixed Case')).to.equal('mixed-case');
+    });
 
-        it('should handle special characters', function() {
-            expect(webrtcGateway.slugify('hello@world!')).to.equal('hello@world!');
-        });
+    it('should handle multiple spaces', function() {
+        expect(slugify('  Multiple   Spaces  ')).to.equal('-multiple-spaces-');
+    });
 
-        it('should handle null and undefined', function() {
-             expect(webrtcGateway.slugify(null)).to.equal('null');
-             expect(webrtcGateway.slugify(undefined)).to.equal('undefined');
-        });
+    it('should return empty string for empty input', function() {
+        expect(slugify('')).to.equal('');
+    });
+
+    it('should handle numbers by converting to string', function() {
+        expect(slugify(123)).to.equal('123');
+    });
+
+    it('should handle special characters', function() {
+        expect(slugify('hello@world!')).to.equal('hello@world!');
+    });
+
+    it('should handle null and undefined', function() {
+        expect(slugify(null)).to.equal('null');
+        expect(slugify(undefined)).to.equal('undefined');
     });
 });
