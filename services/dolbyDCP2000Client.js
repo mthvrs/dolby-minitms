@@ -80,6 +80,84 @@ class DolbyDCP2000Client {
         }
     }
 
+    async getSchedule() {
+        try {
+            await this.session.ensureLoggedIn();
+            const ajaxUrl = '/web/sys_control/cinelister/ajax.php';
+
+            // Format date as D-Month-YYYY (e.g. 16-February-2026)
+            const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+            const now = new Date();
+            const dateStr = `${now.getDate()}-${months[now.getMonth()]}-${now.getFullYear()}`;
+
+            const data = `request=LOAD_SCHEDULES&start_date=${dateStr}&out_dated=false`;
+
+            const res = await this.session.request('POST', ajaxUrl, data, {
+                'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+                'X-Requested-With': 'XMLHttpRequest',
+                'Referer': `${this.session.config.url}/web/sys_control/cinelister/schedule.php`
+            });
+
+            if (res.status === 200 && typeof res.data === 'string') {
+                return this.parseScheduleHTML(res.data);
+            }
+            return [];
+        } catch (err) {
+            this.logger.error(`Error fetching schedule: ${err.message}`);
+            return [];
+        }
+    }
+
+    parseScheduleHTML(html) {
+        const $ = cheerio.load(html);
+        const schedules = [];
+        let currentDate = null;
+
+        $('#scheduleSelect option').each((i, el) => {
+            const $el = $(el);
+            const val = $el.attr('value');
+            const text = $el.text().trim();
+
+            if (val === 'DATE') {
+                const match = text.match(/\((.*?)\)/);
+                if (match) {
+                    const parts = match[1].split(',');
+                    if (parts.length > 1) {
+                        currentDate = parts[1].trim();
+                    } else {
+                        currentDate = match[1].trim();
+                    }
+                }
+            } else if ($el.hasClass('schedule_time')) {
+                const parts = text.split(/\s{3,}/);
+                if (parts.length >= 2 && currentDate) {
+                    const timeRange = parts[0].trim();
+                    const title = parts[1].trim();
+
+                    const times = timeRange.split('-');
+                    if (times.length === 2) {
+                        const startTime = times[0].trim();
+                        const endTime = times[1].trim();
+
+                        const start = new Date(`${currentDate} ${startTime}`);
+                        const end = new Date(`${currentDate} ${endTime}`);
+
+                        if (end < start) {
+                            end.setDate(end.getDate() + 1);
+                        }
+
+                        schedules.push({
+                            title,
+                            start,
+                            end
+                        });
+                    }
+                }
+            }
+        });
+        return schedules;
+    }
+
     parseControlViewHTML(html) {
         const $ = cheerio.load(html);
         const groups = [];

@@ -124,7 +124,6 @@ class MultiviewOverlay {
         }
 
         const rawSplTitle = playback.splTitle || 'Sans titre';
-        title.textContent = API.formatSplTitle(rawSplTitle);
 
         const displayCplTitle = playback.cplTitle || '';
         cplTitleMini.textContent = displayCplTitle;
@@ -142,6 +141,30 @@ class MultiviewOverlay {
         const now = new Date();
         const endTime = new Date(now.getTime() + (remainingTime * 1000));
         end.textContent = this.formatClock(endTime);
+
+        // Check for upcoming schedule if stopped
+        if (state !== 'Play' && state !== 'Pause' && playback.nextShow) {
+            const nextShowStart = new Date(playback.nextShow.start);
+            const diffMs = nextShowStart - now;
+
+            if (diffMs > 0) {
+                const diffSec = Math.floor(diffMs / 1000);
+                const formattedDiff = this.formatTime(diffSec);
+                const nextTitle = API.formatSplTitle(playback.nextShow.title);
+
+                title.innerHTML = `<strong>À SUIVRE :</strong> <i>${nextTitle}</i> — Dans ${formattedDiff}`;
+                cplTitleMini.style.display = 'none';
+
+                // Optional: Clear times or set them to indicate waiting
+                elapsed.textContent = '--:--';
+                remaining.textContent = '--:--';
+                end.textContent = this.formatClock(nextShowStart); // Show start time
+            } else {
+                title.textContent = API.formatSplTitle(rawSplTitle);
+            }
+        } else {
+            title.textContent = API.formatSplTitle(rawSplTitle);
+        }
     }
 
     showError() {

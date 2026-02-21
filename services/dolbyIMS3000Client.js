@@ -81,6 +81,86 @@ class DolbyIMS3000Client {
         }
     }
 
+    async getSchedule() {
+        try {
+            await this.session.ensureLoggedIn();
+            const ajaxUrl = '/web/sys_control/cinelister/ajax.php';
+
+            // Format date as MM-DD-YYYY
+            const now = new Date();
+            const mm = String(now.getMonth() + 1).padStart(2, '0');
+            const dd = String(now.getDate()).padStart(2, '0');
+            const yyyy = now.getFullYear();
+            const dateStr = `${mm}-${dd}-${yyyy}`;
+
+            const data = `request=GET_CALENDAR&now=${dateStr}&style=calendar`;
+
+            const res = await this.session.request('POST', ajaxUrl, data, {
+                'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+                'X-Requested-With': 'XMLHttpRequest',
+                'Referer': `${this.session.config.url}/web/index.php?page=sys_control/cinelister/schedule.php`
+            });
+
+            if (res.status === 200 && typeof res.data === 'string') {
+                return this.parseScheduleHTML(res.data);
+            }
+            return [];
+        } catch (err) {
+            this.logger.error(`Error fetching schedule: ${err.message}`);
+            return [];
+        }
+    }
+
+    parseScheduleHTML(html) {
+        const $ = cheerio.load(html);
+        const schedules = [];
+
+        $('.createScheduleDiv').each((i, el) => {
+            const $dateDiv = $(el);
+            const dateStr = $dateDiv.attr('attr-date'); // "02-16-2026"
+
+            let $sibling = $dateDiv.next();
+            while ($sibling.length && $sibling.hasClass('calendarDivSchedule')) {
+                const $scheduleDiv = $sibling;
+                const inputs = $scheduleDiv.find('input[type="hidden"]');
+
+                if (inputs.length >= 2) {
+                    let title = $(inputs[1]).val();
+                    if (title) {
+                        title = title.replace(/\s*\(SPL no longer exists\)$/, '');
+
+                        const timeText = $scheduleDiv.find('.text-small').text().trim();
+                        const timeMatch = timeText.match(/from\s+(\d{2}:\d{2})\s+to\s+(\d{2}:\d{2})/);
+
+                        if (timeMatch && dateStr) {
+                            const startTime = timeMatch[1];
+                            const endTime = timeMatch[2];
+
+                            const [mm, dd, yyyy] = dateStr.split('-');
+                            const dateForParsing = `${yyyy}-${mm}-${dd}`;
+
+                            const start = new Date(`${dateForParsing}T${startTime}:00`);
+                            const end = new Date(`${dateForParsing}T${endTime}:00`);
+
+                            if (end < start) {
+                                end.setDate(end.getDate() + 1);
+                            }
+
+                            schedules.push({
+                                title,
+                                start,
+                                end
+                            });
+                        }
+                    }
+                }
+                $sibling = $sibling.next();
+            }
+        });
+
+        return schedules;
+    }
+
     parseQuickControlHTML(html) {
         const $ = cheerio.load(html);
         const groups = [];
