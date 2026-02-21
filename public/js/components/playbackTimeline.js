@@ -125,15 +125,13 @@ class PlaybackTimeline {
 
         // Update SPL title
         const rawSplTitle = playback.splTitle || 'Aucun titre';
-        const displaySplTitle = API.formatSplTitle(rawSplTitle);
+        let displaySplTitle = API.formatSplTitle(rawSplTitle);
         
-        splTitle.textContent = displaySplTitle;
-        splTitle.title = displaySplTitle;
-
         // Update CPL title
         const displayCplTitle = playback.cplTitle || '--';
         cplTitle.textContent = displayCplTitle;
         cplTitle.title = displayCplTitle;
+        cplTitle.style.display = 'block';
 
         // Calculate times
         const position = parseInt(playback.splPosition || 0);
@@ -145,13 +143,45 @@ class PlaybackTimeline {
         const now = new Date();
         const endTime = new Date(now.getTime() + (remaining * 1000));
         
-        // Update progress
-        progressFill.style.width = `${percentage}%`;
+        // Check for upcoming schedule if stopped
+        if (state !== 'Play' && state !== 'Pause' && playback.nextShow) {
+            const nextShowStart = new Date(playback.nextShow.start);
+            const diffMs = nextShowStart - now;
 
-        // Update times
-        timeCurrent.textContent = this.formatTime(position);
-        timeRemaining.textContent = this.formatTime(remaining);
-        timeEnd.textContent = this.formatClock(endTime);
+            if (diffMs > 0) {
+                const diffSec = Math.floor(diffMs / 1000);
+                const formattedDiff = this.formatTime(diffSec);
+                const nextTitle = API.formatSplTitle(playback.nextShow.title);
+
+                // **À SUIVRE :** *ital*SPL TITLE...*ital* — Dans ...
+                splTitle.innerHTML = `<strong>À SUIVRE :</strong> <i>${nextTitle}</i> — Dans ${formattedDiff}`;
+                splTitle.title = `Prochain : ${nextTitle} à ${this.formatClock(nextShowStart)}`;
+
+                // Hide CPL title and set times to waiting state
+                cplTitle.style.display = 'none';
+
+                progressFill.style.width = '0%';
+                timeCurrent.textContent = '--:--';
+                timeRemaining.textContent = '--:--';
+                timeEnd.textContent = this.formatClock(nextShowStart); // Show start time
+            } else {
+                splTitle.textContent = displaySplTitle;
+                splTitle.title = displaySplTitle;
+
+                progressFill.style.width = `${percentage}%`;
+                timeCurrent.textContent = this.formatTime(position);
+                timeRemaining.textContent = this.formatTime(remaining);
+                timeEnd.textContent = this.formatClock(endTime);
+            }
+        } else {
+            splTitle.textContent = displaySplTitle;
+            splTitle.title = displaySplTitle;
+
+            progressFill.style.width = `${percentage}%`;
+            timeCurrent.textContent = this.formatTime(position);
+            timeRemaining.textContent = this.formatTime(remaining);
+            timeEnd.textContent = this.formatClock(endTime);
+        }
     }
 
     showError(message) {

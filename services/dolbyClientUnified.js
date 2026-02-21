@@ -29,6 +29,10 @@ class DolbyClientUnified {
         } else {
             this.client = new DolbyDCP2000Client(theaterName, this.sessionManager, this.logger);
         }
+
+        // Schedule cache
+        this.scheduleCache = null;
+        this.lastScheduleFetch = 0;
     }
 
     async login() {
@@ -49,6 +53,23 @@ class DolbyClientUnified {
 
     async executeMacro(macroName) {
         return await this.client.executeMacro(macroName);
+    }
+
+    async getSchedule() {
+        const now = Date.now();
+        if (this.scheduleCache && (now - this.lastScheduleFetch < 5 * 60 * 1000)) {
+            return this.scheduleCache;
+        }
+
+        try {
+            const schedule = await this.client.getSchedule();
+            this.scheduleCache = schedule;
+            this.lastScheduleFetch = now;
+            return schedule;
+        } catch (error) {
+            this.logger.error(`Failed to get schedule: ${error.message}`);
+            return [];
+        }
     }
 
     async destroy() {
@@ -118,7 +139,35 @@ class DolbyClientUnified {
 
             // Parse response
             if (response.status === 200 && response.data?.GetShowStatusResponse?.showStatus) {
-                return response.data.GetShowStatusResponse.showStatus;
+                const status = response.data.GetShowStatusResponse.showStatus;
+
+                // Check for upcoming schedule if stopped
+                const state = status.stateInfo;
+                if (state !== 'Play' && state !== 'Pause') {
+                    try {
+                        const schedule = await this.getSchedule();
+                        const now = new Date();
+                        const fiveHoursLater = new Date(now.getTime() + 5 * 60 * 60 * 1000);
+
+                        // Find next show starting within 5 hours
+                        const nextShow = schedule
+                            .filter(s => s.start > now && s.start <= fiveHoursLater)
+                            .sort((a, b) => a.start - b.start)[0];
+
+                        if (nextShow) {
+                            status.nextShow = {
+                                title: nextShow.title,
+                                start: nextShow.start.toISOString(),
+                                end: nextShow.end.toISOString()
+                            };
+                        }
+                    } catch (err) {
+                        // Silent fail for schedule enhancement
+                        this.logger.warn(`Failed to enhance status with schedule: ${err.message}`);
+                    }
+                }
+
+                return status;
             } else if (response.data?.Fault) {
                 // If we get "not authenticated", clear the cache and retry once
                 if (response.data.Fault.faultstring === 'not authenticated' && soapSessionCache[this.name]) {
