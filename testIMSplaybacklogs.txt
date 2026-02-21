@@ -1,0 +1,44 @@
+rex@regie-rex:~/dolby-minitms$ node testIMSplayback.js 
+[INFO]  Theater : Salle 1  (IMS3000  @  http://10.98.156.12)
+[INFO]  Authenticating…
+[INFO]  IMS3000 login credentials accepted (Redirect)
+[INFO]  Authentication established
+[INFO]  Starting keep-alive polling
+[INFO]  Authenticated  type=IMS3000  PHPSESSID=d4ph4ggp……
+[INFO]  Fetching show status via SOAP…
+[INFO]  State="Play"  SPL="260218 MARSUPILAMI"  pos=3134s  (00:52:14 / 01:59:03)
+[INFO]  Auto-discovering UUID for SPL title "260218 MARSUPILAMI"…
+[INFO]  Found UUID: urn:uuid:1fb20ce6-4104-44c0-a37e-28763bdbf416
+[INFO]  Opening SPL urn:uuid:1fb20ce6-4104-44c0-a37e-28763bdbf416…
+[INFO]  GET_SPL_PROPERTIES: title="260218 MARSUPILAMI", mode="2D", hfr=false
+[INFO]  Loading SPL editor HTML (multi-strategy)…
+[INFO]  Selected HTML: /web/sys_control/cinelister/ajax.php | request=LOAD_SPL_ITEMS&style=editor | HTTP 200 | len=67957 | score=329
+[INFO]  Received 67957 chars of editor HTML
+[INFO]  Sanity: cplnameInputs=0, eventDivs=49, parsedItems=49
+
+========================================================
+Dolby IMS3000 @ http://10.98.156.12 | Salle 1
+State: Play
+SPL  : 260218 MARSUPILAMI
+Pos  : 00:52:14 (3134s)
+========================================================
+
+▶ FIRST SHR/FTR element
+  Time   : 00:20:14 (1214s)
+  Title  : Marsupilami_FTR_S_FR-XX_FR_IAB-51_4K_PAT_20251118_TMF_SMPTE_OV
+  CPLname: (n/a)
+  → vs now: 00:32:00 (1920s) elapsed
+
+▶ LAST SHR/FTR element
+  Time   : 00:20:14 (1214s)
+  Title  : Marsupilami_FTR_S_FR-XX_FR_IAB-51_4K_PAT_20251118_TMF_SMPTE_OV
+  CPLname: (n/a)
+
+▶ First "rail" automation embedded in LAST SHR/FTR
+  Time  : 01:55:47 (6947s)
+  Title : rail soir
+  → vs now: 01:03:33 (3813s) until
+
+Done.
+[INFO]  Session destroyed
+rex@regie-rex:~/dolby-minitms$ 
