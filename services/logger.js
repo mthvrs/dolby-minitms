@@ -26,6 +26,13 @@ class Logger {
         }
     }
 
+    _sanitize(message) {
+        // Convert to string if not already
+        const str = String(message);
+        // Replace newlines with escaped characters to prevent log injection
+        return str.replace(/\n/g, '\\n').replace(/\r/g, '\\r');
+    }
+
     _ensureStream() {
         if (!logStream) {
             try {
@@ -46,7 +53,8 @@ class Logger {
 
     _format(level, message) {
         const ts = new Date().toISOString().replace('T', ' ').split('.')[0];
-        return `[${ts}] [${this.context}] [${level}] ${message}`;
+        const cleanMessage = this._sanitize(message);
+        return `[${ts}] [${this.context}] [${level}] ${cleanMessage}`;
     }
 
     _write(level, message) {
