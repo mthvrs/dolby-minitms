@@ -32,7 +32,7 @@ class DolbyIMS3000Client {
         return null;
     }
 
-    async getPlaybackStatus() {
+    async getPlaybackStatus(retryCount = 0) {
         try {
             // Ensure authenticated
             await this.session.ensureLoggedIn();
@@ -66,11 +66,11 @@ class DolbyIMS3000Client {
                 return response.data.GetShowStatusResponse.showStatus;
             } else if (response.data?.Fault) {
                 // If we get "not authenticated", clear the cache and retry once
-                if (response.data.Fault.faultstring === 'not authenticated' && this.soapSessionId) {
+                if (response.data.Fault.faultstring === 'not authenticated' && this.soapSessionId && retryCount < 1) {
                     this.soapSessionId = null;
                     this.session.setSoapSessionId(null);
                     // Recursive retry
-                    return await this.getPlaybackStatus();
+                    return await this.getPlaybackStatus(retryCount + 1);
                 }
                 throw new Error(`SOAP Fault: ${response.data.Fault.faultstring}`);
             } else {
