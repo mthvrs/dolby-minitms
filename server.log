@@ -1,0 +1,9 @@
+
+> dolby-control-panel-server@1.0.0 start
+> node server.js
+
+[2026-02-20 18:10:47] [WebRTC-Gateway] [INFO] Starting MediaMTX from /app/mediamtx
+[2026-02-20 18:10:47] [Server] [INFO] Dolby Control Server listening on http://0.0.0.0:8347
+[2026-02-20 18:10:47] [Server] [INFO] Access this UI from other computers using your en02 IP address.
+[2026-02-20 18:10:47] [WebRTC-Gateway] [WARN] MediaMTX exited with code 1
+[2026-02-20 18:11:06] [Server] [INFO] Client requesting Multiview Page (/cams) from 127.0.0.1
