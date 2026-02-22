@@ -1,0 +1,794 @@
+
+══════════════════════════════════════════════════════════════════════
+  RUN METADATA
+══════════════════════════════════════════════════════════════════════
+Date/Time   : 2026-02-22T18:42:08.718Z
+Theater     : Salle 3
+Type        : DCP2000
+URL         : http://10.98.156.32
+FORCE_UUID  : (none)
+Node        : v18.19.1
+Script      : /home/rex/dolby-minitms/testDCPplayback.js
+Debug file  : /home/rex/dolby-minitms/testDCP2000playbacktime_debug_1771785728714.txt
+[INFO]  Theater : Salle 3  (DCP2000  @  http://10.98.156.32)
+[INFO]  Diagnostics → testDCP2000playbacktime_debug_1771785728714.txt
+[DEBUG] Session manager initialized for type=DCP2000
+[INFO]  Authenticating…
+[DEBUG] DCP2000 login attempt...
+[DEBUG] Cookie updated: PHPSESSID=22dafacd80…...
+[DEBUG] Cookie updated: interfaceSize=auto...
+[INFO]  DCP2000 login credentials accepted (Redirect)
+[DEBUG] Following login redirect to: overview/
+[INFO]  Authentication established
+[INFO]  Starting keep-alive polling
+[INFO]  Authenticated  type=DCP2000  PHPSESSID=22dafacd……
+[DEBUG] Primed: GET /web/sys_control/cinelister/editor.php → HTTP 200
+[INFO]  Fetching show status via SOAP…
+[DEBUG] SOAP session UUID: fc495a12-9228-48f0-a48b-a4b1af30b92a
+[DEBUG] Full showStatus:
+{
+  "splId": "urn:uuid:25b62137-d107-49ec-9994-c2a103d4c727",
+  "splTitle": "260218 COUTURES VOSTFR",
+  "stateInfo": "Play",
+  "splPosition": "4917",
+  "splDuration": "7360",
+  "cplId": "urn:uuid:265db0b2-25f9-4973-acf6-e48fcb6750a0",
+  "cplTitle": "Coutures_FTR_F_FR-FR_FR_51_4K_PAT_20251014_IKE_SMPTE_OV",
+  "eventId": "urn:uuid:779c4aa5-a446-4115-8108-d7993384697b",
+  "elementId": "urn:uuid:bc198895-8972-4bf2-8948-c5ee7ea8d4ac",
+  "elementPosition": "3756",
+  "elementDuration": "6189",
+  "editRate": {
+    "numerator": "24",
+    "denominator": "1"
+  },
+  "editPosition": "90167",
+  "editDuration": "148542",
+  "framesPerEdit": "1",
+  "kdmId": "urn:uuid:9c9fc75f-ca27-4614-b716-ef264a387505",
+  "recovery": "false",
+  "loadingStatus": {
+    "progress": "100",
+    "stage": "Cue pattern 'Black'",
+    "errorCode": "0"
+  }
+}
+[INFO]  State="Play"  SPL="260218 COUTURES VOSTFR"  pos=01:21:57 (4917s / 7360s)
+[DEBUG] SOAP eventId="urn:uuid:779c4aa5-a446-4115-8108-d7993384697b"  elementId="urn:uuid:bc198895-8972-4bf2-8948-c5ee7ea8d4ac"  CPL="Coutures_FTR_F_FR-FR_FR_51_4K_PAT_20251014_IKE_SMPTE_OV"
+[INFO]  Discovering UUID for "260218 COUTURES VOSTFR"…
+[INFO]  Found UUID: urn:uuid:25b62137-d107-49ec-9994-c2a103d4c727
+[INFO]  SPL properties: title="260218 COUTURES VOSTFR", mode="2D", hfr=false
+[INFO]  Loading SPL editor HTML…
+[INFO]  LOAD_SPL_ITEMS → HTTP 200, len=66912
+[INFO]  Received 66912 chars
+[INFO]  Raw HTML → dcp2000_spl_dump_1771785729702.html
+
+══════════════════════════════════════════════════════════════════════
+  1 · RAW HTML METRICS
+══════════════════════════════════════════════════════════════════════
+Total length   : 66912 chars
+<div> count    : 166
+<tr>  count    : 0
+<span> count   : 140
+<input> count  : 229
+
+── Keyword occurrences in raw HTML ───────────────────────────────────
+  "eventDiv" → 47
+  "element" → 70
+  "cpl" → 135
+  "automation" → 66
+  "addOnDiv" → 47
+  "editor-time" → 0
+  "editor-title" → 0
+  "cplname" → 0
+  "cpl_name" → 47
+  "FTR" → 2
+  "SHR" → 0
+  "rail" → 22
+  "short" → 0
+  "feature" → 3
+  "row m-0" → 0
+  "Black" → 6
+  "ellipsis300" → 47
+
+══════════════════════════════════════════════════════════════════════
+  2 · ALL UNIQUE TAG+CLASS COMBOS (top 80 by frequency)
+══════════════════════════════════════════════════════════════════════
+   229×  <input> class=""
+   140×  <button> class="context"
+    47×  <div> class="eventDiv"
+    47×  <span> class="ellipsis"
+    47×  <span> class="ellipsis ellipsis300"
+    47×  <div> class="addOnDiv automDiv triggerDiv intermissionDiv"
+    46×  <span> class=""
+    22×  <div> class="element automation"
+    17×  <div> class="element psa cpl"
+    17×  <div> class="element advertisement cpl"
+     6×  <div> class="element trailer cpl"
+     3×  <div> class="element pattern"
+     2×  <div> class="element teaser cpl"
+     1×  <html> class=""
+     1×  <head> class=""
+     1×  <body> class=""
+     1×  <div> class="packDiv old"
+     1×  <div> class="element pack oldVersion"
+     1×  <div> class="externalPackDiv"
+     1×  <div> class="element policy cpl"
+     1×  <div> class="element feature cpl"
+
+══════════════════════════════════════════════════════════════════════
+  3 · ALL eventDiv ELEMENTS — outer HTML (first 600 chars each)
+══════════════════════════════════════════════════════════════════════
+
+  [0] eventDiv id="cf294e8d-d07a-461d-afd0-138a3093b9f8" children=2
+       outerHTML(600): <div class="eventDiv " id="cf294e8d-d07a-461d-afd0-138a3093b9f8"><div class="element pattern" id="bc0658a6-6f1f-450e-b6e8-5a51e879d49c"><span class="ellipsis">00:00:00</span>&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;<span class="ellipsis ellipsis300">Black</span><input type="hidden" name="duration" value="45"><input type="hidden" name="editRate" value="24 1"><input type="hidden" name="cpl_name" value="Black"><button class="context" onclick="onClickRemove(&apos;cf294e8d-d07a-461d-afd0-138a3093b9f8&apos;, &apos;pattern&apos;)" style="background-image:url(/web/images/error_16.png)" title="Remove"></button><b
+
+  [1] eventDiv id="2145fc75-9539-4248-a075-7ebb88797876" children=2
+       outerHTML(600): <div class="eventDiv " id="2145fc75-9539-4248-a075-7ebb88797876"><div class="element psa cpl" id="91a19126-9e1c-478e-9a97-5f84b93e5da9"><span class="ellipsis " title>00:00:45</span>&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;<span class="ellipsis ellipsis300 " title>QRCODES-RS_PSA_F_XX-XX_XX_XX_2K_XX_20230420_CDM_OV</span><input type="hidden" name="duration" value="20"><input type="hidden" name="editRate" value="24 1"><input type="hidden" name="cpl" value="82ccaa74-6ec4-405c-8327-bc2883dd5c46"><input type="hidden" name="cpl_name" value="QRCODES-RS_PSA_F_XX-XX_XX_XX_2K_XX_20230420_CDM_OV"><button class="cont
+
+  [2] eventDiv id="7e514696-8f11-48e5-9841-a9b45a94c1ff" children=2
+       outerHTML(600): <div class="eventDiv " id="7e514696-8f11-48e5-9841-a9b45a94c1ff"><div class="element advertisement cpl" id="ec59b035-5801-4c32-8122-277f6f2c0f6f"><span class="ellipsis " title>00:01:05</span>&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;<span class="ellipsis ellipsis300 " title>Mediavision_ADV-30s_F_FR-XX_FR_51_2K_20210504_TSL_IOP_OV</span><input type="hidden" name="duration" value="30"><input type="hidden" name="editRate" value="24 1"><input type="hidden" name="cpl" value="46b69862-e3cd-4238-b589-bf1cb30ff7fc"><input type="hidden" name="cpl_name" value="Mediavision_ADV-30s_F_FR-XX_FR_51_2K_20210504_TSL_IOP_O
+
+  [3] eventDiv id="92b08dc3-bbfd-46b8-9bb0-8f02e1da5547" children=2
+       outerHTML(600): <div class="eventDiv " id="92b08dc3-bbfd-46b8-9bb0-8f02e1da5547"><div class="element advertisement cpl" id="2f787f2a-1ea6-4997-a55d-c5caa9dedfbb"><span class="ellipsis " title>00:01:35</span>&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;<span class="ellipsis ellipsis300 " title>AmazonRomCom_ADV-1_F_FR-XX_FR_51_2K_20260121_CHR_IOP_OV</span><input type="hidden" name="duration" value="30"><input type="hidden" name="editRate" value="24 1"><input type="hidden" name="cpl" value="156fa56b-9157-41fb-8a43-f253e157f8c9"><input type="hidden" name="cpl_name" value="AmazonRomCom_ADV-1_F_FR-XX_FR_51_2K_20260121_CHR_IOP_OV"
+
+  [4] eventDiv id="47d907a7-c669-43b3-905e-91c2b8676df9" children=2
+       outerHTML(600): <div class="eventDiv " id="47d907a7-c669-43b3-905e-91c2b8676df9"><div class="element advertisement cpl" id="7da6fcce-1391-487d-bbd2-303165481def"><span class="ellipsis " title>00:02:05</span>&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;<span class="ellipsis ellipsis300 " title>Polestar_ADV-MLR_F_FR-XX_FR_51_2K_20260128_DLX_IOP_OV</span><input type="hidden" name="duration" value="30.0833333333"><input type="hidden" name="editRate" value="24 1"><input type="hidden" name="cpl" value="2b7dddbb-0865-4839-a680-7f424cc158a5"><input type="hidden" name="cpl_name" value="Polestar_ADV-MLR_F_FR-XX_FR_51_2K_20260128_DLX_
+
+  [5] eventDiv id="e69c0575-067f-4b7b-ab69-a941eabbda84" children=2
+       outerHTML(600): <div class="eventDiv " id="e69c0575-067f-4b7b-ab69-a941eabbda84"><div class="element advertisement cpl" id="9a1bd658-6a15-49d2-be1c-051cfe3c112e"><span class="ellipsis " title>00:02:35</span>&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;<span class="ellipsis ellipsis300 " title>GMFPrevention_ADV-32s_F_FR-fr_FR_51_2K_20250818_BAR_IOP_OV</span><input type="hidden" name="duration" value="31.25"><input type="hidden" name="editRate" value="24 1"><input type="hidden" name="cpl" value="eec82379-e451-4c20-91ff-19ff8eb8e820"><input type="hidden" name="cpl_name" value="GMFPrevention_ADV-32s_F_FR-fr_FR_51_2K_20250818_BA
+
+  [6] eventDiv id="a6b1451c-cc89-4bcd-9a83-f42d9493bd6e" children=2
+       outerHTML(600): <div class="eventDiv " id="a6b1451c-cc89-4bcd-9a83-f42d9493bd6e"><div class="element advertisement cpl" id="716ed166-f0ae-4586-96ec-e4009c84aa57"><span class="ellipsis " title>00:03:06</span>&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;<span class="ellipsis ellipsis300 " title>VolvoEveryCar_ADV_F_FR-XX_FR_51_2K_20260112_DLX_IOP_OV</span><input type="hidden" name="duration" value="38.0833333333"><input type="hidden" name="editRate" value="24 1"><input type="hidden" name="cpl" value="c162009f-4078-4479-ad42-5e35a447f4f2"><input type="hidden" name="cpl_name" value="VolvoEveryCar_ADV_F_FR-XX_FR_51_2K_20260112_DL
+
+  [7] eventDiv id="e528a526-9230-4802-bba2-d809c99c5421" children=2
+       outerHTML(600): <div class="eventDiv " id="e528a526-9230-4802-bba2-d809c99c5421"><div class="element advertisement cpl" id="b3e59d58-eccf-4e2b-be52-a77b5ab956e4"><span class="ellipsis " title>00:03:44</span>&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;<span class="ellipsis ellipsis300 " title>Mediavision_ADV-5s_F_FR-XX_FR_51_2K_20210528_TSL_IOP_OV</span><input type="hidden" name="duration" value="5"><input type="hidden" name="editRate" value="24 1"><input type="hidden" name="cpl" value="84e8af62-9358-4d0a-8459-7f4a76dda8b9"><input type="hidden" name="cpl_name" value="Mediavision_ADV-5s_F_FR-XX_FR_51_2K_20210528_TSL_IOP_OV">
+
+  [8] eventDiv id="2fa43053-1572-4c63-abb9-90cf963cfdf3" children=2
+       outerHTML(600): <div class="eventDiv " id="2fa43053-1572-4c63-abb9-90cf963cfdf3"><div class="element psa cpl" id="3f67c8f4-0a0a-4425-a602-1f18e026e5d4"><span class="ellipsis " title>00:03:49</span>&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;<span class="ellipsis ellipsis300 " title>AboFid_PSA-1_F_FR-XX_FR_20_2K_REX_20250322_SMPTE_OV</span><input type="hidden" name="duration" value="20.0833333333"><input type="hidden" name="editRate" value="24 1"><input type="hidden" name="cpl" value="e34e6fdf-0f18-49f8-bf40-2b5bede29df4"><input type="hidden" name="cpl_name" value="AboFid_PSA-1_F_FR-XX_FR_20_2K_REX_20250322_SMPTE_OV"><butto
+
+  [9] eventDiv id="d31658e1-e6d0-4ee5-8d1c-50d984bd7b07" children=2
+       outerHTML(600): <div class="eventDiv " id="d31658e1-e6d0-4ee5-8d1c-50d984bd7b07"><div class="element trailer cpl" id="9f985627-e9f0-418d-aa26-707eda497c33"><span class="ellipsis " title>00:04:09</span>&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;<span class="ellipsis ellipsis300 " title>AucunAutreChoi_TLR_F_KO-fr_FR-NR_20_2K_NULL_20251219_NOI_IOP_OV</span><input type="hidden" name="duration" value="52.2916666667"><input type="hidden" name="editRate" value="24 1"><input type="hidden" name="cpl" value="d2c1e203-aa6f-45ea-a8e0-c1cd078a348f"><input type="hidden" name="cpl_name" value="AucunAutreChoi_TLR_F_KO-fr_FR-NR_20_2K_NULL
+
+  [10] eventDiv id="0c9fae8d-5600-4595-91e9-3b31b0734292" children=2
+       outerHTML(600): <div class="eventDiv " id="0c9fae8d-5600-4595-91e9-3b31b0734292"><div class="element trailer cpl" id="08f0091f-50a5-4980-b419-f7d516e97c5c"><span class="ellipsis " title>00:05:01</span>&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;<span class="ellipsis ellipsis300 " title>FAWoolfWorks_TLR-NODATE_S-177_FR-XX_FR_51_2K_20251222_CGR_SMPTE_OV</span><input type="hidden" name="duration" value="39.625"><input type="hidden" name="editRate" value="24 1"><input type="hidden" name="cpl" value="b5c5d2a8-ec21-4f38-9003-e576eaaa3f12"><input type="hidden" name="cpl_name" value="FAWoolfWorks_TLR-NODATE_S-177_FR-XX_FR_51_2K_20
+
+  [11] eventDiv id="16223163-5c50-44d8-85ba-6354358d83f6" children=2
+       outerHTML(600): <div class="eventDiv " id="16223163-5c50-44d8-85ba-6354358d83f6"><div class="element trailer cpl" id="7001eff0-fef1-4a23-b5ac-a1807c9032b4"><span class="ellipsis " title>00:05:41</span>&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;<span class="ellipsis ellipsis300 " title>Apieddoeuvre_TLR-1_F-166_FR-XX_FR_51_4K_20251218_POL_IOP_OV</span><input type="hidden" name="duration" value="86.3333333333"><input type="hidden" name="editRate" value="24 1"><input type="hidden" name="cpl" value="af4873b3-b680-438f-92ae-0b1e8cc2a600"><input type="hidden" name="cpl_name" value="Apieddoeuvre_TLR-1_F-166_FR-XX_FR_51_4K_2025121
+
+  [12] eventDiv id="7d85aeb5-f156-4b20-be2f-c4508b2554a2" children=2
+       outerHTML(600): <div class="eventDiv " id="7d85aeb5-f156-4b20-be2f-c4508b2554a2"><div class="element trailer cpl" id="64b9a7c7-6974-4937-9f77-98a3b14fa0fd"><span class="ellipsis " title>00:07:07</span>&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;<span class="ellipsis ellipsis300 " title>LOL2_TLR-Date_F_FR-XX_FR-NR_51_2K_NULL_20251230_NOI_IOP_OV</span><input type="hidden" name="duration" value="102.083333333"><input type="hidden" name="editRate" value="24 1"><input type="hidden" name="cpl" value="ba1069fd-cf75-4ea5-9fbc-fdcfda0648a7"><input type="hidden" name="cpl_name" value="LOL2_TLR-Date_F_FR-XX_FR-NR_51_2K_NULL_20251230_
+
+  [13] eventDiv id="e33ea436-097a-4a61-ba7b-22fa8f79b7a3" children=2
+       outerHTML(600): <div class="eventDiv " id="e33ea436-097a-4a61-ba7b-22fa8f79b7a3"><div class="element psa cpl" id="ada2d1af-d9f4-499a-89b4-1c99f5fd5f5f"><span class="ellipsis " title>00:08:49</span>&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;<span class="ellipsis ellipsis300 " title>Newsletter_PSA-1_F_FR-XX_FR_20_2K_REX_20250322_SMPTE_OV</span><input type="hidden" name="duration" value="14.0416666667"><input type="hidden" name="editRate" value="24 1"><input type="hidden" name="cpl" value="013c9b87-1a3f-4de3-935b-8f8a4c922c8a"><input type="hidden" name="cpl_name" value="Newsletter_PSA-1_F_FR-XX_FR_20_2K_REX_20250322_SMPTE_OV
+
+  [14] eventDiv id="459e2075-1ddf-4271-8a69-e44d59f0bec9" children=2
+       outerHTML(600): <div class="eventDiv " id="459e2075-1ddf-4271-8a69-e44d59f0bec9"><div class="element psa cpl" id="39d948a7-4b39-4a09-8cc8-0885a4d323e0"><span class="ellipsis " title>00:09:03</span>&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;<span class="ellipsis ellipsis300 " title>2526OPERABAL_PSA_F_XX-XX_XX_XX_2K_XX_20250822_CDM_OV</span><input type="hidden" name="duration" value="15"><input type="hidden" name="editRate" value="24 1"><input type="hidden" name="cpl" value="c52c5e1c-e854-4542-9884-95c79671bbd0"><input type="hidden" name="cpl_name" value="2526OPERABAL_PSA_F_XX-XX_XX_XX_2K_XX_20250822_CDM_OV"><button class="
+
+  [15] eventDiv id="7f35a905-5992-4223-af8e-7d35ac022c56" children=2
+       outerHTML(600): <div class="eventDiv " id="7f35a905-5992-4223-af8e-7d35ac022c56"><div class="element psa cpl" id="47feafee-1205-4519-ac94-8cbb1d487d48"><span class="ellipsis " title>00:09:18</span>&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;<span class="ellipsis ellipsis300 " title>2805MIRABEL_PSA_F_XX-XX_XX_XX_2K_XX_20251210_CDM_OV</span><input type="hidden" name="duration" value="10"><input type="hidden" name="editRate" value="24 1"><input type="hidden" name="cpl" value="381261e2-0836-470a-920d-ecec740cabb7"><input type="hidden" name="cpl_name" value="2805MIRABEL_PSA_F_XX-XX_XX_XX_2K_XX_20251210_CDM_OV"><button class="co
+
+  [16] eventDiv id="91974ab3-b66d-4d87-bb94-1f881a234e16" children=2
+       outerHTML(600): <div class="eventDiv " id="91974ab3-b66d-4d87-bb94-1f881a234e16"><div class="element psa cpl" id="60017e15-56b0-46cb-bc8b-17ba8add3a5e"><span class="ellipsis " title>00:09:28</span>&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;<span class="ellipsis ellipsis300 " title>3003CO-VENUE_PSA_F_XX-XX_XX_XX_2K_XX_20260212_CDM_OV</span><input type="hidden" name="duration" value="10"><input type="hidden" name="editRate" value="24 1"><input type="hidden" name="cpl" value="3fbdb44d-1bee-4f87-99f9-e34127e0a123"><input type="hidden" name="cpl_name" value="3003CO-VENUE_PSA_F_XX-XX_XX_XX_2K_XX_20260212_CDM_OV"><button class="
+
+  [17] eventDiv id="2ee84b1b-0dd2-42e8-acb6-13d83efba49f" children=2
+       outerHTML(600): <div class="eventDiv " id="2ee84b1b-0dd2-42e8-acb6-13d83efba49f"><div class="element psa cpl" id="652a7042-772c-4000-babe-5dfcb05be939"><span class="ellipsis " title>00:09:38</span>&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;<span class="ellipsis ellipsis300 " title>PDC2026_PSA_F_XX-XX_XX_XX_2K_XX_20260217_CDM_OV</span><input type="hidden" name="duration" value="15"><input type="hidden" name="editRate" value="24 1"><input type="hidden" name="cpl" value="5c0abdbe-3ebd-4251-bde8-9935d67b20d1"><input type="hidden" name="cpl_name" value="PDC2026_PSA_F_XX-XX_XX_XX_2K_XX_20260217_CDM_OV"><button class="context" o
+
+  [18] eventDiv id="3063a03e-40c9-4398-96e1-965c6dba15b3" children=2
+       outerHTML(600): <div class="eventDiv " id="3063a03e-40c9-4398-96e1-965c6dba15b3"><div class="element psa cpl" id="b48f6217-bc2d-47c4-8843-ed884170655b"><span class="ellipsis " title>00:09:53</span>&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;<span class="ellipsis ellipsis300 " title>1503NC-NOTTI_PSA_F_XX-XX_XX_XX_2K_XX_20260210_CDM_OV</span><input type="hidden" name="duration" value="10"><input type="hidden" name="editRate" value="24 1"><input type="hidden" name="cpl" value="0fdf9572-1bf1-4d95-aab8-625d9319f423"><input type="hidden" name="cpl_name" value="1503NC-NOTTI_PSA_F_XX-XX_XX_XX_2K_XX_20260210_CDM_OV"><button class="
+
+  [19] eventDiv id="314ca36e-572c-457c-93b5-dc9dbbf7e68a" children=2
+       outerHTML(600): <div class="eventDiv " id="314ca36e-572c-457c-93b5-dc9dbbf7e68a"><div class="element psa cpl" id="d8acb4f7-d304-429d-9228-89f27e267628"><span class="ellipsis " title>00:10:03</span>&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;<span class="ellipsis ellipsis300 " title>1503CP-PEUPL_PSA_F_XX-XX_XX_XX_2K_XX_20260210_CDM_OV</span><input type="hidden" name="duration" value="10"><input type="hidden" name="editRate" value="24 1"><input type="hidden" name="cpl" value="7b3d6cd2-fd36-4a7c-b38f-f9154300cb28"><input type="hidden" name="cpl_name" value="1503CP-PEUPL_PSA_F_XX-XX_XX_XX_2K_XX_20260210_CDM_OV"><button class="
+
+  [20] eventDiv id="991dcd76-dad3-4443-96df-3ba7ffd0a027" children=2
+       outerHTML(600): <div class="eventDiv " id="991dcd76-dad3-4443-96df-3ba7ffd0a027"><div class="element psa cpl" id="8e40b46e-436d-4d7b-8a89-48720d093239"><span class="ellipsis " title>00:10:13</span>&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;<span class="ellipsis ellipsis300 " title>1303-ONVOUSC_PSA_F_XX-XX_XX_XX_2K_XX_20260219_CDM_OV</span><input type="hidden" name="duration" value="10"><input type="hidden" name="editRate" value="24 1"><input type="hidden" name="cpl" value="a28556db-e07d-4c08-85e1-f90495bf0592"><input type="hidden" name="cpl_name" value="1303-ONVOUSC_PSA_F_XX-XX_XX_XX_2K_XX_20260219_CDM_OV"><button class="
+
+  [21] eventDiv id="72949ccd-99fe-462e-98dd-449a0a4f3b15" children=2
+       outerHTML(600): <div class="eventDiv " id="72949ccd-99fe-462e-98dd-449a0a4f3b15"><div class="element psa cpl" id="2cda21ed-b62e-40d8-88fc-6bc926b3dc48"><span class="ellipsis " title>00:10:23</span>&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;<span class="ellipsis ellipsis300 " title>0903BA-WOOLF_PSA_F_XX-XX_XX_XX_2K_XX_20260211_CDM_OV</span><input type="hidden" name="duration" value="10"><input type="hidden" name="editRate" value="24 1"><input type="hidden" name="cpl" value="9d27f994-6347-4cf2-aa0a-590caefaff08"><input type="hidden" name="cpl_name" value="0903BA-WOOLF_PSA_F_XX-XX_XX_XX_2K_XX_20260211_CDM_OV"><button class="
+
+  [22] eventDiv id="e99fa068-afa3-4aed-9d61-5263abd49efc" children=2
+       outerHTML(600): <div class="eventDiv " id="e99fa068-afa3-4aed-9d61-5263abd49efc"><div class="element psa cpl" id="dcdf8b79-6421-488e-b3d7-586a56c3d6ff"><span class="ellipsis " title>00:10:33</span>&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;<span class="ellipsis ellipsis300 " title>0303AVPSURPR_PSA_F_XX-XX_XX_XX_2K_XX_20260206_CDM_OV</span><input type="hidden" name="duration" value="10"><input type="hidden" name="editRate" value="24 1"><input type="hidden" name="cpl" value="6a619231-43fc-4ea3-9f00-d67dc7a5353f"><input type="hidden" name="cpl_name" value="0303AVPSURPR_PSA_F_XX-XX_XX_XX_2K_XX_20260206_CDM_OV"><button class="
+
+  [23] eventDiv id="caf93f4e-b2a0-4d5e-973e-16664fa9e6ee" children=2
+       outerHTML(600): <div class="eventDiv " id="caf93f4e-b2a0-4d5e-973e-16664fa9e6ee"><div class="element psa cpl" id="31a28e48-dd75-4ec3-96e8-ba2079c2dd68"><span class="ellipsis " title>00:10:43</span>&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;<span class="ellipsis ellipsis300 " title>0203CO-QUAND_PSA_F_XX-XX_XX_XX_2K_XX_20260112_CDM_OV</span><input type="hidden" name="duration" value="10"><input type="hidden" name="editRate" value="24 1"><input type="hidden" name="cpl" value="84edb600-b45d-4f91-be7b-9069bc925fe1"><input type="hidden" name="cpl_name" value="0203CO-QUAND_PSA_F_XX-XX_XX_XX_2K_XX_20260112_CDM_OV"><button class="
+
+  [24] eventDiv id="9fabee82-5da9-4801-b6d0-033679e70bad" children=2
+       outerHTML(600): <div class="eventDiv " id="9fabee82-5da9-4801-b6d0-033679e70bad"><div class="element psa cpl" id="0c54f730-0969-4b74-ad06-8e2beffaf7e8"><span class="ellipsis " title>00:10:53</span>&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;<span class="ellipsis ellipsis300 " title>0103AVP-JUMP_PSA_F_XX-XX_XX_XX_2K_XX_20260211_CDM_OV</span><input type="hidden" name="duration" value="10"><input type="hidden" name="editRate" value="24 1"><input type="hidden" name="cpl" value="bbd69b1c-a132-48a1-a160-c0ee4d730d8d"><input type="hidden" name="cpl_name" value="0103AVP-JUMP_PSA_F_XX-XX_XX_XX_2K_XX_20260211_CDM_OV"><button class="
+
+  [25] eventDiv id="8cd068e3-32d7-46e0-9ea4-94e90db3630d" children=2
+       outerHTML(600): <div class="eventDiv " id="8cd068e3-32d7-46e0-9ea4-94e90db3630d"><div class="element trailer cpl" id="d1ee8c7a-9ec9-4ff9-8221-bb2becde3c58"><span class="ellipsis " title>00:11:03</span>&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;<span class="ellipsis ellipsis300 " title>AFCAECCS20sec_TLR_F_FR-XX_INT_51_2K_NULL_20220904_VP_IOP_OV</span><input type="hidden" name="duration" value="19.72"><input type="hidden" name="editRate" value="25 1"><input type="hidden" name="cpl" value="6c744432-ef7b-473c-ba73-cd9f271d78a3"><input type="hidden" name="cpl_name" value="AFCAECCS20sec_TLR_F_FR-XX_INT_51_2K_NULL_20220904_VP_IO
+
+  [26] eventDiv id="8d2a2392-d5c2-48fc-b660-db75aee42d01" children=2
+       outerHTML(600): <div class="eventDiv " id="8d2a2392-d5c2-48fc-b660-db75aee42d01"><div class="element trailer cpl" id="e9f8a5ba-b846-44b0-ac58-c611d3b858b1"><span class="ellipsis " title>00:11:23</span>&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;<span class="ellipsis ellipsis300 " title>Printemps26-VL_TLR_F_FR-XX_FR_51_2K_FNCF_20260204_TST_SMPTE_OV</span><input type="hidden" name="duration" value="85.2916666667"><input type="hidden" name="editRate" value="24 1"><input type="hidden" name="cpl" value="38c1c710-0085-419e-8e90-8447599a3f45"><input type="hidden" name="cpl_name" value="Printemps26-VL_TLR_F_FR-XX_FR_51_2K_FNCF_202
+
+  [27] eventDiv id="839c2a73-da4f-4f3b-a99c-bf8cb43494c1" children=2
+       outerHTML(600): <div class="eventDiv " id="839c2a73-da4f-4f3b-a99c-bf8cb43494c1"><div class="element teaser cpl" id="a99f4633-1673-4ab0-a73d-74d385b62c45"><span class="ellipsis " title>00:12:48</span>&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;<span class="ellipsis ellipsis300 " title>BoucleFevrier2_TSR-1_F_FR-XX_20_2K_20260120_SMPTE_OV</span><input type="hidden" name="duration" value="125.125"><input type="hidden" name="editRate" value="24 1"><input type="hidden" name="cpl" value="90663645-d25f-4ea7-836a-156f40420dea"><input type="hidden" name="cpl_name" value="BoucleFevrier2_TSR-1_F_FR-XX_20_2K_20260120_SMPTE_OV"><button
+
+  [28] eventDiv id="071fd5ec-4129-441f-a7d0-0e3a91b0a9f1" children=2
+       outerHTML(600): <div class="eventDiv " id="071fd5ec-4129-441f-a7d0-0e3a91b0a9f1"><div class="element teaser cpl" id="75cba6ef-5909-4944-a9b9-e3f4a5880820"><span class="ellipsis " title>00:14:54</span>&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;<span class="ellipsis ellipsis300 " title>PromoLocDeSall_TSR-1_F_XX-XX_20_2K_20250218_SMPTE_OV</span><input type="hidden" name="duration" value="17.4583333333"><input type="hidden" name="editRate" value="24 1"><input type="hidden" name="cpl" value="89ae2925-ebd0-4e09-83e5-7abb66054ba7"><input type="hidden" name="cpl_name" value="PromoLocDeSall_TSR-1_F_XX-XX_20_2K_20250218_SMPTE_OV"><
+
+  [29] eventDiv id="edae16bd-fa7b-4738-af69-717ee4e310f0" children=2
+       outerHTML(600): <div class="eventDiv " id="edae16bd-fa7b-4738-af69-717ee4e310f0"><div class="element psa cpl" id="25632a97-2d35-48b3-b423-089b9c90903e"><span class="ellipsis " title>00:15:11</span>&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;<span class="ellipsis ellipsis300 " title>LABELFRI-FEV_PSA_F_XX-XX_XX_XX_2K_XX_20260122_CDM_OV</span><input type="hidden" name="duration" value="10"><input type="hidden" name="editRate" value="24 1"><input type="hidden" name="cpl" value="b246f253-8a57-472d-b517-2ea90b907464"><input type="hidden" name="cpl_name" value="LABELFRI-FEV_PSA_F_XX-XX_XX_XX_2K_XX_20260122_CDM_OV"><button class="
+
+  [30] eventDiv id="da1537c5-0bef-42bb-bc16-938d0f8590d4" children=2
+       outerHTML(600): <div class="eventDiv " id="da1537c5-0bef-42bb-bc16-938d0f8590d4"><div class="element advertisement cpl" id="662d45fb-e6a7-4974-aa1c-9c827a81ea30"><span class="ellipsis " title>00:15:21</span>&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;<span class="ellipsis ellipsis300 " title>NOG-BIOCOOP_ADV-500964_C_FR-XX_FR_51_2K_20250519_CPX_IOP_OV</span><input type="hidden" name="duration" value="12.3333333333"><input type="hidden" name="editRate" value="24 1"><input type="hidden" name="cpl" value="8fa964b9-e71f-4a41-a240-365b65515746"><input type="hidden" name="cpl_name" value="NOG-BIOCOOP_ADV-500964_C_FR-XX_FR_51_2K_2
+
+  [31] eventDiv id="eca605da-e7c8-4cdd-870d-6ff5521713d0" children=2
+       outerHTML(600): <div class="eventDiv " id="eca605da-e7c8-4cdd-870d-6ff5521713d0"><div class="element advertisement cpl" id="3a4da9a2-6311-458b-b7b8-e6321e2ca90e"><span class="ellipsis " title>00:15:33</span>&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;<span class="ellipsis ellipsis300 " title>NOG-MAILLARD_ADV-500810_C_FR-XX_FR_51_2K_20251031_CPX_IOP_OV</span><input type="hidden" name="duration" value="12.25"><input type="hidden" name="editRate" value="24 1"><input type="hidden" name="cpl" value="b44c8865-a711-4a4c-8efa-cc6749806864"><input type="hidden" name="cpl_name" value="NOG-MAILLARD_ADV-500810_C_FR-XX_FR_51_2K_2025103
+
+  [32] eventDiv id="e8039359-a9af-4a52-86db-be33704ae9b6" children=2
+       outerHTML(600): <div class="eventDiv " id="e8039359-a9af-4a52-86db-be33704ae9b6"><div class="element advertisement cpl" id="b8e0a50c-46ad-43d4-8643-a48de523aa7a"><span class="ellipsis " title>00:15:46</span>&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;<span class="ellipsis ellipsis300 " title>NOG-OPTIC2000_ADV-500631_C_FR-XX_FR_51_2K_20250124_CPX_IOP_OV</span><input type="hidden" name="duration" value="16.3333333333"><input type="hidden" name="editRate" value="24 1"><input type="hidden" name="cpl" value="5345e34d-315b-4947-afd2-2d3712a4575a"><input type="hidden" name="cpl_name" value="NOG-OPTIC2000_ADV-500631_C_FR-XX_FR_51_
+
+  [33] eventDiv id="9c9d2cde-2254-44d1-a7e1-e37d7189d135" children=2
+       outerHTML(600): <div class="eventDiv " id="9c9d2cde-2254-44d1-a7e1-e37d7189d135"><div class="element advertisement cpl" id="c98eb5ff-797b-43a9-a0bb-94e872326ec3"><span class="ellipsis " title>00:16:02</span>&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;<span class="ellipsis ellipsis300 " title>NOG-CENTRAKOR_ADV-500935_C_FR-XX_FR_51_2K_20250430_CPX_IOP_OV</span><input type="hidden" name="duration" value="12.2083333333"><input type="hidden" name="editRate" value="24 1"><input type="hidden" name="cpl" value="18aebf56-b54d-494d-8053-10df50a5445c"><input type="hidden" name="cpl_name" value="NOG-CENTRAKOR_ADV-500935_C_FR-XX_FR_51_
+
+  [34] eventDiv id="95dab9b4-6479-419f-b1c0-e4a98e3507d8" children=2
+       outerHTML(600): <div class="eventDiv " id="95dab9b4-6479-419f-b1c0-e4a98e3507d8"><div class="element advertisement cpl" id="5e26155d-afdb-4864-b1b6-eb66f2aaeeaf"><span class="ellipsis " title>00:16:14</span>&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;<span class="ellipsis ellipsis300 " title>NOG-ORPI_ADV-500968_C_FR-XX_FR_51_2K_20250522_CPX_IOP_OV</span><input type="hidden" name="duration" value="12.2083333333"><input type="hidden" name="editRate" value="24 1"><input type="hidden" name="cpl" value="3a8a29d9-ea87-4f4e-ae6d-1572c33cf757"><input type="hidden" name="cpl_name" value="NOG-ORPI_ADV-500968_C_FR-XX_FR_51_2K_2025052
+
+  [35] eventDiv id="13bc9f05-9c28-4e7b-bb7f-e8f131122c66" children=2
+       outerHTML(600): <div class="eventDiv " id="13bc9f05-9c28-4e7b-bb7f-e8f131122c66"><div class="element advertisement cpl" id="3cfd9d98-a9ae-4b0d-9f5d-d1f85ed58383"><span class="ellipsis " title>00:16:26</span>&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;<span class="ellipsis ellipsis300 " title>NOG-ENTENDRE_ADV-500948_C_FR-XX_FR_20_2K_20250620_CPX_IOP_OV</span><input type="hidden" name="duration" value="12.4583333333"><input type="hidden" name="editRate" value="24 1"><input type="hidden" name="cpl" value="f770eabc-d931-474d-9f77-195dc8bdca86"><input type="hidden" name="cpl_name" value="NOG-ENTENDRE_ADV-500948_C_FR-XX_FR_20_2K
+
+  [36] eventDiv id="b6eead63-dcf8-48ba-8911-7ff34136cc37" children=2
+       outerHTML(600): <div class="eventDiv " id="b6eead63-dcf8-48ba-8911-7ff34136cc37"><div class="element advertisement cpl" id="011d0752-6000-436d-b8b8-66e0507043e6"><span class="ellipsis " title>00:16:39</span>&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;<span class="ellipsis ellipsis300 " title>NOG-ARRIVBAFIT_ADV-5501234_C_FR-XX_FR_51_2K_20251120_CPX_IOP_OV</span><input type="hidden" name="duration" value="12.25"><input type="hidden" name="editRate" value="24 1"><input type="hidden" name="cpl" value="13ef92fc-4549-4e40-a3d8-718e3caa0886"><input type="hidden" name="cpl_name" value="NOG-ARRIVBAFIT_ADV-5501234_C_FR-XX_FR_51_2K_2
+
+  [37] eventDiv id="439d67da-714e-47c7-a24f-f092188497e7" children=2
+       outerHTML(600): <div class="eventDiv " id="439d67da-714e-47c7-a24f-f092188497e7"><div class="element advertisement cpl" id="0c920b25-4cf6-4ba5-8bf4-5ff6972859d0"><span class="ellipsis " title>00:16:51</span>&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;<span class="ellipsis ellipsis300 " title>PAYSAG-MAGILIN_ADV-500973_C_FR-XX_FR_51_2K_20250701_CPX_IOP_OV</span><input type="hidden" name="duration" value="12.2083333333"><input type="hidden" name="editRate" value="24 1"><input type="hidden" name="cpl" value="11ce0d2c-921a-4543-b3a4-4f4ac3c9f9bc"><input type="hidden" name="cpl_name" value="PAYSAG-MAGILIN_ADV-500973_C_FR-XX_FR_5
+
+  [38] eventDiv id="1af794a8-9ca3-4a81-b4c0-600ce801c27b" children=2
+       outerHTML(600): <div class="eventDiv " id="1af794a8-9ca3-4a81-b4c0-600ce801c27b"><div class="element advertisement cpl" id="e3e0d89d-ba48-4a30-91bc-ad1365ae0956"><span class="ellipsis " title>00:17:03</span>&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;<span class="ellipsis ellipsis300 " title>NOG-ENVIA_ADV-500965_C_FR-XX_FR_51_2K_20250829_CPX_IOP_OV</span><input type="hidden" name="duration" value="12.2083333333"><input type="hidden" name="editRate" value="24 1"><input type="hidden" name="cpl" value="9914cdb1-ffe9-444c-a243-440dc4557ae4"><input type="hidden" name="cpl_name" value="NOG-ENVIA_ADV-500965_C_FR-XX_FR_51_2K_20250
+
+  [39] eventDiv id="83caca7f-6e6d-476d-ae5a-c241af949ba5" children=2
+       outerHTML(600): <div class="eventDiv " id="83caca7f-6e6d-476d-ae5a-c241af949ba5"><div class="element advertisement cpl" id="ae0573fa-a818-46c6-88c7-02855d43bf36"><span class="ellipsis " title>00:17:15</span>&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;<span class="ellipsis ellipsis300 " title>NOG-NJNJO_ADV-500962_C_FR-XX_FR_51_2K_20250911_CPX_IOP_OV</span><input type="hidden" name="duration" value="12.4583333333"><input type="hidden" name="editRate" value="24 1"><input type="hidden" name="cpl" value="5dcb289b-f725-454f-b9af-be7528b3336a"><input type="hidden" name="cpl_name" value="NOG-NJNJO_ADV-500962_C_FR-XX_FR_51_2K_20250
+
+  [40] eventDiv id="711ae6c3-0a0b-431b-9593-a2c1c9cbf50f" children=2
+       outerHTML(600): <div class="eventDiv " id="711ae6c3-0a0b-431b-9593-a2c1c9cbf50f"><div class="element advertisement cpl" id="3e6a9c6f-0239-4994-bf20-d4bac07b5083"><span class="ellipsis " title>00:17:28</span>&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;<span class="ellipsis ellipsis300 " title>LECLERC_ADV_F_XX-XX_XX_71_2K_XX_20241005_CDM_OV</span><input type="hidden" name="duration" value="18"><input type="hidden" name="editRate" value="25 1"><input type="hidden" name="cpl" value="587d5638-7a91-45b3-98e0-c190eda89a18"><input type="hidden" name="cpl_name" value="LECLERC_ADV_F_XX-XX_XX_71_2K_XX_20241005_CDM_OV"><button class="
+
+  [41] eventDiv id="418ab140-e804-405b-809b-78a8e316de36" children=2
+       outerHTML(600): <div class="eventDiv " id="418ab140-e804-405b-809b-78a8e316de36"><div class="element psa cpl" id="aa8328cc-3305-45bb-9a11-230fe759271b"><span class="ellipsis " title>00:17:46</span>&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;<span class="ellipsis ellipsis300 " title>PiConcept_PSA-1-25_F-178_XX-XX_20_4K_20230218_SMPTE_OV</span><input type="hidden" name="duration" value="31.88"><input type="hidden" name="editRate" value="25 1"><input type="hidden" name="cpl" value="c82103dc-f93a-4ff0-9d41-4caa28a61f1d"><input type="hidden" name="cpl_name" value="PiConcept_PSA-1-25_F-178_XX-XX_20_4K_20230218_SMPTE_OV"><button 
+
+  [42] eventDiv id="844edaa1-2d9f-4499-9015-a0a81bf34fee" children=2
+       outerHTML(600): <div class="eventDiv " id="844edaa1-2d9f-4499-9015-a0a81bf34fee"><div class="element policy cpl" id="ca8f0a55-8767-4233-83e2-2cb4c9faaa76"><span class="ellipsis " title>00:18:18</span>&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;<span class="ellipsis ellipsis300 " title>Piratage_POL_F_FR-XX_FR_MOS_2K_FNCF_20230303_FNCF_SMPTE_OV</span><input type="hidden" name="duration" value="12"><input type="hidden" name="editRate" value="24 1"><input type="hidden" name="cpl" value="6d67ca63-3012-4660-80b4-c5e0c9bbd30b"><input type="hidden" name="cpl_name" value="Piratage_POL_F_FR-XX_FR_MOS_2K_FNCF_20230303_FNCF_SMPTE_OV">
+
+  [43] eventDiv id="81d09e17-8d17-40ff-a7bf-21dae0550730" children=2
+       outerHTML(600): <div class="eventDiv " id="81d09e17-8d17-40ff-a7bf-21dae0550730"><div class="element pattern" id="be9fb2f0-ab80-4435-bf46-d18143836172"><span class="ellipsis">00:18:30</span>&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;<span class="ellipsis ellipsis300">Black</span><input type="hidden" name="duration" value="10"><input type="hidden" name="editRate" value="24 1"><input type="hidden" name="cpl_name" value="Black"><button class="context" onclick="onClickRemove(&apos;81d09e17-8d17-40ff-a7bf-21dae0550730&apos;, &apos;pattern&apos;)" style="background-image:url(/web/images/error_16.png)" title="Remove"></button><b
+
+  [44] eventDiv id="91ce470e-ab3e-4082-a6e2-788bc902f71b" children=2
+       outerHTML(600): <div class="eventDiv " id="91ce470e-ab3e-4082-a6e2-788bc902f71b"><div class="element psa cpl" id="69690880-439a-46ef-bcd5-977125c624ad"><span class="ellipsis " title>00:18:40</span>&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;<span class="ellipsis ellipsis300 " title>LOGONOE_PSA_C_51_2K_20140925_OV</span><input type="hidden" name="duration" value="48.125"><input type="hidden" name="editRate" value="24 1"><input type="hidden" name="cpl" value="bf812ec3-a6d8-45dd-8afb-f0cb78c854e9"><input type="hidden" name="cpl_name" value="LOGONOE_PSA_C_51_2K_20140925_OV"><button class="context" onclick="onClickRemove(&apos;
+
+  [45] eventDiv id="779c4aa5-a446-4115-8108-d7993384697b" children=2
+       outerHTML(600): <div class="eventDiv " id="779c4aa5-a446-4115-8108-d7993384697b"><div class="element feature cpl" id="bc198895-8972-4bf2-8948-c5ee7ea8d4ac"><span class="ellipsis " title>00:19:28</span>&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;<span class="ellipsis ellipsis300 " title>Coutures_FTR_F_FR-FR_FR_51_4K_PAT_20251014_IKE_SMPTE_OV</span><input type="hidden" name="duration" value="6189.25"><input type="hidden" name="editRate" value="24 1"><input type="hidden" name="cpl" value="265db0b2-25f9-4973-acf6-e48fcb6750a0"><input type="hidden" name="cpl_name" value="Coutures_FTR_F_FR-FR_FR_51_4K_PAT_20251014_IKE_SMPTE_OV">
+
+  [46] eventDiv id="8ba3067f-3b16-4676-998b-8da6124d0605" children=2
+       outerHTML(600): <div class="eventDiv " id="8ba3067f-3b16-4676-998b-8da6124d0605"><div class="element pattern" id="257403b9-02fc-449a-b28c-48f6caf78258"><span class="ellipsis">02:02:37</span>&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;<span class="ellipsis ellipsis300">Black</span><input type="hidden" name="duration" value="10"><input type="hidden" name="editRate" value="24 1"><input type="hidden" name="cpl_name" value="Black"><button class="context" onclick="onClickRemove(&apos;8ba3067f-3b16-4676-998b-8da6124d0605&apos;, &apos;pattern&apos;)" style="background-image:url(/web/images/error_16.png)" title="Remove"></button><b
+
+══════════════════════════════════════════════════════════════════════
+  4 · ALL div.element CHILDREN (all, with classes and text)
+══════════════════════════════════════════════════════════════════════
+  [0] id="7ed50c08-ea00-4b48-9aca-be867fe29f56" class="element pack oldVersion" | text="Segment"
+  [1] id="bc0658a6-6f1f-450e-b6e8-5a51e879d49c" class="element pattern" | text="00:00:00     Black"
+  [2] id="b803020d-7d85-4956-a74d-27d0c1280029" class="element automation" | text="00:00:01     volet fermeture"
+  [3] id="dfb5bbe2-235c-425a-8ea4-8bcbc9aa2d80" class="element automation" | text="00:00:04     FLAT"
+  [4] id="9b3eca06-ee4d-44da-81df-30ff20986028" class="element automation" | text="00:00:15     lamp on"
+  [5] id="5f077622-55a0-4dd3-9353-18c3fe081f3a" class="element automation" | text="00:00:39     son format NUMERIQUE"
+  [6] id="4e366282-9885-4ef1-ad5f-4931aba1c86c" class="element automation" | text="00:00:40     son volume 3.5"
+  [7] id="6cea46da-bacb-483e-b271-d5bd2de2192d" class="element automation" | text="00:00:41     proj extinction"
+  [8] id="d16674ee-1eeb-473c-bd88-bca1dd409862" class="element automation" | text="00:00:42     rail soir"
+  [9] id="e4160ccd-94cc-492d-88ed-02a8216d961c" class="element automation" | text="00:00:43     volet ouverture"
+  [10] id="91a19126-9e1c-478e-9a97-5f84b93e5da9" class="element psa cpl" | text="00:00:45     QRCODES-RS_PSA_F_XX-XX_XX_XX_2K_XX_20230420_CDM_OV"
+  [11] id="ec59b035-5801-4c32-8122-277f6f2c0f6f" class="element advertisement cpl" | text="00:01:05     Mediavision_ADV-30s_F_FR-XX_FR_51_2K_20210504_TSL_IOP_OV"
+  [12] id="2f787f2a-1ea6-4997-a55d-c5caa9dedfbb" class="element advertisement cpl" | text="00:01:35     AmazonRomCom_ADV-1_F_FR-XX_FR_51_2K_20260121_CHR_IOP_OV"
+  [13] id="7da6fcce-1391-487d-bbd2-303165481def" class="element advertisement cpl" | text="00:02:05     Polestar_ADV-MLR_F_FR-XX_FR_51_2K_20260128_DLX_IOP_OV"
+  [14] id="9a1bd658-6a15-49d2-be1c-051cfe3c112e" class="element advertisement cpl" | text="00:02:35     GMFPrevention_ADV-32s_F_FR-fr_FR_51_2K_20250818_BAR_IOP_OV"
+  [15] id="716ed166-f0ae-4586-96ec-e4009c84aa57" class="element advertisement cpl" | text="00:03:06     VolvoEveryCar_ADV_F_FR-XX_FR_51_2K_20260112_DLX_IOP_OV"
+  [16] id="b3e59d58-eccf-4e2b-be52-a77b5ab956e4" class="element advertisement cpl" | text="00:03:44     Mediavision_ADV-5s_F_FR-XX_FR_51_2K_20210528_TSL_IOP_OV"
+  [17] id="3f67c8f4-0a0a-4425-a602-1f18e026e5d4" class="element psa cpl" | text="00:03:49     AboFid_PSA-1_F_FR-XX_FR_20_2K_REX_20250322_SMPTE_OV"
+  [18] id="9f985627-e9f0-418d-aa26-707eda497c33" class="element trailer cpl" | text="00:04:09     AucunAutreChoi_TLR_F_KO-fr_FR-NR_20_2K_NULL_20251219_NOI_IOP_OV"
+  [19] id="08f0091f-50a5-4980-b419-f7d516e97c5c" class="element trailer cpl" | text="00:05:01     FAWoolfWorks_TLR-NODATE_S-177_FR-XX_FR_51_2K_20251222_CGR_SMPTE_OV"
+  [20] id="7001eff0-fef1-4a23-b5ac-a1807c9032b4" class="element trailer cpl" | text="00:05:41     Apieddoeuvre_TLR-1_F-166_FR-XX_FR_51_4K_20251218_POL_IOP_OV"
+  [21] id="64b9a7c7-6974-4937-9f77-98a3b14fa0fd" class="element trailer cpl" | text="00:07:07     LOL2_TLR-Date_F_FR-XX_FR-NR_51_2K_NULL_20251230_NOI_IOP_OV"
+  [22] id="ada2d1af-d9f4-499a-89b4-1c99f5fd5f5f" class="element psa cpl" | text="00:08:49     Newsletter_PSA-1_F_FR-XX_FR_20_2K_REX_20250322_SMPTE_OV"
+  [23] id="39d948a7-4b39-4a09-8cc8-0885a4d323e0" class="element psa cpl" | text="00:09:03     2526OPERABAL_PSA_F_XX-XX_XX_XX_2K_XX_20250822_CDM_OV"
+  [24] id="3547d91f-63fe-4583-8860-3761f2d3a56c" class="element automation" | text="00:09:04     son format NON SYNC"
+  [25] id="0ac5e655-8197-4b01-96ed-191a64e11db3" class="element automation" | text="00:09:06     son volume 3.5"
+  [26] id="47feafee-1205-4519-ac94-8cbb1d487d48" class="element psa cpl" | text="00:09:18     2805MIRABEL_PSA_F_XX-XX_XX_XX_2K_XX_20251210_CDM_OV"
+  [27] id="60017e15-56b0-46cb-bc8b-17ba8add3a5e" class="element psa cpl" | text="00:09:28     3003CO-VENUE_PSA_F_XX-XX_XX_XX_2K_XX_20260212_CDM_OV"
+  [28] id="652a7042-772c-4000-babe-5dfcb05be939" class="element psa cpl" | text="00:09:38     PDC2026_PSA_F_XX-XX_XX_XX_2K_XX_20260217_CDM_OV"
+  [29] id="b48f6217-bc2d-47c4-8843-ed884170655b" class="element psa cpl" | text="00:09:53     1503NC-NOTTI_PSA_F_XX-XX_XX_XX_2K_XX_20260210_CDM_OV"
+  [30] id="d8acb4f7-d304-429d-9228-89f27e267628" class="element psa cpl" | text="00:10:03     1503CP-PEUPL_PSA_F_XX-XX_XX_XX_2K_XX_20260210_CDM_OV"
+  [31] id="8e40b46e-436d-4d7b-8a89-48720d093239" class="element psa cpl" | text="00:10:13     1303-ONVOUSC_PSA_F_XX-XX_XX_XX_2K_XX_20260219_CDM_OV"
+  [32] id="2cda21ed-b62e-40d8-88fc-6bc926b3dc48" class="element psa cpl" | text="00:10:23     0903BA-WOOLF_PSA_F_XX-XX_XX_XX_2K_XX_20260211_CDM_OV"
+  [33] id="dcdf8b79-6421-488e-b3d7-586a56c3d6ff" class="element psa cpl" | text="00:10:33     0303AVPSURPR_PSA_F_XX-XX_XX_XX_2K_XX_20260206_CDM_OV"
+  [34] id="31a28e48-dd75-4ec3-96e8-ba2079c2dd68" class="element psa cpl" | text="00:10:43     0203CO-QUAND_PSA_F_XX-XX_XX_XX_2K_XX_20260112_CDM_OV"
+  [35] id="0c54f730-0969-4b74-ad06-8e2beffaf7e8" class="element psa cpl" | text="00:10:53     0103AVP-JUMP_PSA_F_XX-XX_XX_XX_2K_XX_20260211_CDM_OV"
+  [36] id="98996aeb-f6e2-47fa-a247-e238e658b17b" class="element automation" | text="00:11:02     son volume 3.5"
+  [37] id="9833a2a6-4790-4131-ad57-094a4cc0af57" class="element automation" | text="00:11:00     son format NUMERIQUE"
+  [38] id="d1ee8c7a-9ec9-4ff9-8221-bb2becde3c58" class="element trailer cpl" | text="00:11:03     AFCAECCS20sec_TLR_F_FR-XX_INT_51_2K_NULL_20220904_VP_IOP_OV"
+  [39] id="e9f8a5ba-b846-44b0-ac58-c611d3b858b1" class="element trailer cpl" | text="00:11:23     Printemps26-VL_TLR_F_FR-XX_FR_51_2K_FNCF_20260204_TST_SMPTE_OV"
+  [40] id="a99f4633-1673-4ab0-a73d-74d385b62c45" class="element teaser cpl" | text="00:12:48     BoucleFevrier2_TSR-1_F_FR-XX_20_2K_20260120_SMPTE_OV"
+  [41] id="75cba6ef-5909-4944-a9b9-e3f4a5880820" class="element teaser cpl" | text="00:14:54     PromoLocDeSall_TSR-1_F_XX-XX_20_2K_20250218_SMPTE_OV"
+  [42] id="25632a97-2d35-48b3-b423-089b9c90903e" class="element psa cpl" | text="00:15:11     LABELFRI-FEV_PSA_F_XX-XX_XX_XX_2K_XX_20260122_CDM_OV"
+  [43] id="662d45fb-e6a7-4974-aa1c-9c827a81ea30" class="element advertisement cpl" | text="00:15:21     NOG-BIOCOOP_ADV-500964_C_FR-XX_FR_51_2K_20250519_CPX_IOP_OV"
+  [44] id="3a4da9a2-6311-458b-b7b8-e6321e2ca90e" class="element advertisement cpl" | text="00:15:33     NOG-MAILLARD_ADV-500810_C_FR-XX_FR_51_2K_20251031_CPX_IOP_OV"
+  [45] id="b8e0a50c-46ad-43d4-8643-a48de523aa7a" class="element advertisement cpl" | text="00:15:46     NOG-OPTIC2000_ADV-500631_C_FR-XX_FR_51_2K_20250124_CPX_IOP_OV"
+  [46] id="c98eb5ff-797b-43a9-a0bb-94e872326ec3" class="element advertisement cpl" | text="00:16:02     NOG-CENTRAKOR_ADV-500935_C_FR-XX_FR_51_2K_20250430_CPX_IOP_OV"
+  [47] id="5e26155d-afdb-4864-b1b6-eb66f2aaeeaf" class="element advertisement cpl" | text="00:16:14     NOG-ORPI_ADV-500968_C_FR-XX_FR_51_2K_20250522_CPX_IOP_OV"
+  [48] id="3cfd9d98-a9ae-4b0d-9f5d-d1f85ed58383" class="element advertisement cpl" | text="00:16:26     NOG-ENTENDRE_ADV-500948_C_FR-XX_FR_20_2K_20250620_CPX_IOP_OV"
+  [49] id="011d0752-6000-436d-b8b8-66e0507043e6" class="element advertisement cpl" | text="00:16:39     NOG-ARRIVBAFIT_ADV-5501234_C_FR-XX_FR_51_2K_20251120_CPX_IOP_OV"
+  [50] id="0c920b25-4cf6-4ba5-8bf4-5ff6972859d0" class="element advertisement cpl" | text="00:16:51     PAYSAG-MAGILIN_ADV-500973_C_FR-XX_FR_51_2K_20250701_CPX_IOP_OV"
+  [51] id="e3e0d89d-ba48-4a30-91bc-ad1365ae0956" class="element advertisement cpl" | text="00:17:03     NOG-ENVIA_ADV-500965_C_FR-XX_FR_51_2K_20250829_CPX_IOP_OV"
+  [52] id="ae0573fa-a818-46c6-88c7-02855d43bf36" class="element advertisement cpl" | text="00:17:15     NOG-NJNJO_ADV-500962_C_FR-XX_FR_51_2K_20250911_CPX_IOP_OV"
+  [53] id="3e6a9c6f-0239-4994-bf20-d4bac07b5083" class="element advertisement cpl" | text="00:17:28     LECLERC_ADV_F_XX-XX_XX_71_2K_XX_20241005_CDM_OV"
+  [54] id="aa8328cc-3305-45bb-9a11-230fe759271b" class="element psa cpl" | text="00:17:46     PiConcept_PSA-1-25_F-178_XX-XX_20_4K_20230218_SMPTE_OV"
+  [55] id="ca8f0a55-8767-4233-83e2-2cb4c9faaa76" class="element policy cpl" | text="00:18:18     Piratage_POL_F_FR-XX_FR_MOS_2K_FNCF_20230303_FNCF_SMPTE_OV"
+  [56] id="be9fb2f0-ab80-4435-bf46-d18143836172" class="element pattern" | text="00:18:30     Black"
+  [57] id="68109067-b35e-41ae-8284-b4d1cb157d4e" class="element automation" | text="00:18:31     volet fermeture"
+  [58] id="da45ad0d-331c-49b7-a94a-d10c9b39e883" class="element automation" | text="00:18:36     son volume 4.5"
+  [59] id="7e8b8319-14bd-48ec-a56f-ddcd6e7b01ff" class="element automation" | text="00:18:37     volet ouverture"
+  [60] id="69690880-439a-46ef-bcd5-977125c624ad" class="element psa cpl" | text="00:18:40     LOGONOE_PSA_C_51_2K_20140925_OV"
+  [61] id="ebe0d76a-221f-4e19-88f0-eb6542d2a1b7" class="element automation" | text="00:18:45     rail extinction"
+  [62] id="bc198895-8972-4bf2-8948-c5ee7ea8d4ac" class="element feature cpl" | text="00:19:28     Coutures_FTR_F_FR-FR_FR_51_4K_PAT_20251014_IKE_SMPTE_OV"
+  [63] id="cd09066c-e5a7-4ba8-abd9-186826a81bed" class="element automation" | text="01:57:37     rail soir"
+  [64] id="257403b9-02fc-449a-b28c-48f6caf78258" class="element pattern" | text="02:02:37     Black"
+  [65] id="5805ccd2-397e-4243-9a03-b0201431171e" class="element automation" | text="02:02:38     rail allumage"
+  [66] id="c9a4d329-a30e-438a-8a18-57afa1363308" class="element automation" | text="02:02:39     son format NON SYNC"
+  [67] id="8dc96b0d-9691-402c-869a-ef6d1b78c1ab" class="element automation" | text="02:02:40     son volume 2.5"
+  [68] id="2c2e9f10-cc96-4ea8-9330-94c0f6eae873" class="element automation" | text="02:02:41     volet ouverture"
+  [69] id="832f77e0-20d4-4286-b86f-174e8783738c" class="element automation" | text="02:02:42     Interseance 239"
+
+══════════════════════════════════════════════════════════════════════
+  5 · ALL addOnDiv ELEMENTS (with child count and name attr)
+══════════════════════════════════════════════════════════════════════
+  [0] name="bc0658a6-6f1f-450e-b6e8-5a51e879d49c" children=8
+       first child HTML(400): <div class="element automation" id="b803020d-7d85-4956-a74d-27d0c1280029"><span>00:00:01</span>&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;<span>volet fermeture</span><input type="hidden" id="kind_b803020d-7d85-4956-a74d-27d0c1280029" value="Start"><input type="hidden" id="offset_b803020d-7d85-4956-a74d-27d0c1280029" value="1"><button class="context" onclick="onClickRemove(&apos;b803020d-7d85-4956-a74d-27d0c128
+  [1] name="82ccaa74-6ec4-405c-8327-bc2883dd5c46" children=0
+  [2] name="46b69862-e3cd-4238-b589-bf1cb30ff7fc" children=0
+  [3] name="156fa56b-9157-41fb-8a43-f253e157f8c9" children=0
+  [4] name="2b7dddbb-0865-4839-a680-7f424cc158a5" children=0
+  [5] name="eec82379-e451-4c20-91ff-19ff8eb8e820" children=0
+  [6] name="c162009f-4078-4479-ad42-5e35a447f4f2" children=0
+  [7] name="84e8af62-9358-4d0a-8459-7f4a76dda8b9" children=0
+  [8] name="e34e6fdf-0f18-49f8-bf40-2b5bede29df4" children=0
+  [9] name="d2c1e203-aa6f-45ea-a8e0-c1cd078a348f" children=0
+  [10] name="b5c5d2a8-ec21-4f38-9003-e576eaaa3f12" children=0
+  [11] name="af4873b3-b680-438f-92ae-0b1e8cc2a600" children=0
+  [12] name="ba1069fd-cf75-4ea5-9fbc-fdcfda0648a7" children=0
+  [13] name="013c9b87-1a3f-4de3-935b-8f8a4c922c8a" children=0
+  [14] name="c52c5e1c-e854-4542-9884-95c79671bbd0" children=2
+       first child HTML(400): <div class="element automation" id="3547d91f-63fe-4583-8860-3761f2d3a56c"><span>00:09:04</span>&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;<span>son format NON SYNC</span><input type="hidden" id="kind_3547d91f-63fe-4583-8860-3761f2d3a56c" value="Start"><input type="hidden" id="offset_3547d91f-63fe-4583-8860-3761f2d3a56c" value="1"><button class="context" onclick="onClickRemove(&apos;3547d91f-63fe-4583-8860-3761
+  [15] name="381261e2-0836-470a-920d-ecec740cabb7" children=0
+  [16] name="3fbdb44d-1bee-4f87-99f9-e34127e0a123" children=0
+  [17] name="5c0abdbe-3ebd-4251-bde8-9935d67b20d1" children=0
+  [18] name="0fdf9572-1bf1-4d95-aab8-625d9319f423" children=0
+  [19] name="7b3d6cd2-fd36-4a7c-b38f-f9154300cb28" children=0
+  [20] name="a28556db-e07d-4c08-85e1-f90495bf0592" children=0
+  [21] name="9d27f994-6347-4cf2-aa0a-590caefaff08" children=0
+  [22] name="6a619231-43fc-4ea3-9f00-d67dc7a5353f" children=0
+  [23] name="84edb600-b45d-4f91-be7b-9069bc925fe1" children=0
+  [24] name="bbd69b1c-a132-48a1-a160-c0ee4d730d8d" children=2
+       first child HTML(400): <div class="element automation" id="98996aeb-f6e2-47fa-a247-e238e658b17b"><span>00:11:02</span>&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;<span>son volume 3.5</span><input type="hidden" id="kind_98996aeb-f6e2-47fa-a247-e238e658b17b" value="End"><input type="hidden" id="offset_98996aeb-f6e2-47fa-a247-e238e658b17b" value="1"><button class="context" onclick="onClickRemove(&apos;98996aeb-f6e2-47fa-a247-e238e658b17
+  [25] name="6c744432-ef7b-473c-ba73-cd9f271d78a3" children=0
+  [26] name="38c1c710-0085-419e-8e90-8447599a3f45" children=0
+  [27] name="90663645-d25f-4ea7-836a-156f40420dea" children=0
+  [28] name="89ae2925-ebd0-4e09-83e5-7abb66054ba7" children=0
+  [29] name="b246f253-8a57-472d-b517-2ea90b907464" children=0
+  [30] name="8fa964b9-e71f-4a41-a240-365b65515746" children=0
+  [31] name="b44c8865-a711-4a4c-8efa-cc6749806864" children=0
+  [32] name="5345e34d-315b-4947-afd2-2d3712a4575a" children=0
+  [33] name="18aebf56-b54d-494d-8053-10df50a5445c" children=0
+  [34] name="3a8a29d9-ea87-4f4e-ae6d-1572c33cf757" children=0
+  [35] name="f770eabc-d931-474d-9f77-195dc8bdca86" children=0
+  [36] name="13ef92fc-4549-4e40-a3d8-718e3caa0886" children=0
+  [37] name="11ce0d2c-921a-4543-b3a4-4f4ac3c9f9bc" children=0
+  [38] name="9914cdb1-ffe9-444c-a243-440dc4557ae4" children=0
+  [39] name="5dcb289b-f725-454f-b9af-be7528b3336a" children=0
+  [40] name="587d5638-7a91-45b3-98e0-c190eda89a18" children=0
+  [41] name="c82103dc-f93a-4ff0-9d41-4caa28a61f1d" children=0
+  [42] name="6d67ca63-3012-4660-80b4-c5e0c9bbd30b" children=0
+  [43] name="be9fb2f0-ab80-4435-bf46-d18143836172" children=3
+       first child HTML(400): <div class="element automation" id="68109067-b35e-41ae-8284-b4d1cb157d4e"><span>00:18:31</span>&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;<span>volet fermeture</span><input type="hidden" id="kind_68109067-b35e-41ae-8284-b4d1cb157d4e" value="Start"><input type="hidden" id="offset_68109067-b35e-41ae-8284-b4d1cb157d4e" value="1"><button class="context" onclick="onClickRemove(&apos;68109067-b35e-41ae-8284-b4d1cb15
+  [44] name="bf812ec3-a6d8-45dd-8afb-f0cb78c854e9" children=1
+       first child HTML(400): <div class="element automation" id="ebe0d76a-221f-4e19-88f0-eb6542d2a1b7"><span>00:18:45</span>&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;<span>rail extinction</span><input type="hidden" id="kind_ebe0d76a-221f-4e19-88f0-eb6542d2a1b7" value="Start"><input type="hidden" id="offset_ebe0d76a-221f-4e19-88f0-eb6542d2a1b7" value="5"><button class="context" onclick="onClickRemove(&apos;ebe0d76a-221f-4e19-88f0-eb6542d2
+  [45] name="265db0b2-25f9-4973-acf6-e48fcb6750a0" children=1
+       first child HTML(400): <div class="element automation" id="cd09066c-e5a7-4ba8-abd9-186826a81bed"><span>01:57:37</span>&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;<span>rail soir</span><input type="hidden" id="kind_cd09066c-e5a7-4ba8-abd9-186826a81bed" value="End"><input type="hidden" id="offset_cd09066c-e5a7-4ba8-abd9-186826a81bed" value="300"><button class="context" onclick="onClickRemove(&apos;cd09066c-e5a7-4ba8-abd9-186826a81bed&a
+  [46] name="257403b9-02fc-449a-b28c-48f6caf78258" children=5
+       first child HTML(400): <div class="element automation" id="5805ccd2-397e-4243-9a03-b0201431171e"><span>02:02:38</span>&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;<span>rail allumage</span><input type="hidden" id="kind_5805ccd2-397e-4243-9a03-b0201431171e" value="Start"><input type="hidden" id="offset_5805ccd2-397e-4243-9a03-b0201431171e" value="1"><button class="context" onclick="onClickRemove(&apos;5805ccd2-397e-4243-9a03-b020143117
+
+══════════════════════════════════════════════════════════════════════
+  6 · AUTOMATION ELEMENTS — full structure
+══════════════════════════════════════════════════════════════════════
+  [0] id="b803020d-7d85-4956-a74d-27d0c1280029" | outerHTML(500): <div class="element automation" id="b803020d-7d85-4956-a74d-27d0c1280029"><span>00:00:01</span>&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;<span>volet fermeture</span><input type="hidden" id="kind_b803020d-7d85-4956-a74d-27d0c1280029" value="Start"><input type="hidden" id="offset_b803020d-7d85-4956-a74d-27d0c1280029" value="1"><button class="context" onclick="onClickRemove(&apos;b803020d-7d85-4956-a74d-27d0c1280029&apos;, &apos;automation&apos;)" style="background-image:url(/web/images/error_16.png)" title="R
+  [1] id="dfb5bbe2-235c-425a-8ea4-8bcbc9aa2d80" | outerHTML(500): <div class="element automation" id="dfb5bbe2-235c-425a-8ea4-8bcbc9aa2d80"><span>00:00:04</span>&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;<span>FLAT</span><input type="hidden" id="kind_dfb5bbe2-235c-425a-8ea4-8bcbc9aa2d80" value="Start"><input type="hidden" id="offset_dfb5bbe2-235c-425a-8ea4-8bcbc9aa2d80" value="4"><button class="context" onclick="onClickRemove(&apos;dfb5bbe2-235c-425a-8ea4-8bcbc9aa2d80&apos;, &apos;automation&apos;)" style="background-image:url(/web/images/error_16.png)" title="Remove"></bu
+  [2] id="9b3eca06-ee4d-44da-81df-30ff20986028" | outerHTML(500): <div class="element automation" id="9b3eca06-ee4d-44da-81df-30ff20986028"><span>00:00:15</span>&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;<span>lamp on</span><input type="hidden" id="kind_9b3eca06-ee4d-44da-81df-30ff20986028" value="Start"><input type="hidden" id="offset_9b3eca06-ee4d-44da-81df-30ff20986028" value="15"><button class="context" onclick="onClickRemove(&apos;9b3eca06-ee4d-44da-81df-30ff20986028&apos;, &apos;automation&apos;)" style="background-image:url(/web/images/error_16.png)" title="Remove">
+  [3] id="5f077622-55a0-4dd3-9353-18c3fe081f3a" | outerHTML(500): <div class="element automation" id="5f077622-55a0-4dd3-9353-18c3fe081f3a"><span>00:00:39</span>&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;<span>son format NUMERIQUE</span><input type="hidden" id="kind_5f077622-55a0-4dd3-9353-18c3fe081f3a" value="End"><input type="hidden" id="offset_5f077622-55a0-4dd3-9353-18c3fe081f3a" value="6"><button class="context" onclick="onClickRemove(&apos;5f077622-55a0-4dd3-9353-18c3fe081f3a&apos;, &apos;automation&apos;)" style="background-image:url(/web/images/error_16.png)" title
+  [4] id="4e366282-9885-4ef1-ad5f-4931aba1c86c" | outerHTML(500): <div class="element automation" id="4e366282-9885-4ef1-ad5f-4931aba1c86c"><span>00:00:40</span>&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;<span>son volume 3.5</span><input type="hidden" id="kind_4e366282-9885-4ef1-ad5f-4931aba1c86c" value="End"><input type="hidden" id="offset_4e366282-9885-4ef1-ad5f-4931aba1c86c" value="5"><button class="context" onclick="onClickRemove(&apos;4e366282-9885-4ef1-ad5f-4931aba1c86c&apos;, &apos;automation&apos;)" style="background-image:url(/web/images/error_16.png)" title="Remo
+  [5] id="6cea46da-bacb-483e-b271-d5bd2de2192d" | outerHTML(500): <div class="element automation" id="6cea46da-bacb-483e-b271-d5bd2de2192d"><span>00:00:41</span>&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;<span>proj extinction</span><input type="hidden" id="kind_6cea46da-bacb-483e-b271-d5bd2de2192d" value="End"><input type="hidden" id="offset_6cea46da-bacb-483e-b271-d5bd2de2192d" value="4"><button class="context" onclick="onClickRemove(&apos;6cea46da-bacb-483e-b271-d5bd2de2192d&apos;, &apos;automation&apos;)" style="background-image:url(/web/images/error_16.png)" title="Rem
+  [6] id="d16674ee-1eeb-473c-bd88-bca1dd409862" | outerHTML(500): <div class="element automation" id="d16674ee-1eeb-473c-bd88-bca1dd409862"><span>00:00:42</span>&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;<span>rail soir</span><input type="hidden" id="kind_d16674ee-1eeb-473c-bd88-bca1dd409862" value="End"><input type="hidden" id="offset_d16674ee-1eeb-473c-bd88-bca1dd409862" value="3"><button class="context" onclick="onClickRemove(&apos;d16674ee-1eeb-473c-bd88-bca1dd409862&apos;, &apos;automation&apos;)" style="background-image:url(/web/images/error_16.png)" title="Remove"><
+  [7] id="e4160ccd-94cc-492d-88ed-02a8216d961c" | outerHTML(500): <div class="element automation" id="e4160ccd-94cc-492d-88ed-02a8216d961c"><span>00:00:43</span>&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;<span>volet ouverture</span><input type="hidden" id="kind_e4160ccd-94cc-492d-88ed-02a8216d961c" value="End"><input type="hidden" id="offset_e4160ccd-94cc-492d-88ed-02a8216d961c" value="2"><button class="context" onclick="onClickRemove(&apos;e4160ccd-94cc-492d-88ed-02a8216d961c&apos;, &apos;automation&apos;)" style="background-image:url(/web/images/error_16.png)" title="Rem
+  [8] id="3547d91f-63fe-4583-8860-3761f2d3a56c" | outerHTML(500): <div class="element automation" id="3547d91f-63fe-4583-8860-3761f2d3a56c"><span>00:09:04</span>&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;<span>son format NON SYNC</span><input type="hidden" id="kind_3547d91f-63fe-4583-8860-3761f2d3a56c" value="Start"><input type="hidden" id="offset_3547d91f-63fe-4583-8860-3761f2d3a56c" value="1"><button class="context" onclick="onClickRemove(&apos;3547d91f-63fe-4583-8860-3761f2d3a56c&apos;, &apos;automation&apos;)" style="background-image:url(/web/images/error_16.png)" titl
+  [9] id="0ac5e655-8197-4b01-96ed-191a64e11db3" | outerHTML(500): <div class="element automation" id="0ac5e655-8197-4b01-96ed-191a64e11db3"><span>00:09:06</span>&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;<span>son volume 3.5</span><input type="hidden" id="kind_0ac5e655-8197-4b01-96ed-191a64e11db3" value="Start"><input type="hidden" id="offset_0ac5e655-8197-4b01-96ed-191a64e11db3" value="3"><button class="context" onclick="onClickRemove(&apos;0ac5e655-8197-4b01-96ed-191a64e11db3&apos;, &apos;automation&apos;)" style="background-image:url(/web/images/error_16.png)" title="Re
+  [10] id="98996aeb-f6e2-47fa-a247-e238e658b17b" | outerHTML(500): <div class="element automation" id="98996aeb-f6e2-47fa-a247-e238e658b17b"><span>00:11:02</span>&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;<span>son volume 3.5</span><input type="hidden" id="kind_98996aeb-f6e2-47fa-a247-e238e658b17b" value="End"><input type="hidden" id="offset_98996aeb-f6e2-47fa-a247-e238e658b17b" value="1"><button class="context" onclick="onClickRemove(&apos;98996aeb-f6e2-47fa-a247-e238e658b17b&apos;, &apos;automation&apos;)" style="background-image:url(/web/images/error_16.png)" title="Remo
+  [11] id="9833a2a6-4790-4131-ad57-094a4cc0af57" | outerHTML(500): <div class="element automation" id="9833a2a6-4790-4131-ad57-094a4cc0af57"><span>00:11:00</span>&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;<span>son format NUMERIQUE</span><input type="hidden" id="kind_9833a2a6-4790-4131-ad57-094a4cc0af57" value="End"><input type="hidden" id="offset_9833a2a6-4790-4131-ad57-094a4cc0af57" value="3"><button class="context" onclick="onClickRemove(&apos;9833a2a6-4790-4131-ad57-094a4cc0af57&apos;, &apos;automation&apos;)" style="background-image:url(/web/images/error_16.png)" title
+  [12] id="68109067-b35e-41ae-8284-b4d1cb157d4e" | outerHTML(500): <div class="element automation" id="68109067-b35e-41ae-8284-b4d1cb157d4e"><span>00:18:31</span>&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;<span>volet fermeture</span><input type="hidden" id="kind_68109067-b35e-41ae-8284-b4d1cb157d4e" value="Start"><input type="hidden" id="offset_68109067-b35e-41ae-8284-b4d1cb157d4e" value="1"><button class="context" onclick="onClickRemove(&apos;68109067-b35e-41ae-8284-b4d1cb157d4e&apos;, &apos;automation&apos;)" style="background-image:url(/web/images/error_16.png)" title="R
+  [13] id="da45ad0d-331c-49b7-a94a-d10c9b39e883" | outerHTML(500): <div class="element automation" id="da45ad0d-331c-49b7-a94a-d10c9b39e883"><span>00:18:36</span>&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;<span>son volume 4.5</span><input type="hidden" id="kind_da45ad0d-331c-49b7-a94a-d10c9b39e883" value="End"><input type="hidden" id="offset_da45ad0d-331c-49b7-a94a-d10c9b39e883" value="4"><button class="context" onclick="onClickRemove(&apos;da45ad0d-331c-49b7-a94a-d10c9b39e883&apos;, &apos;automation&apos;)" style="background-image:url(/web/images/error_16.png)" title="Remo
+  [14] id="7e8b8319-14bd-48ec-a56f-ddcd6e7b01ff" | outerHTML(500): <div class="element automation" id="7e8b8319-14bd-48ec-a56f-ddcd6e7b01ff"><span>00:18:37</span>&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;<span>volet ouverture</span><input type="hidden" id="kind_7e8b8319-14bd-48ec-a56f-ddcd6e7b01ff" value="End"><input type="hidden" id="offset_7e8b8319-14bd-48ec-a56f-ddcd6e7b01ff" value="3"><button class="context" onclick="onClickRemove(&apos;7e8b8319-14bd-48ec-a56f-ddcd6e7b01ff&apos;, &apos;automation&apos;)" style="background-image:url(/web/images/error_16.png)" title="Rem
+  [15] id="ebe0d76a-221f-4e19-88f0-eb6542d2a1b7" | outerHTML(500): <div class="element automation" id="ebe0d76a-221f-4e19-88f0-eb6542d2a1b7"><span>00:18:45</span>&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;<span>rail extinction</span><input type="hidden" id="kind_ebe0d76a-221f-4e19-88f0-eb6542d2a1b7" value="Start"><input type="hidden" id="offset_ebe0d76a-221f-4e19-88f0-eb6542d2a1b7" value="5"><button class="context" onclick="onClickRemove(&apos;ebe0d76a-221f-4e19-88f0-eb6542d2a1b7&apos;, &apos;automation&apos;)" style="background-image:url(/web/images/error_16.png)" title="R
+  [16] id="cd09066c-e5a7-4ba8-abd9-186826a81bed" | outerHTML(500): <div class="element automation" id="cd09066c-e5a7-4ba8-abd9-186826a81bed"><span>01:57:37</span>&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;<span>rail soir</span><input type="hidden" id="kind_cd09066c-e5a7-4ba8-abd9-186826a81bed" value="End"><input type="hidden" id="offset_cd09066c-e5a7-4ba8-abd9-186826a81bed" value="300"><button class="context" onclick="onClickRemove(&apos;cd09066c-e5a7-4ba8-abd9-186826a81bed&apos;, &apos;automation&apos;)" style="background-image:url(/web/images/error_16.png)" title="Remove"
+  [17] id="5805ccd2-397e-4243-9a03-b0201431171e" | outerHTML(500): <div class="element automation" id="5805ccd2-397e-4243-9a03-b0201431171e"><span>02:02:38</span>&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;<span>rail allumage</span><input type="hidden" id="kind_5805ccd2-397e-4243-9a03-b0201431171e" value="Start"><input type="hidden" id="offset_5805ccd2-397e-4243-9a03-b0201431171e" value="1"><button class="context" onclick="onClickRemove(&apos;5805ccd2-397e-4243-9a03-b0201431171e&apos;, &apos;automation&apos;)" style="background-image:url(/web/images/error_16.png)" title="Rem
+  [18] id="c9a4d329-a30e-438a-8a18-57afa1363308" | outerHTML(500): <div class="element automation" id="c9a4d329-a30e-438a-8a18-57afa1363308"><span>02:02:39</span>&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;<span>son format NON SYNC</span><input type="hidden" id="kind_c9a4d329-a30e-438a-8a18-57afa1363308" value="Start"><input type="hidden" id="offset_c9a4d329-a30e-438a-8a18-57afa1363308" value="2"><button class="context" onclick="onClickRemove(&apos;c9a4d329-a30e-438a-8a18-57afa1363308&apos;, &apos;automation&apos;)" style="background-image:url(/web/images/error_16.png)" titl
+  [19] id="8dc96b0d-9691-402c-869a-ef6d1b78c1ab" | outerHTML(500): <div class="element automation" id="8dc96b0d-9691-402c-869a-ef6d1b78c1ab"><span>02:02:40</span>&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;<span>son volume 2.5</span><input type="hidden" id="kind_8dc96b0d-9691-402c-869a-ef6d1b78c1ab" value="Start"><input type="hidden" id="offset_8dc96b0d-9691-402c-869a-ef6d1b78c1ab" value="3"><button class="context" onclick="onClickRemove(&apos;8dc96b0d-9691-402c-869a-ef6d1b78c1ab&apos;, &apos;automation&apos;)" style="background-image:url(/web/images/error_16.png)" title="Re
+  [20] id="2c2e9f10-cc96-4ea8-9330-94c0f6eae873" | outerHTML(500): <div class="element automation" id="2c2e9f10-cc96-4ea8-9330-94c0f6eae873"><span>02:02:41</span>&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;<span>volet ouverture</span><input type="hidden" id="kind_2c2e9f10-cc96-4ea8-9330-94c0f6eae873" value="Start"><input type="hidden" id="offset_2c2e9f10-cc96-4ea8-9330-94c0f6eae873" value="4"><button class="context" onclick="onClickRemove(&apos;2c2e9f10-cc96-4ea8-9330-94c0f6eae873&apos;, &apos;automation&apos;)" style="background-image:url(/web/images/error_16.png)" title="R
+  [21] id="832f77e0-20d4-4286-b86f-174e8783738c" | outerHTML(500): <div class="element automation" id="832f77e0-20d4-4286-b86f-174e8783738c"><span>02:02:42</span>&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;<span>Interseance 239</span><input type="hidden" id="kind_832f77e0-20d4-4286-b86f-174e8783738c" value="Start"><input type="hidden" id="offset_832f77e0-20d4-4286-b86f-174e8783738c" value="5"><button class="context" onclick="onClickRemove(&apos;832f77e0-20d4-4286-b86f-174e8783738c&apos;, &apos;automation&apos;)" style="background-image:url(/web/images/error_16.png)" title="R
+
+══════════════════════════════════════════════════════════════════════
+  7 · ALL <input> ELEMENTS
+══════════════════════════════════════════════════════════════════════
+  [0] name="duration" id="" type="hidden" value="45"
+  [1] name="editRate" id="" type="hidden" value="24 1"
+  [2] name="cpl_name" id="" type="hidden" value="Black"
+  [3] name="" id="kind_b803020d-7d85-4956-a74d-27d0c1280029" type="hidden" value="Start"
+  [4] name="" id="offset_b803020d-7d85-4956-a74d-27d0c1280029" type="hidden" value="1"
+  [5] name="" id="kind_dfb5bbe2-235c-425a-8ea4-8bcbc9aa2d80" type="hidden" value="Start"
+  [6] name="" id="offset_dfb5bbe2-235c-425a-8ea4-8bcbc9aa2d80" type="hidden" value="4"
+  [7] name="" id="kind_9b3eca06-ee4d-44da-81df-30ff20986028" type="hidden" value="Start"
+  [8] name="" id="offset_9b3eca06-ee4d-44da-81df-30ff20986028" type="hidden" value="15"
+  [9] name="" id="kind_5f077622-55a0-4dd3-9353-18c3fe081f3a" type="hidden" value="End"
+  [10] name="" id="offset_5f077622-55a0-4dd3-9353-18c3fe081f3a" type="hidden" value="6"
+  [11] name="" id="kind_4e366282-9885-4ef1-ad5f-4931aba1c86c" type="hidden" value="End"
+  [12] name="" id="offset_4e366282-9885-4ef1-ad5f-4931aba1c86c" type="hidden" value="5"
+  [13] name="" id="kind_6cea46da-bacb-483e-b271-d5bd2de2192d" type="hidden" value="End"
+  [14] name="" id="offset_6cea46da-bacb-483e-b271-d5bd2de2192d" type="hidden" value="4"
+  [15] name="" id="kind_d16674ee-1eeb-473c-bd88-bca1dd409862" type="hidden" value="End"
+  [16] name="" id="offset_d16674ee-1eeb-473c-bd88-bca1dd409862" type="hidden" value="3"
+  [17] name="" id="kind_e4160ccd-94cc-492d-88ed-02a8216d961c" type="hidden" value="End"
+  [18] name="" id="offset_e4160ccd-94cc-492d-88ed-02a8216d961c" type="hidden" value="2"
+  [19] name="duration" id="" type="hidden" value="20"
+  [20] name="editRate" id="" type="hidden" value="24 1"
+  [21] name="cpl" id="" type="hidden" value="82ccaa74-6ec4-405c-8327-bc2883dd5c46"
+  [22] name="cpl_name" id="" type="hidden" value="QRCODES-RS_PSA_F_XX-XX_XX_XX_2K_XX_20230420_CDM_OV"
+  [23] name="duration" id="" type="hidden" value="30"
+  [24] name="editRate" id="" type="hidden" value="24 1"
+  [25] name="cpl" id="" type="hidden" value="46b69862-e3cd-4238-b589-bf1cb30ff7fc"
+  [26] name="cpl_name" id="" type="hidden" value="Mediavision_ADV-30s_F_FR-XX_FR_51_2K_20210504_TSL_IOP_OV"
+  [27] name="duration" id="" type="hidden" value="30"
+  [28] name="editRate" id="" type="hidden" value="24 1"
+  [29] name="cpl" id="" type="hidden" value="156fa56b-9157-41fb-8a43-f253e157f8c9"
+  [30] name="cpl_name" id="" type="hidden" value="AmazonRomCom_ADV-1_F_FR-XX_FR_51_2K_20260121_CHR_IOP_OV"
+  [31] name="duration" id="" type="hidden" value="30.0833333333"
+  [32] name="editRate" id="" type="hidden" value="24 1"
+  [33] name="cpl" id="" type="hidden" value="2b7dddbb-0865-4839-a680-7f424cc158a5"
+  [34] name="cpl_name" id="" type="hidden" value="Polestar_ADV-MLR_F_FR-XX_FR_51_2K_20260128_DLX_IOP_OV"
+  [35] name="duration" id="" type="hidden" value="31.25"
+  [36] name="editRate" id="" type="hidden" value="24 1"
+  [37] name="cpl" id="" type="hidden" value="eec82379-e451-4c20-91ff-19ff8eb8e820"
+  [38] name="cpl_name" id="" type="hidden" value="GMFPrevention_ADV-32s_F_FR-fr_FR_51_2K_20250818_BAR_IOP_OV"
+  [39] name="duration" id="" type="hidden" value="38.0833333333"
+  [40] name="editRate" id="" type="hidden" value="24 1"
+  [41] name="cpl" id="" type="hidden" value="c162009f-4078-4479-ad42-5e35a447f4f2"
+  [42] name="cpl_name" id="" type="hidden" value="VolvoEveryCar_ADV_F_FR-XX_FR_51_2K_20260112_DLX_IOP_OV"
+  [43] name="duration" id="" type="hidden" value="5"
+  [44] name="editRate" id="" type="hidden" value="24 1"
+  [45] name="cpl" id="" type="hidden" value="84e8af62-9358-4d0a-8459-7f4a76dda8b9"
+  [46] name="cpl_name" id="" type="hidden" value="Mediavision_ADV-5s_F_FR-XX_FR_51_2K_20210528_TSL_IOP_OV"
+  [47] name="duration" id="" type="hidden" value="20.0833333333"
+  [48] name="editRate" id="" type="hidden" value="24 1"
+  [49] name="cpl" id="" type="hidden" value="e34e6fdf-0f18-49f8-bf40-2b5bede29df4"
+  [50] name="cpl_name" id="" type="hidden" value="AboFid_PSA-1_F_FR-XX_FR_20_2K_REX_20250322_SMPTE_OV"
+  [51] name="duration" id="" type="hidden" value="52.2916666667"
+  [52] name="editRate" id="" type="hidden" value="24 1"
+  [53] name="cpl" id="" type="hidden" value="d2c1e203-aa6f-45ea-a8e0-c1cd078a348f"
+  [54] name="cpl_name" id="" type="hidden" value="AucunAutreChoi_TLR_F_KO-fr_FR-NR_20_2K_NULL_20251219_NOI_IOP_OV"
+  [55] name="duration" id="" type="hidden" value="39.625"
+  [56] name="editRate" id="" type="hidden" value="24 1"
+  [57] name="cpl" id="" type="hidden" value="b5c5d2a8-ec21-4f38-9003-e576eaaa3f12"
+  [58] name="cpl_name" id="" type="hidden" value="FAWoolfWorks_TLR-NODATE_S-177_FR-XX_FR_51_2K_20251222_CGR_SMPTE_OV"
+  [59] name="duration" id="" type="hidden" value="86.3333333333"
+  [60] name="editRate" id="" type="hidden" value="24 1"
+  [61] name="cpl" id="" type="hidden" value="af4873b3-b680-438f-92ae-0b1e8cc2a600"
+  [62] name="cpl_name" id="" type="hidden" value="Apieddoeuvre_TLR-1_F-166_FR-XX_FR_51_4K_20251218_POL_IOP_OV"
+  [63] name="duration" id="" type="hidden" value="102.083333333"
+  [64] name="editRate" id="" type="hidden" value="24 1"
+  [65] name="cpl" id="" type="hidden" value="ba1069fd-cf75-4ea5-9fbc-fdcfda0648a7"
+  [66] name="cpl_name" id="" type="hidden" value="LOL2_TLR-Date_F_FR-XX_FR-NR_51_2K_NULL_20251230_NOI_IOP_OV"
+  [67] name="duration" id="" type="hidden" value="14.0416666667"
+  [68] name="editRate" id="" type="hidden" value="24 1"
+  [69] name="cpl" id="" type="hidden" value="013c9b87-1a3f-4de3-935b-8f8a4c922c8a"
+  [70] name="cpl_name" id="" type="hidden" value="Newsletter_PSA-1_F_FR-XX_FR_20_2K_REX_20250322_SMPTE_OV"
+  [71] name="duration" id="" type="hidden" value="15"
+  [72] name="editRate" id="" type="hidden" value="24 1"
+  [73] name="cpl" id="" type="hidden" value="c52c5e1c-e854-4542-9884-95c79671bbd0"
+  [74] name="cpl_name" id="" type="hidden" value="2526OPERABAL_PSA_F_XX-XX_XX_XX_2K_XX_20250822_CDM_OV"
+  [75] name="" id="kind_3547d91f-63fe-4583-8860-3761f2d3a56c" type="hidden" value="Start"
+  [76] name="" id="offset_3547d91f-63fe-4583-8860-3761f2d3a56c" type="hidden" value="1"
+  [77] name="" id="kind_0ac5e655-8197-4b01-96ed-191a64e11db3" type="hidden" value="Start"
+  [78] name="" id="offset_0ac5e655-8197-4b01-96ed-191a64e11db3" type="hidden" value="3"
+  [79] name="duration" id="" type="hidden" value="10"
+  [80] name="editRate" id="" type="hidden" value="24 1"
+  [81] name="cpl" id="" type="hidden" value="381261e2-0836-470a-920d-ecec740cabb7"
+  [82] name="cpl_name" id="" type="hidden" value="2805MIRABEL_PSA_F_XX-XX_XX_XX_2K_XX_20251210_CDM_OV"
+  [83] name="duration" id="" type="hidden" value="10"
+  [84] name="editRate" id="" type="hidden" value="24 1"
+  [85] name="cpl" id="" type="hidden" value="3fbdb44d-1bee-4f87-99f9-e34127e0a123"
+  [86] name="cpl_name" id="" type="hidden" value="3003CO-VENUE_PSA_F_XX-XX_XX_XX_2K_XX_20260212_CDM_OV"
+  [87] name="duration" id="" type="hidden" value="15"
+  [88] name="editRate" id="" type="hidden" value="24 1"
+  [89] name="cpl" id="" type="hidden" value="5c0abdbe-3ebd-4251-bde8-9935d67b20d1"
+  [90] name="cpl_name" id="" type="hidden" value="PDC2026_PSA_F_XX-XX_XX_XX_2K_XX_20260217_CDM_OV"
+  [91] name="duration" id="" type="hidden" value="10"
+  [92] name="editRate" id="" type="hidden" value="24 1"
+  [93] name="cpl" id="" type="hidden" value="0fdf9572-1bf1-4d95-aab8-625d9319f423"
+  [94] name="cpl_name" id="" type="hidden" value="1503NC-NOTTI_PSA_F_XX-XX_XX_XX_2K_XX_20260210_CDM_OV"
+  [95] name="duration" id="" type="hidden" value="10"
+  [96] name="editRate" id="" type="hidden" value="24 1"
+  [97] name="cpl" id="" type="hidden" value="7b3d6cd2-fd36-4a7c-b38f-f9154300cb28"
+  [98] name="cpl_name" id="" type="hidden" value="1503CP-PEUPL_PSA_F_XX-XX_XX_XX_2K_XX_20260210_CDM_OV"
+  [99] name="duration" id="" type="hidden" value="10"
+  [100] name="editRate" id="" type="hidden" value="24 1"
+  [101] name="cpl" id="" type="hidden" value="a28556db-e07d-4c08-85e1-f90495bf0592"
+  [102] name="cpl_name" id="" type="hidden" value="1303-ONVOUSC_PSA_F_XX-XX_XX_XX_2K_XX_20260219_CDM_OV"
+  [103] name="duration" id="" type="hidden" value="10"
+  [104] name="editRate" id="" type="hidden" value="24 1"
+  [105] name="cpl" id="" type="hidden" value="9d27f994-6347-4cf2-aa0a-590caefaff08"
+  [106] name="cpl_name" id="" type="hidden" value="0903BA-WOOLF_PSA_F_XX-XX_XX_XX_2K_XX_20260211_CDM_OV"
+  [107] name="duration" id="" type="hidden" value="10"
+  [108] name="editRate" id="" type="hidden" value="24 1"
+  [109] name="cpl" id="" type="hidden" value="6a619231-43fc-4ea3-9f00-d67dc7a5353f"
+  [110] name="cpl_name" id="" type="hidden" value="0303AVPSURPR_PSA_F_XX-XX_XX_XX_2K_XX_20260206_CDM_OV"
+  [111] name="duration" id="" type="hidden" value="10"
+  [112] name="editRate" id="" type="hidden" value="24 1"
+  [113] name="cpl" id="" type="hidden" value="84edb600-b45d-4f91-be7b-9069bc925fe1"
+  [114] name="cpl_name" id="" type="hidden" value="0203CO-QUAND_PSA_F_XX-XX_XX_XX_2K_XX_20260112_CDM_OV"
+  [115] name="duration" id="" type="hidden" value="10"
+  [116] name="editRate" id="" type="hidden" value="24 1"
+  [117] name="cpl" id="" type="hidden" value="bbd69b1c-a132-48a1-a160-c0ee4d730d8d"
+  [118] name="cpl_name" id="" type="hidden" value="0103AVP-JUMP_PSA_F_XX-XX_XX_XX_2K_XX_20260211_CDM_OV"
+  [119] name="" id="kind_98996aeb-f6e2-47fa-a247-e238e658b17b" type="hidden" value="End"
+  [120] name="" id="offset_98996aeb-f6e2-47fa-a247-e238e658b17b" type="hidden" value="1"
+  [121] name="" id="kind_9833a2a6-4790-4131-ad57-094a4cc0af57" type="hidden" value="End"
+  [122] name="" id="offset_9833a2a6-4790-4131-ad57-094a4cc0af57" type="hidden" value="3"
+  [123] name="duration" id="" type="hidden" value="19.72"
+  [124] name="editRate" id="" type="hidden" value="25 1"
+  [125] name="cpl" id="" type="hidden" value="6c744432-ef7b-473c-ba73-cd9f271d78a3"
+  [126] name="cpl_name" id="" type="hidden" value="AFCAECCS20sec_TLR_F_FR-XX_INT_51_2K_NULL_20220904_VP_IOP_OV"
+  [127] name="duration" id="" type="hidden" value="85.2916666667"
+  [128] name="editRate" id="" type="hidden" value="24 1"
+  [129] name="cpl" id="" type="hidden" value="38c1c710-0085-419e-8e90-8447599a3f45"
+  [130] name="cpl_name" id="" type="hidden" value="Printemps26-VL_TLR_F_FR-XX_FR_51_2K_FNCF_20260204_TST_SMPTE_OV"
+  [131] name="duration" id="" type="hidden" value="125.125"
+  [132] name="editRate" id="" type="hidden" value="24 1"
+  [133] name="cpl" id="" type="hidden" value="90663645-d25f-4ea7-836a-156f40420dea"
+  [134] name="cpl_name" id="" type="hidden" value="BoucleFevrier2_TSR-1_F_FR-XX_20_2K_20260120_SMPTE_OV"
+  [135] name="duration" id="" type="hidden" value="17.4583333333"
+  [136] name="editRate" id="" type="hidden" value="24 1"
+  [137] name="cpl" id="" type="hidden" value="89ae2925-ebd0-4e09-83e5-7abb66054ba7"
+  [138] name="cpl_name" id="" type="hidden" value="PromoLocDeSall_TSR-1_F_XX-XX_20_2K_20250218_SMPTE_OV"
+  [139] name="duration" id="" type="hidden" value="10"
+  [140] name="editRate" id="" type="hidden" value="24 1"
+  [141] name="cpl" id="" type="hidden" value="b246f253-8a57-472d-b517-2ea90b907464"
+  [142] name="cpl_name" id="" type="hidden" value="LABELFRI-FEV_PSA_F_XX-XX_XX_XX_2K_XX_20260122_CDM_OV"
+  [143] name="duration" id="" type="hidden" value="12.3333333333"
+  [144] name="editRate" id="" type="hidden" value="24 1"
+  [145] name="cpl" id="" type="hidden" value="8fa964b9-e71f-4a41-a240-365b65515746"
+  [146] name="cpl_name" id="" type="hidden" value="NOG-BIOCOOP_ADV-500964_C_FR-XX_FR_51_2K_20250519_CPX_IOP_OV"
+  [147] name="duration" id="" type="hidden" value="12.25"
+  [148] name="editRate" id="" type="hidden" value="24 1"
+  [149] name="cpl" id="" type="hidden" value="b44c8865-a711-4a4c-8efa-cc6749806864"
+  [150] name="cpl_name" id="" type="hidden" value="NOG-MAILLARD_ADV-500810_C_FR-XX_FR_51_2K_20251031_CPX_IOP_OV"
+  [151] name="duration" id="" type="hidden" value="16.3333333333"
+  [152] name="editRate" id="" type="hidden" value="24 1"
+  [153] name="cpl" id="" type="hidden" value="5345e34d-315b-4947-afd2-2d3712a4575a"
+  [154] name="cpl_name" id="" type="hidden" value="NOG-OPTIC2000_ADV-500631_C_FR-XX_FR_51_2K_20250124_CPX_IOP_OV"
+  [155] name="duration" id="" type="hidden" value="12.2083333333"
+  [156] name="editRate" id="" type="hidden" value="24 1"
+  [157] name="cpl" id="" type="hidden" value="18aebf56-b54d-494d-8053-10df50a5445c"
+  [158] name="cpl_name" id="" type="hidden" value="NOG-CENTRAKOR_ADV-500935_C_FR-XX_FR_51_2K_20250430_CPX_IOP_OV"
+  [159] name="duration" id="" type="hidden" value="12.2083333333"
+  [160] name="editRate" id="" type="hidden" value="24 1"
+  [161] name="cpl" id="" type="hidden" value="3a8a29d9-ea87-4f4e-ae6d-1572c33cf757"
+  [162] name="cpl_name" id="" type="hidden" value="NOG-ORPI_ADV-500968_C_FR-XX_FR_51_2K_20250522_CPX_IOP_OV"
+  [163] name="duration" id="" type="hidden" value="12.4583333333"
+  [164] name="editRate" id="" type="hidden" value="24 1"
+  [165] name="cpl" id="" type="hidden" value="f770eabc-d931-474d-9f77-195dc8bdca86"
+  [166] name="cpl_name" id="" type="hidden" value="NOG-ENTENDRE_ADV-500948_C_FR-XX_FR_20_2K_20250620_CPX_IOP_OV"
+  [167] name="duration" id="" type="hidden" value="12.25"
+  [168] name="editRate" id="" type="hidden" value="24 1"
+  [169] name="cpl" id="" type="hidden" value="13ef92fc-4549-4e40-a3d8-718e3caa0886"
+  [170] name="cpl_name" id="" type="hidden" value="NOG-ARRIVBAFIT_ADV-5501234_C_FR-XX_FR_51_2K_20251120_CPX_IOP_OV"
+  [171] name="duration" id="" type="hidden" value="12.2083333333"
+  [172] name="editRate" id="" type="hidden" value="24 1"
+  [173] name="cpl" id="" type="hidden" value="11ce0d2c-921a-4543-b3a4-4f4ac3c9f9bc"
+  [174] name="cpl_name" id="" type="hidden" value="PAYSAG-MAGILIN_ADV-500973_C_FR-XX_FR_51_2K_20250701_CPX_IOP_OV"
+  [175] name="duration" id="" type="hidden" value="12.2083333333"
+  [176] name="editRate" id="" type="hidden" value="24 1"
+  [177] name="cpl" id="" type="hidden" value="9914cdb1-ffe9-444c-a243-440dc4557ae4"
+  [178] name="cpl_name" id="" type="hidden" value="NOG-ENVIA_ADV-500965_C_FR-XX_FR_51_2K_20250829_CPX_IOP_OV"
+  [179] name="duration" id="" type="hidden" value="12.4583333333"
+  [180] name="editRate" id="" type="hidden" value="24 1"
+  [181] name="cpl" id="" type="hidden" value="5dcb289b-f725-454f-b9af-be7528b3336a"
+  [182] name="cpl_name" id="" type="hidden" value="NOG-NJNJO_ADV-500962_C_FR-XX_FR_51_2K_20250911_CPX_IOP_OV"
+  [183] name="duration" id="" type="hidden" value="18"
+  [184] name="editRate" id="" type="hidden" value="25 1"
+  [185] name="cpl" id="" type="hidden" value="587d5638-7a91-45b3-98e0-c190eda89a18"
+  [186] name="cpl_name" id="" type="hidden" value="LECLERC_ADV_F_XX-XX_XX_71_2K_XX_20241005_CDM_OV"
+  [187] name="duration" id="" type="hidden" value="31.88"
+  [188] name="editRate" id="" type="hidden" value="25 1"
+  [189] name="cpl" id="" type="hidden" value="c82103dc-f93a-4ff0-9d41-4caa28a61f1d"
+  [190] name="cpl_name" id="" type="hidden" value="PiConcept_PSA-1-25_F-178_XX-XX_20_4K_20230218_SMPTE_OV"
+  [191] name="duration" id="" type="hidden" value="12"
+  [192] name="editRate" id="" type="hidden" value="24 1"
+  [193] name="cpl" id="" type="hidden" value="6d67ca63-3012-4660-80b4-c5e0c9bbd30b"
+  [194] name="cpl_name" id="" type="hidden" value="Piratage_POL_F_FR-XX_FR_MOS_2K_FNCF_20230303_FNCF_SMPTE_OV"
+  [195] name="duration" id="" type="hidden" value="10"
+  [196] name="editRate" id="" type="hidden" value="24 1"
+  [197] name="cpl_name" id="" type="hidden" value="Black"
+  [198] name="" id="kind_68109067-b35e-41ae-8284-b4d1cb157d4e" type="hidden" value="Start"
+  [199] name="" id="offset_68109067-b35e-41ae-8284-b4d1cb157d4e" type="hidden" value="1"
+  [200] name="" id="kind_da45ad0d-331c-49b7-a94a-d10c9b39e883" type="hidden" value="End"
+  [201] name="" id="offset_da45ad0d-331c-49b7-a94a-d10c9b39e883" type="hidden" value="4"
+  [202] name="" id="kind_7e8b8319-14bd-48ec-a56f-ddcd6e7b01ff" type="hidden" value="End"
+  [203] name="" id="offset_7e8b8319-14bd-48ec-a56f-ddcd6e7b01ff" type="hidden" value="3"
+  [204] name="duration" id="" type="hidden" value="48.125"
+  [205] name="editRate" id="" type="hidden" value="24 1"
+  [206] name="cpl" id="" type="hidden" value="bf812ec3-a6d8-45dd-8afb-f0cb78c854e9"
+  [207] name="cpl_name" id="" type="hidden" value="LOGONOE_PSA_C_51_2K_20140925_OV"
+  [208] name="" id="kind_ebe0d76a-221f-4e19-88f0-eb6542d2a1b7" type="hidden" value="Start"
+  [209] name="" id="offset_ebe0d76a-221f-4e19-88f0-eb6542d2a1b7" type="hidden" value="5"
+  [210] name="duration" id="" type="hidden" value="6189.25"
+  [211] name="editRate" id="" type="hidden" value="24 1"
+  [212] name="cpl" id="" type="hidden" value="265db0b2-25f9-4973-acf6-e48fcb6750a0"
+  [213] name="cpl_name" id="" type="hidden" value="Coutures_FTR_F_FR-FR_FR_51_4K_PAT_20251014_IKE_SMPTE_OV"
+  [214] name="" id="kind_cd09066c-e5a7-4ba8-abd9-186826a81bed" type="hidden" value="End"
+  [215] name="" id="offset_cd09066c-e5a7-4ba8-abd9-186826a81bed" type="hidden" value="300"
+  [216] name="duration" id="" type="hidden" value="10"
+  [217] name="editRate" id="" type="hidden" value="24 1"
+  [218] name="cpl_name" id="" type="hidden" value="Black"
+  [219] name="" id="kind_5805ccd2-397e-4243-9a03-b0201431171e" type="hidden" value="Start"
+  [220] name="" id="offset_5805ccd2-397e-4243-9a03-b0201431171e" type="hidden" value="1"
+  [221] name="" id="kind_c9a4d329-a30e-438a-8a18-57afa1363308" type="hidden" value="Start"
+  [222] name="" id="offset_c9a4d329-a30e-438a-8a18-57afa1363308" type="hidden" value="2"
+  [223] name="" id="kind_8dc96b0d-9691-402c-869a-ef6d1b78c1ab" type="hidden" value="Start"
+  [224] name="" id="offset_8dc96b0d-9691-402c-869a-ef6d1b78c1ab" type="hidden" value="3"
+  [225] name="" id="kind_2c2e9f10-cc96-4ea8-9330-94c0f6eae873" type="hidden" value="Start"
+  [226] name="" id="offset_2c2e9f10-cc96-4ea8-9330-94c0f6eae873" type="hidden" value="4"
+  [227] name="" id="kind_832f77e0-20d4-4286-b86f-174e8783738c" type="hidden" value="Start"
+  [228] name="" id="offset_832f77e0-20d4-4286-b86f-174e8783738c" type="hidden" value="5"
+
+══════════════════════════════════════════════════════════════════════
+  8 · ALL data-* ATTRIBUTES
+══════════════════════════════════════════════════════════════════════
+  (none)
+
+══════════════════════════════════════════════════════════════════════
+  9 · SOAP showStatus (full)
+══════════════════════════════════════════════════════════════════════
+{
+  "splId": "urn:uuid:25b62137-d107-49ec-9994-c2a103d4c727",
+  "splTitle": "260218 COUTURES VOSTFR",
+  "stateInfo": "Play",
+  "splPosition": "4917",
+  "splDuration": "7360",
+  "cplId": "urn:uuid:265db0b2-25f9-4973-acf6-e48fcb6750a0",
+  "cplTitle": "Coutures_FTR_F_FR-FR_FR_51_4K_PAT_20251014_IKE_SMPTE_OV",
+  "eventId": "urn:uuid:779c4aa5-a446-4115-8108-d7993384697b",
+  "elementId": "urn:uuid:bc198895-8972-4bf2-8948-c5ee7ea8d4ac",
+  "elementPosition": "3756",
+  "elementDuration": "6189",
+  "editRate": {
+    "numerator": "24",
+    "denominator": "1"
+  },
+  "editPosition": "90167",
+  "editDuration": "148542",
+  "framesPerEdit": "1",
+  "kdmId": "urn:uuid:9c9fc75f-ca27-4614-b716-ef264a387505",
+  "recovery": "false",
+  "loadingStatus": {
+    "progress": "100",
+    "stage": "Cue pattern 'Black'",
+    "errorCode": "0"
+  }
+}
+
+══════════════════════════════════════════════════════════════════════
+  10 · SOAP FALLBACK TIMING CALCULATION
+══════════════════════════════════════════════════════════════════════
+  splPosition     : 4917s  (01:21:57)
+  elementPosition : 3756s  (01:02:36)
+  elementDuration : 6189s  (01:43:09)
+  → FTR start in SPL = nowSec - elementPosition = 1161s  (00:19:21)
+  → FTR end   in SPL = FTR start + elementDuration = 7350s
+
+══════════════════════════════════════════════════════════════════════
+  11 · RAW HTML — FIRST 3000 CHARS
+══════════════════════════════════════════════════════════════════════
+<div class="packDiv  old "><div class="element pack oldVersion" id="7ed50c08-ea00-4b48-9aca-be867fe29f56"><div class="externalPackDiv">Segment</div><span></span><span></span><button class="context" onclick="onClickRemove('7ed50c08-ea00-4b48-9aca-be867fe29f56', 'pack')" style="background-image:url(/web/images/error_16.png)" title="Remove"></button><button class="context" onclick="showItemProperties('7ed50c08-ea00-4b48-9aca-be867fe29f56', 'pack')" style="background-image:url(/web/images/zoom_16.png)" title="Properties"></button></div><div class="eventDiv " id="cf294e8d-d07a-461d-afd0-138a3093b9f8"><div class="element pattern" id="bc0658a6-6f1f-450e-b6e8-5a51e879d49c"><span class="ellipsis">00:00:00</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="ellipsis ellipsis300">Black</span><input type="hidden" name="duration" value="45" /><input type="hidden" name="editRate" value="24 1" /><input type="hidden" name="cpl_name" value="Black" /><button class="context" onclick="onClickRemove('cf294e8d-d07a-461d-afd0-138a3093b9f8', 'pattern')" style="background-image:url(/web/images/error_16.png)" title="Remove"></button><button class="context" onclick="showItemProperties('bc0658a6-6f1f-450e-b6e8-5a51e879d49c', 'pattern')" style="background-image:url(/web/images/zoom_16.png)" title="Properties"></button></div><div class="addOnDiv automDiv triggerDiv intermissionDiv " name="bc0658a6-6f1f-450e-b6e8-5a51e879d49c"><div class="element automation" id="b803020d-7d85-4956-a74d-27d0c1280029"><span>00:00:01</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span>volet fermeture</span><input type="hidden" id="kind_b803020d-7d85-4956-a74d-27d0c1280029" value="Start" /><input type="hidden" id="offset_b803020d-7d85-4956-a74d-27d0c1280029" value="1" /><button class="context" onclick="onClickRemove('b803020d-7d85-4956-a74d-27d0c1280029', 'automation')" style="background-image:url(/web/images/error_16.png)" title="Remove"></button><button class="context" onclick="showItemProperties('b803020d-7d85-4956-a74d-27d0c1280029', 'automation')" style="background-image:url(/web/images/zoom_16.png)" title="Properties"></button></div><div class="element automation" id="dfb5bbe2-235c-425a-8ea4-8bcbc9aa2d80"><span>00:00:04</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span>FLAT</span><input type="hidden" id="kind_dfb5bbe2-235c-425a-8ea4-8bcbc9aa2d80" value="Start" /><input type="hidden" id="offset_dfb5bbe2-235c-425a-8ea4-8bcbc9aa2d80" value="4" /><button class="context" onclick="onClickRemove('dfb5bbe2-235c-425a-8ea4-8bcbc9aa2d80', 'automation')" style="background-image:url(/web/images/error_16.png)" title="Remove"></button><button class="context" onclick="showItemProperties('dfb5bbe2-235c-425a-8ea4-8bcbc9aa2d80', 'automation')" style="background-image:url(/web/images/zoom_16.png)" title="Properties"></button></div><div class="element automation" id="9b3eca06-ee4d-44da-81df-30ff20986028"><span>00:00:15</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span>lamp on</span><input type="hidden" id="kind_9b3eca06-ee4d-44da-81df-30ff2
+
+══════════════════════════════════════════════════════════════════════
+  12 · RAW HTML — LAST 1500 CHARS
+══════════════════════════════════════════════════════════════════════
+')" style="background-image:url(/web/images/zoom_16.png)" title="Properties"></button></div><div class="element automation" id="2c2e9f10-cc96-4ea8-9330-94c0f6eae873"><span>02:02:41</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span>volet ouverture</span><input type="hidden" id="kind_2c2e9f10-cc96-4ea8-9330-94c0f6eae873" value="Start" /><input type="hidden" id="offset_2c2e9f10-cc96-4ea8-9330-94c0f6eae873" value="4" /><button class="context" onclick="onClickRemove('2c2e9f10-cc96-4ea8-9330-94c0f6eae873', 'automation')" style="background-image:url(/web/images/error_16.png)" title="Remove"></button><button class="context" onclick="showItemProperties('2c2e9f10-cc96-4ea8-9330-94c0f6eae873', 'automation')" style="background-image:url(/web/images/zoom_16.png)" title="Properties"></button></div><div class="element automation" id="832f77e0-20d4-4286-b86f-174e8783738c"><span>02:02:42</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span>Interseance 239</span><input type="hidden" id="kind_832f77e0-20d4-4286-b86f-174e8783738c" value="Start" /><input type="hidden" id="offset_832f77e0-20d4-4286-b86f-174e8783738c" value="5" /><button class="context" onclick="onClickRemove('832f77e0-20d4-4286-b86f-174e8783738c', 'automation')" style="background-image:url(/web/images/error_16.png)" title="Remove"></button><button class="context" onclick="showItemProperties('832f77e0-20d4-4286-b86f-174e8783738c', 'automation')" style="background-image:url(/web/images/zoom_16.png)" title="Properties"></button></div></div></div></div>
+
+══════════════════════════════════════════════════════════════════════
+  END OF DIAGNOSTICS
+══════════════════════════════════════════════════════════════════════
+
+══════════════════════════════════════════════════════════════════════
+  PARSED ITEMS (all eventDivs)
+══════════════════════════════════════════════════════════════════════
+  [ 0] t=00:00:00  classes="element pattern"  cplName="Black"  dur=45  automations=8
+         AUTO: t=00:00:01  "volet fermeture"  kind="Start"  offset="1"
+         AUTO: t=00:00:04  "FLAT"  kind="Start"  offset="4"
+         AUTO: t=00:00:15  "lamp on"  kind="Start"  offset="15"
+         AUTO: t=00:00:39  "son format NUMERIQUE"  kind="End"  offset="6"
+         AUTO: t=00:00:40  "son volume 3.5"  kind="End"  offset="5"
+         AUTO: t=00:00:41  "proj extinction"  kind="End"  offset="4"
+         AUTO: t=00:00:42  "rail soir"  kind="End"  offset="3"
+         AUTO: t=00:00:43  "volet ouverture"  kind="End"  offset="2"
+  [ 1] t=00:00:45  classes="element psa cpl"  cplName="QRCODES-RS_PSA_F_XX-XX_XX_XX_2K_XX_20230420_CDM_OV"  dur=20  automations=0
+  [ 2] t=00:01:05  classes="element advertisement cpl"  cplName="Mediavision_ADV-30s_F_FR-XX_FR_51_2K_20210504_TSL_IOP_OV"  dur=30  automations=0
+  [ 3] t=00:01:35  classes="element advertisement cpl"  cplName="AmazonRomCom_ADV-1_F_FR-XX_FR_51_2K_20260121_CHR_IOP_OV"  dur=30  automations=0
+  [ 4] t=00:02:05  classes="element advertisement cpl"  cplName="Polestar_ADV-MLR_F_FR-XX_FR_51_2K_20260128_DLX_IOP_OV"  dur=30.0833333333  automations=0
+  [ 5] t=00:02:35  classes="element advertisement cpl"  cplName="GMFPrevention_ADV-32s_F_FR-fr_FR_51_2K_20250818_BAR_IOP_OV"  dur=31.25  automations=0
+  [ 6] t=00:03:06  classes="element advertisement cpl"  cplName="VolvoEveryCar_ADV_F_FR-XX_FR_51_2K_20260112_DLX_IOP_OV"  dur=38.0833333333  automations=0
+  [ 7] t=00:03:44  classes="element advertisement cpl"  cplName="Mediavision_ADV-5s_F_FR-XX_FR_51_2K_20210528_TSL_IOP_OV"  dur=5  automations=0
+  [ 8] t=00:03:49  classes="element psa cpl"  cplName="AboFid_PSA-1_F_FR-XX_FR_20_2K_REX_20250322_SMPTE_OV"  dur=20.0833333333  automations=0
+  [ 9] t=00:04:09  classes="element trailer cpl"  cplName="AucunAutreChoi_TLR_F_KO-fr_FR-NR_20_2K_NULL_20251219_NOI_IOP_OV"  dur=52.2916666667  automations=0
+  [10] t=00:05:01  classes="element trailer cpl"  cplName="FAWoolfWorks_TLR-NODATE_S-177_FR-XX_FR_51_2K_20251222_CGR_SMPTE_OV"  dur=39.625  automations=0
+  [11] t=00:05:41  classes="element trailer cpl"  cplName="Apieddoeuvre_TLR-1_F-166_FR-XX_FR_51_4K_20251218_POL_IOP_OV"  dur=86.3333333333  automations=0
+  [12] t=00:07:07  classes="element trailer cpl"  cplName="LOL2_TLR-Date_F_FR-XX_FR-NR_51_2K_NULL_20251230_NOI_IOP_OV"  dur=102.083333333  automations=0
+  [13] t=00:08:49  classes="element psa cpl"  cplName="Newsletter_PSA-1_F_FR-XX_FR_20_2K_REX_20250322_SMPTE_OV"  dur=14.0416666667  automations=0
+  [14] t=00:09:03  classes="element psa cpl"  cplName="2526OPERABAL_PSA_F_XX-XX_XX_XX_2K_XX_20250822_CDM_OV"  dur=15  automations=2
+         AUTO: t=00:09:04  "son format NON SYNC"  kind="Start"  offset="1"
+         AUTO: t=00:09:06  "son volume 3.5"  kind="Start"  offset="3"
+  [15] t=00:09:18  classes="element psa cpl"  cplName="2805MIRABEL_PSA_F_XX-XX_XX_XX_2K_XX_20251210_CDM_OV"  dur=10  automations=0
+  [16] t=00:09:28  classes="element psa cpl"  cplName="3003CO-VENUE_PSA_F_XX-XX_XX_XX_2K_XX_20260212_CDM_OV"  dur=10  automations=0
+  [17] t=00:09:38  classes="element psa cpl"  cplName="PDC2026_PSA_F_XX-XX_XX_XX_2K_XX_20260217_CDM_OV"  dur=15  automations=0
+  [18] t=00:09:53  classes="element psa cpl"  cplName="1503NC-NOTTI_PSA_F_XX-XX_XX_XX_2K_XX_20260210_CDM_OV"  dur=10  automations=0
+  [19] t=00:10:03  classes="element psa cpl"  cplName="1503CP-PEUPL_PSA_F_XX-XX_XX_XX_2K_XX_20260210_CDM_OV"  dur=10  automations=0
+  [20] t=00:10:13  classes="element psa cpl"  cplName="1303-ONVOUSC_PSA_F_XX-XX_XX_XX_2K_XX_20260219_CDM_OV"  dur=10  automations=0
+  [21] t=00:10:23  classes="element psa cpl"  cplName="0903BA-WOOLF_PSA_F_XX-XX_XX_XX_2K_XX_20260211_CDM_OV"  dur=10  automations=0
+  [22] t=00:10:33  classes="element psa cpl"  cplName="0303AVPSURPR_PSA_F_XX-XX_XX_XX_2K_XX_20260206_CDM_OV"  dur=10  automations=0
+  [23] t=00:10:43  classes="element psa cpl"  cplName="0203CO-QUAND_PSA_F_XX-XX_XX_XX_2K_XX_20260112_CDM_OV"  dur=10  automations=0
+  [24] t=00:10:53  classes="element psa cpl"  cplName="0103AVP-JUMP_PSA_F_XX-XX_XX_XX_2K_XX_20260211_CDM_OV"  dur=10  automations=2
+         AUTO: t=00:11:02  "son volume 3.5"  kind="End"  offset="1"
+         AUTO: t=00:11:00  "son format NUMERIQUE"  kind="End"  offset="3"
+  [25] t=00:11:03  classes="element trailer cpl"  cplName="AFCAECCS20sec_TLR_F_FR-XX_INT_51_2K_NULL_20220904_VP_IOP_OV"  dur=19.72  automations=0
+  [26] t=00:11:23  classes="element trailer cpl"  cplName="Printemps26-VL_TLR_F_FR-XX_FR_51_2K_FNCF_20260204_TST_SMPTE_OV"  dur=85.2916666667  automations=0
+  [27] t=00:12:48  classes="element teaser cpl"  cplName="BoucleFevrier2_TSR-1_F_FR-XX_20_2K_20260120_SMPTE_OV"  dur=125.125  automations=0
+  [28] t=00:14:54  classes="element teaser cpl"  cplName="PromoLocDeSall_TSR-1_F_XX-XX_20_2K_20250218_SMPTE_OV"  dur=17.4583333333  automations=0
+  [29] t=00:15:11  classes="element psa cpl"  cplName="LABELFRI-FEV_PSA_F_XX-XX_XX_XX_2K_XX_20260122_CDM_OV"  dur=10  automations=0
+  [30] t=00:15:21  classes="element advertisement cpl"  cplName="NOG-BIOCOOP_ADV-500964_C_FR-XX_FR_51_2K_20250519_CPX_IOP_OV"  dur=12.3333333333  automations=0
+  [31] t=00:15:33  classes="element advertisement cpl"  cplName="NOG-MAILLARD_ADV-500810_C_FR-XX_FR_51_2K_20251031_CPX_IOP_OV"  dur=12.25  automations=0
+  [32] t=00:15:46  classes="element advertisement cpl"  cplName="NOG-OPTIC2000_ADV-500631_C_FR-XX_FR_51_2K_20250124_CPX_IOP_OV"  dur=16.3333333333  automations=0
+  [33] t=00:16:02  classes="element advertisement cpl"  cplName="NOG-CENTRAKOR_ADV-500935_C_FR-XX_FR_51_2K_20250430_CPX_IOP_OV"  dur=12.2083333333  automations=0
+  [34] t=00:16:14  classes="element advertisement cpl"  cplName="NOG-ORPI_ADV-500968_C_FR-XX_FR_51_2K_20250522_CPX_IOP_OV"  dur=12.2083333333  automations=0
+  [35] t=00:16:26  classes="element advertisement cpl"  cplName="NOG-ENTENDRE_ADV-500948_C_FR-XX_FR_20_2K_20250620_CPX_IOP_OV"  dur=12.4583333333  automations=0
+  [36] t=00:16:39  classes="element advertisement cpl"  cplName="NOG-ARRIVBAFIT_ADV-5501234_C_FR-XX_FR_51_2K_20251120_CPX_IOP_OV"  dur=12.25  automations=0
+  [37] t=00:16:51  classes="element advertisement cpl"  cplName="PAYSAG-MAGILIN_ADV-500973_C_FR-XX_FR_51_2K_20250701_CPX_IOP_OV"  dur=12.2083333333  automations=0
+  [38] t=00:17:03  classes="element advertisement cpl"  cplName="NOG-ENVIA_ADV-500965_C_FR-XX_FR_51_2K_20250829_CPX_IOP_OV"  dur=12.2083333333  automations=0
+  [39] t=00:17:15  classes="element advertisement cpl"  cplName="NOG-NJNJO_ADV-500962_C_FR-XX_FR_51_2K_20250911_CPX_IOP_OV"  dur=12.4583333333  automations=0
+  [40] t=00:17:28  classes="element advertisement cpl"  cplName="LECLERC_ADV_F_XX-XX_XX_71_2K_XX_20241005_CDM_OV"  dur=18  automations=0
+  [41] t=00:17:46  classes="element psa cpl"  cplName="PiConcept_PSA-1-25_F-178_XX-XX_20_4K_20230218_SMPTE_OV"  dur=31.88  automations=0
+  [42] t=00:18:18  classes="element policy cpl"  cplName="Piratage_POL_F_FR-XX_FR_MOS_2K_FNCF_20230303_FNCF_SMPTE_OV"  dur=12  automations=0
+  [43] t=00:18:30  classes="element pattern"  cplName="Black"  dur=10  automations=3
+         AUTO: t=00:18:31  "volet fermeture"  kind="Start"  offset="1"
+         AUTO: t=00:18:36  "son volume 4.5"  kind="End"  offset="4"
+         AUTO: t=00:18:37  "volet ouverture"  kind="End"  offset="3"
+  [44] t=00:18:40  classes="element psa cpl"  cplName="LOGONOE_PSA_C_51_2K_20140925_OV"  dur=48.125  automations=1
+         AUTO: t=00:18:45  "rail extinction"  kind="Start"  offset="5"
+  [45] t=00:19:28  classes="element feature cpl"  cplName="Coutures_FTR_F_FR-FR_FR_51_4K_PAT_20251014_IKE_SMPTE_OV"  dur=6189.25  automations=1
+         AUTO: t=01:57:37  "rail soir"  kind="End"  offset="300"
+  [46] t=02:02:37  classes="element pattern"  cplName="Black"  dur=10  automations=5
+         AUTO: t=02:02:38  "rail allumage"  kind="Start"  offset="1"
+         AUTO: t=02:02:39  "son format NON SYNC"  kind="Start"  offset="2"
+         AUTO: t=02:02:40  "son volume 2.5"  kind="Start"  offset="3"
+         AUTO: t=02:02:41  "volet ouverture"  kind="Start"  offset="4"
+         AUTO: t=02:02:42  "Interseance 239"  kind="Start"  offset="5"
+[INFO]  Parsed 47 eventDiv items
+
+══════════════════════════════════════════════════════════════════════
+  SHR/FTR CANDIDATES
+══════════════════════════════════════════════════════════════════════
+  [0] t=00:19:28 classes="element feature cpl" "Coutures_FTR_F_FR-FR_FR_51_4K_PAT_20251014_IKE_SMPTE_OV"
+  → vs now: 01:02:29 (3749s) elapsed since
+  → vs now: 01:02:29 (3749s) elapsed since
+  → vs now: 00:35:40 (2140s) until
