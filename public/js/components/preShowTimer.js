@@ -1,12 +1,15 @@
 // public/js/components/preShowTimer.js
+// Renders a single purple pre-show countdown badge inside .preshow-timer-slot.
+// The slot div is owned/managed by the caller (PlaybackTimeline).
+// This component only touches its own innerHTML and the .hidden class on the slot.
 
 class PreShowTimer {
   /**
    * @param {Element} slotEl  – a pre-existing empty container inside .timeline-info
    */
   constructor(slotEl) {
-    this.slot     = slotEl;
-    this.active   = false;
+    this.slot   = slotEl;
+    this.active = false;
   }
 
   /**

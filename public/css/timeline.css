@@ -138,6 +138,20 @@
     display: flex;
     gap: 0.5rem;
     flex-shrink: 0;
+    align-items: stretch;
+}
+
+/* ── Preshow timer slot ─────────────────────────────────────────────
+   The slot is a zero-size flex child when hidden so it takes no space.
+   When active (slot does not carry .hidden), it appears as a full
+   purple badge to the LEFT of the Écoulé and Restant timers.
+   The two existing timers each get flex:1 so they share remaining space.
+   ────────────────────────────────────────────────────────────────── */
+.preshow-timer-slot {
+    display: contents; /* transparent wrapper — the inner .time-item drives layout */
+}
+.preshow-timer-slot.hidden {
+    display: none;
 }
 
 .time-item {
@@ -154,30 +168,36 @@
     border: 3px solid transparent;
 }
 
-/* Écoulé : couleur qui matche la timeline */
-.time-item:nth-child(1) {
+/* ── Écoulé : class-based (was nth-child(1)) ────────────────────── */
+.time-elapsed-item {
     border-color: #00e676;
 }
 
-.playback-timeline.playing .time-item:nth-child(1) {
+.playback-timeline.playing .time-elapsed-item {
     border-color: #00e676;
 }
 
-.playback-timeline.playing.feature .time-item:nth-child(1) {
+.playback-timeline.playing.feature .time-elapsed-item {
     border-color: #2196f3;
 }
 
-.playback-timeline.paused .time-item:nth-child(1) {
+.playback-timeline.paused .time-elapsed-item {
     border-color: #ff9100;
 }
 
-.playback-timeline.stopped .time-item:nth-child(1) {
+.playback-timeline.stopped .time-elapsed-item {
     border-color: #ff1744;
 }
 
-/* Restant : toujours orange */
-.time-item:nth-child(2) {
+/* ── Restant : always orange (was nth-child(2)) ─────────────────── */
+.time-remaining-item {
     border-color: #ff9100;
+}
+
+/* ── Preshow timer badge : purple ───────────────────────────────── */
+.time-item.preshow-timer {
+    border-color: #9c27b0;
+    flex-shrink: 0; /* don't shrink — let the other two share remaining space */
 }
 
 [data-theme="light"] .time-item {
@@ -205,49 +225,83 @@
     flex-shrink: 0;
 }
 
-/* Couleur des valeurs selon le timer et l'état */
-.time-item:nth-child(1) .time-value {
+/* ── Écoulé value colour (was nth-child(1) .time-value) ─────────── */
+.time-elapsed-item .time-value {
     color: #00e676;
 }
 
-.playback-timeline.playing .time-item:nth-child(1) .time-value {
+.playback-timeline.playing .time-elapsed-item .time-value {
     color: #00e676;
 }
 
-.playback-timeline.playing.feature .time-item:nth-child(1) .time-value {
+.playback-timeline.playing.feature .time-elapsed-item .time-value {
     color: #2196f3;
 }
 
-.playback-timeline.paused .time-item:nth-child(1) .time-value {
+.playback-timeline.paused .time-elapsed-item .time-value {
     color: #ff9100;
 }
 
-.playback-timeline.stopped .time-item:nth-child(1) .time-value {
+.playback-timeline.stopped .time-elapsed-item .time-value {
     color: #ff1744;
 }
 
-.time-item:nth-child(2) .time-value {
+/* ── Restant value colour (was nth-child(2) .time-value) ────────── */
+.time-remaining-item .time-value {
     color: #ff9100;
 }
 
-[data-theme="light"] .time-item:nth-child(1) .time-value {
+/* ── Preshow value colour : purple ──────────────────────────────── */
+.time-item.preshow-timer .time-value,
+.time-item.preshow-timer .preshow-value {
+    color: #ce93d8;
+}
+
+.time-item.preshow-timer .preshow-label {
+    color: var(--color-text);
+    opacity: 0.9;
+}
+
+.preshow-target {
+    font-size: 0.75rem;
+    color: #ce93d8;
+    opacity: 0.8;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+/* ── Light theme overrides ───────────────────────────────────────── */
+[data-theme="light"] .time-elapsed-item .time-value {
     color: #00c853;
 }
 
-[data-theme="light"] .playback-timeline.playing.feature .time-item:nth-child(1) .time-value {
+[data-theme="light"] .playback-timeline.playing.feature .time-elapsed-item .time-value {
     color: #1976d2;
 }
 
-[data-theme="light"] .playback-timeline.paused .time-item:nth-child(1) .time-value {
+[data-theme="light"] .playback-timeline.paused .time-elapsed-item .time-value {
     color: #ff6d00;
 }
 
-[data-theme="light"] .playback-timeline.stopped .time-item:nth-child(1) .time-value {
+[data-theme="light"] .playback-timeline.stopped .time-elapsed-item .time-value {
     color: #d50000;
 }
 
-[data-theme="light"] .time-item:nth-child(2) .time-value {
+[data-theme="light"] .time-remaining-item .time-value {
     color: #ff6d00;
+}
+
+[data-theme="light"] .time-item.preshow-timer {
+    border-color: #7b1fa2;
+}
+
+[data-theme="light"] .time-item.preshow-timer .time-value,
+[data-theme="light"] .time-item.preshow-timer .preshow-value {
+    color: #6a1b9a;
+}
+
+[data-theme="light"] .preshow-target {
+    color: #6a1b9a;
 }
 
 /* =========================================
@@ -323,6 +377,14 @@
     flex-direction: column;
 }
 
+/* Keep the preshow timer box style visible in detail view */
+.theater-detail .time-item.preshow-timer {
+    background: rgba(156, 39, 176, 0.1);
+    border: 2px solid #9c27b0 !important;
+    padding: 0.4rem 0.75rem;
+    border-radius: 4px;
+}
+
 .theater-detail .time-label {
     font-size: 0.75rem;
     opacity: 0.8;
@@ -333,11 +395,11 @@
 }
 
 /* Color the text directly without boxes */
-.theater-detail .time-item:nth-child(1) .time-label {
+.theater-detail .time-elapsed-item .time-label {
     color: var(--color-text-dim);
 }
 
-.theater-detail .time-item:nth-child(2) .time-label {
+.theater-detail .time-remaining-item .time-label {
     color: var(--color-text-dim);
 }
 

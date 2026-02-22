@@ -7,6 +7,7 @@ class PlaybackTimeline {
         this.compact      = compact;
         this.updateInterval = null;
         this.isDestroyed  = false;
+        this.preShowTimer = null;
 
         // Stored wall-clock start of the upcoming show (Date), used for live countdown
         this._nextShowStart = null;
@@ -45,11 +46,12 @@ class PlaybackTimeline {
                     <div class="timeline-end-time">--:--</div>
                 </div>
                 <div class="timeline-info">
-                    <div class="time-item">
+                    <div class="preshow-timer-slot hidden"></div>
+                    <div class="time-item time-elapsed-item">
                         <span class="time-label">Écoulé</span>
                         <span class="time-value time-current">--:--</span>
                     </div>
-                    <div class="time-item">
+                    <div class="time-item time-remaining-item">
                         <span class="time-label">Restant</span>
                         <span class="time-value time-remaining">--:--</span>
                     </div>
@@ -59,16 +61,33 @@ class PlaybackTimeline {
                 </div>
             </div>
         `;
+
+        // Wire up the PreShowTimer component to its slot
+        const slot = this.container.querySelector('.preshow-timer-slot');
+        this.preShowTimer = new PreShowTimer(slot);
     }
 
     async update() {
         if (this.isDestroyed) return;
         try {
-            const response = await api.getPlayback(this.theaterName);
-            if (response.success && response.playback) {
-                this.updateUI(response.playback);
+            // Fire both requests in parallel; timers endpoint is best-effort
+            const [playbackResp, timerResp] = await Promise.allSettled([
+                api.getPlayback(this.theaterName),
+                api.getTimers(this.theaterName),
+            ]);
+
+            if (playbackResp.status === 'fulfilled' && playbackResp.value.success && playbackResp.value.playback) {
+                this.updateUI(playbackResp.value.playback);
             } else {
                 this.showError('Aucune donnée');
+            }
+
+            // Update preshow timer — silently swallow any error
+            if (this.preShowTimer) {
+                const timer = (timerResp.status === 'fulfilled' && timerResp.value && timerResp.value.success)
+                    ? timerResp.value.timer
+                    : null;
+                this.preShowTimer.update(timer);
             }
         } catch (error) {
             this.showError('Erreur');
@@ -133,7 +152,7 @@ class PlaybackTimeline {
             const countdown      = this._fmtCountdown(secsUntil);
 
             splTitle.innerHTML =
-                `<span class="a-suivre-label">À SUIVRE :</span> ` +
+                `<span class="a-suivre-label">À SUIVRE :</span> ` +
                 `<em class="a-suivre-title">${formattedTitle}</em>` +
                 `<span class="a-suivre-sep"> ——— Dans ${countdown}s</span>`;
             splTitle.title = `À SUIVRE : ${formattedTitle} — Dans ${countdown}s`;

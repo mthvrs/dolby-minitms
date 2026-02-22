@@ -1,3 +1,4 @@
+// public/js/components/multiviewOverlay.js
 class MultiviewOverlay {
     constructor(container, theaterName, theaterNumber, showClock = false, logger = null) {
         this.container     = container;
@@ -55,6 +56,10 @@ class MultiviewOverlay {
                 <div class="progress-fill-mini"></div>
             </div>
             <div class="timeline-times">
+                <div class="time-group preshow-group" style="display:none;">
+                    <div class="time-label preshow-cam-label">--</div>
+                    <div class="time-value preshow-cam-value">--:--</div>
+                </div>
                 <div class="time-group">
                     <div class="time-label">Écoulé</div>
                     <div class="time-value time-elapsed">--:--</div>
@@ -74,16 +79,55 @@ class MultiviewOverlay {
 
     async update() {
         try {
-            const response = await api.getPlayback(this.theaterName);
-            if (response.success && response.playback) {
-                this.updateUI(response.playback);
+            // Fire both requests in parallel; timers are best-effort
+            const [playbackResp, timerResp] = await Promise.allSettled([
+                api.getPlayback(this.theaterName),
+                api.getTimers(this.theaterName),
+            ]);
+
+            if (playbackResp.status === 'fulfilled' && playbackResp.value.success && playbackResp.value.playback) {
+                this.updateUI(playbackResp.value.playback);
             } else {
                 this.showError();
             }
+
+            // Update preshow timer group — silently swallow errors
+            const timer = (timerResp.status === 'fulfilled' && timerResp.value && timerResp.value.success)
+                ? timerResp.value.timer
+                : null;
+            this._updatePreshowTimer(timer);
+
         } catch (error) {
             if (this.logger) this.logger.log(`Playback update error for ${this.theaterName}: ${error.message}`);
             this.showError();
         }
+    }
+
+    _updatePreshowTimer(timer) {
+        const overlay = this.container.querySelector('.timeline-overlay');
+        if (!overlay) return;
+        const group = overlay.querySelector('.preshow-group');
+        if (!group) return;
+
+        if (!timer) {
+            group.style.display = 'none';
+            return;
+        }
+
+        const labelEl = group.querySelector('.preshow-cam-label');
+        const valueEl = group.querySelector('.preshow-cam-value');
+
+        const s  = Math.max(0, Math.round(timer.secondsRemaining));
+        const h  = Math.floor(s / 3600);
+        const m  = Math.floor((s % 3600) / 60);
+        const ss = s % 60;
+        const formatted = h > 0
+            ? `${h}:${String(m).padStart(2,'0')}:${String(ss).padStart(2,'0')}`
+            : `${m}:${String(ss).padStart(2,'0')}`;
+
+        labelEl.textContent = timer.label;   // "Film dans" or "Rails dans"
+        valueEl.textContent = formatted;
+        group.style.display = 'flex';
     }
 
     updateUI(playback) {
@@ -140,7 +184,7 @@ class MultiviewOverlay {
             const countdown      = this._fmtCountdown(secsUntil);
 
             title.innerHTML =
-                `<span class="a-suivre-label">À SUIVRE :</span> ` +
+                `<span class="a-suivre-label">À SUIVRE :</span> ` +
                 `<em class="a-suivre-title">${formattedTitle}</em>` +
                 `<span class="a-suivre-sep"> ——— Dans ${countdown}s</span>`;
             title.title = `À SUIVRE : ${formattedTitle} — Dans ${countdown}s`;
