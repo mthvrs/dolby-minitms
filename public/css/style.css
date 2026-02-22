@@ -857,7 +857,7 @@ button { font-family: inherit; }
 }
 
 
-/* ── Pre-show countdown timer ─────────────────────────────────────────── */
+/* ── Pre-show countdown timer ─────────────────────────────────────── */
 
 .preshow-timer-slot {
   display: contents; /* invisible wrapper — takes no layout space when empty */
@@ -910,4 +910,48 @@ button { font-family: inherit; }
 
 [data-theme="dark"] .time-item.preshow-timer {
   background: rgba(160, 80, 220, 0.18);
+}
+
+
+/* ── À SUIVRE — upcoming show title displayed when stopped ─────────────── */
+
+/*
+  Used by both .spl-title (PlaybackTimeline) and .show-title (MultiviewOverlay)
+  when a theater is stopped but has a show starting within the next 5 hours.
+
+  Rendered HTML structure:
+    <span class="a-suivre-label">À SUIVRE :</span>
+    <em class="a-suivre-title">TITRE DU FILM</em>
+    <span class="a-suivre-sep"> ——— Dans HH:MM:SSs</span>
+*/
+
+.a-suivre-label {
+  font-style:    normal;
+  font-weight:   800;
+  color:         var(--color-warning);   /* amber — echoes existing warning tone */
+  letter-spacing: 0.04em;
+  margin-right:  0.25em;
+  white-space:   nowrap;
+}
+
+.a-suivre-title {
+  font-style:  italic;
+  font-weight: 600;
+  color:       var(--color-text);        /* full-brightness title */
+  overflow:    hidden;
+  text-overflow: ellipsis;
+}
+
+.a-suivre-sep {
+  font-style:  normal;
+  font-weight: 500;
+  color:       var(--color-text-dim);    /* muted countdown */
+  font-variant-numeric: tabular-nums;    /* prevent jitter as digits change */
+  white-space: nowrap;
+  margin-left: 0.2em;
+}
+
+/* Light theme: tweak amber brightness for readability on white bg */
+[data-theme="light"] .a-suivre-label {
+  color: var(--color-warning);           /* already re-mapped to deeper orange */
 }
