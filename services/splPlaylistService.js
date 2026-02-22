@@ -45,21 +45,38 @@ function parseAllCplRowsAndAutomations(html) {
   const $ = cheerio.load(html, { decodeEntities: true });
   const items = [];
 
-  $('div.row.m-0.element').each((_, el) => {
+  // FIXED: Relaxed selector from 'div.row.m-0.element' to 'div.element'
+  // to support both IMS (with Bootstrap-like classes) and DCP (plain classes).
+  $('div.element').each((_, el) => {
     const $row   = $(el);
     const classes = rowClasses($row);
     const low    = classes.map(c => c.toLowerCase());
+
+    // Skip nested automations or irrelevant elements if caught here
     if (low.includes('automation')) return;
 
+    // Check for essential fields
     const hasTime  = $row.find('span.editor-time,  span[class*="editor-time"]').length  > 0;
     const hasTitle = $row.find('span.editor-title, span[class*="editor-title"]').length > 0;
-    if (!hasTime || !hasTitle) return;
+
+    // Fallback logic for DCP dump where editor-time classes are missing
+    let timeText = bestText($row, 'span.editor-time,  span[class*="editor-time"]');
+    let title    = bestText($row, 'span.editor-title, span[class*="editor-title"]');
+
+    if (!hasTime && !timeText) {
+        const spans = $row.find('span.ellipsis');
+        if (spans.length >= 1) timeText = $(spans[0]).text().trim();
+    }
+    if (!hasTitle && !title) {
+        const spans = $row.find('span.ellipsis');
+        if (spans.length >= 2) title = $(spans[1]).attr('title') || $(spans[1]).text().trim();
+    }
+
+    if (!timeText && !title && !hasTime && !hasTitle) return;
 
     const id         = String($row.attr('id') || '').trim();
-    const timeText   = bestText($row, 'span.editor-time,  span[class*="editor-time"]');
-    const title      = bestText($row, 'span.editor-title, span[class*="editor-title"]');
     const tSec       = parseSec(timeText);
-    const cplname    = String($row.find('input[name="cplname"]').val() || '').trim();
+    const cplname    = String($row.find('input[name="cplname"], input[name="cpl_name"]').val() || '').trim();
     const durationRaw = $row.find('input[name="duration"]').val();
     const duration   = durationRaw != null && String(durationRaw).trim() !== '' ? +durationRaw : null;
     const cplUuid    = String($row.find('input[name="cpl"]').val()     || '').trim();
@@ -85,14 +102,29 @@ function parseAllCplRowsAndAutomations(html) {
     for (const key of keys) {
       const $add = addOnByName.get(key);
       if (!$add) continue;
-      $add.find('div.row.m-0.element.automation').each((_, aEl) => {
+
+      // FIXED: Relaxed selector here too
+      $add.find('div.element.automation').each((_, aEl) => {
         const $a       = $(aEl);
         const aId      = String($a.attr('id') || '').trim();
-        const aTimeText = bestText($a, 'span.editor-time,  span[class*="editor-time"]');
-        const aTitle    = bestText($a, 'span.editor-title, span[class*="editor-title"]');
+
+        let aTimeText = bestText($a, 'span.editor-time,  span[class*="editor-time"]');
+        let aTitle    = bestText($a, 'span.editor-title, span[class*="editor-title"]');
+
+        // Fallback for DCP
+        if (!aTimeText) {
+             const spans = $a.find('span');
+             if (spans.length >= 1) aTimeText = $(spans[0]).text().trim();
+        }
+        if (!aTitle) {
+             const spans = $a.find('span');
+             if (spans.length >= 2) aTitle = $(spans[1]).text().trim();
+        }
+
         const aTSec     = parseSec(aTimeText);
         const kind      = aId ? String($add.find(`input#kind${aId}`).val()   || '').trim() : '';
         const offset    = aId ? String($add.find(`input#offset${aId}`).val() || '').trim() : '';
+
         if (aTitle && !autos.some(x => x.id === aId && aId))
           autos.push({ id: aId, timeText: aTimeText, tSec: aTSec, title: aTitle, kind, offset });
       });
@@ -227,8 +259,9 @@ function computeTimer(items, splPositionSec) {
     .filter(a => a.tSec != null && /rail/i.test(a.title || ''))
     .sort((a, b) => a.tSec - b.tSec);
 
-  const firstRail = railAutos[0] || null;
-  const railDelta = firstRail ? firstRail.tSec - splPositionSec : null;
+  // FIXED: Select the LAST rail automation, not the first
+  const lastRail = railAutos.length > 0 ? railAutos[railAutos.length - 1] : null;
+  const railDelta = lastRail ? lastRail.tSec - splPositionSec : null;
 
   if (railDelta != null && railDelta > 0 && railDelta <= PRESHOW_WINDOW) {
     return { type: 'rails', label: 'Rails dans', secondsRemaining: Math.round(railDelta) };
