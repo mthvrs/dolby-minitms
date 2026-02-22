@@ -1,11 +1,14 @@
 class MultiviewOverlay {
     constructor(container, theaterName, theaterNumber, showClock = false, logger = null) {
-        this.container = container;
-        this.theaterName = theaterName;
+        this.container     = container;
+        this.theaterName   = theaterName;
         this.theaterNumber = theaterNumber;
-        this.showClock = showClock;
-        this.logger = logger;
+        this.showClock     = showClock;
+        this.logger        = logger;
         this.updateInterval = null;
+
+        // Wall-clock anchor for live countdown
+        this._nextShowStart = null;
 
         this.render();
         this.update();
@@ -87,22 +90,23 @@ class MultiviewOverlay {
         const overlay = this.container.querySelector('.timeline-overlay');
         if (!overlay) return;
 
-        const title = overlay.querySelector('.show-title');
+        const title       = overlay.querySelector('.show-title');
         const cplTitleMini = overlay.querySelector('.cpl-title-mini');
-        const progress = overlay.querySelector('.progress-fill-mini');
-        const elapsed = overlay.querySelector('.time-elapsed');
-        const remaining = overlay.querySelector('.time-remaining');
-        const end = overlay.querySelector('.time-end');
-        const icon = overlay.querySelector('.playback-icon');
-        const iconPlay = overlay.querySelector('.icon-play');
-        const iconPause = overlay.querySelector('.icon-pause');
-        const iconStop = overlay.querySelector('.icon-stop');
+        const progress    = overlay.querySelector('.progress-fill-mini');
+        const elapsed     = overlay.querySelector('.time-elapsed');
+        const remaining   = overlay.querySelector('.time-remaining');
+        const end         = overlay.querySelector('.time-end');
+        const icon        = overlay.querySelector('.playback-icon');
+        const iconPlay    = overlay.querySelector('.icon-play');
+        const iconPause   = overlay.querySelector('.icon-pause');
+        const iconStop    = overlay.querySelector('.icon-stop');
 
         const state = playback.stateInfo || 'Unknown';
 
-        iconPlay.style.display = 'none';
+        // ── State icons ─────────────────────────────────────────────────
+        iconPlay.style.display  = 'none';
         iconPause.style.display = 'none';
-        iconStop.style.display = 'none';
+        iconStop.style.display  = 'none';
         icon.classList.remove('playing', 'paused', 'stopped');
         progress.classList.remove('feature', 'paused', 'stopped');
 
@@ -110,9 +114,7 @@ class MultiviewOverlay {
             iconPlay.style.display = 'block';
             icon.classList.add('playing');
             const cpl = playback.cplTitle || '';
-            if (cpl.includes('_FTR') || cpl.includes('_SHR')) {
-                progress.classList.add('feature');
-            }
+            if (cpl.includes('_FTR') || cpl.includes('_SHR')) progress.classList.add('feature');
         } else if (state === 'Pause') {
             iconPause.style.display = 'block';
             icon.classList.add('paused');
@@ -123,37 +125,60 @@ class MultiviewOverlay {
             progress.classList.add('stopped');
         }
 
-        const rawSplTitle = playback.splTitle || 'Sans titre';
-        title.textContent = API.formatSplTitle(rawSplTitle);
+        // ── Title — "À SUIVRE" override when stopped with upcoming show ────────
+        const isStopped = (state !== 'Play' && state !== 'Pause');
+        const nextShow  = playback.nextShow;
 
-        const displayCplTitle = playback.cplTitle || '';
-        cplTitleMini.textContent = displayCplTitle;
-        cplTitleMini.style.display = displayCplTitle ? 'block' : 'none';
+        if (isStopped && nextShow && nextShow.title && nextShow.start) {
+            const incomingStart = new Date(nextShow.start);
+            if (!this._nextShowStart || Math.abs(this._nextShowStart - incomingStart) > 5000) {
+                this._nextShowStart = incomingStart;
+            }
 
-        const position = parseInt(playback.splPosition || 0);
-        const duration = parseInt(playback.splDuration || 1);
-        const remainingTime = Math.max(0, duration - position);
-        const percentage = Math.min(100, Math.max(0, (position / duration) * 100));
+            const secsUntil      = Math.max(0, Math.round((this._nextShowStart - Date.now()) / 1000));
+            const formattedTitle = API.formatSplTitle(nextShow.title);
+            const countdown      = this._fmtCountdown(secsUntil);
 
-        progress.style.width = `${percentage}%`;
-        elapsed.textContent = this.formatTime(position);
-        remaining.textContent = this.formatTime(remainingTime);
+            title.innerHTML =
+                `<span class="a-suivre-label">À SUIVRE :</span> ` +
+                `<em class="a-suivre-title">${formattedTitle}</em>` +
+                `<span class="a-suivre-sep"> ——— Dans ${countdown}s</span>`;
+            title.title = `À SUIVRE : ${formattedTitle} — Dans ${countdown}s`;
 
-        const now = new Date();
-        const endTime = new Date(now.getTime() + (remainingTime * 1000));
-        end.textContent = this.formatClock(endTime);
-    }
+            cplTitleMini.style.display = 'none';
+        } else {
+            this._nextShowStart = null;
+            const rawSplTitle = playback.splTitle || 'Sans titre';
+            title.textContent = API.formatSplTitle(rawSplTitle);
+            title.title       = title.textContent;
 
-    showError() {
-        // Keep simplified for space
-        const overlay = this.container.querySelector('.timeline-overlay');
-        if (overlay) overlay.querySelector('.show-title').textContent = 'OFFLINE';
-    }
-
-    updateClock() {
-        if (this.clockElement) {
-            this.clockElement.textContent = new Date().toLocaleTimeString('fr-FR');
+            const displayCplTitle = playback.cplTitle || '';
+            cplTitleMini.textContent   = displayCplTitle;
+            cplTitleMini.style.display = displayCplTitle ? 'block' : 'none';
         }
+
+        // ── Progress / times ─────────────────────────────────────────
+        const position     = parseInt(playback.splPosition || 0);
+        const duration     = parseInt(playback.splDuration  || 1);
+        const remainingTime = Math.max(0, duration - position);
+        const pct           = Math.min(100, Math.max(0, (position / duration) * 100));
+        const now           = new Date();
+        const endTime       = new Date(now.getTime() + remainingTime * 1000);
+
+        progress.style.width     = `${pct}%`;
+        elapsed.textContent      = this.formatTime(position);
+        remaining.textContent    = this.formatTime(remainingTime);
+        end.textContent          = this.formatClock(endTime);
+    }
+
+    // ── Helpers ──────────────────────────────────────────────────
+
+    _fmtCountdown(totalSec) {
+        const s  = Math.max(0, Math.round(totalSec));
+        const h  = Math.floor(s / 3600);
+        const m  = Math.floor((s % 3600) / 60);
+        const ss = s % 60;
+        return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}:${String(ss).padStart(2, '0')}`;
     }
 
     formatTime(seconds) {
@@ -166,6 +191,17 @@ class MultiviewOverlay {
 
     formatClock(date) {
         return date.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
+    }
+
+    showError() {
+        const overlay = this.container.querySelector('.timeline-overlay');
+        if (overlay) overlay.querySelector('.show-title').textContent = 'OFFLINE';
+    }
+
+    updateClock() {
+        if (this.clockElement) {
+            this.clockElement.textContent = new Date().toLocaleTimeString('fr-FR');
+        }
     }
 
     destroy() {
