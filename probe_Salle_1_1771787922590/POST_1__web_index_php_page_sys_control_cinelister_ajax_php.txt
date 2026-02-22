@@ -1,0 +1,275 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="CONTENT-TYPE" content="text/html; charset=UTF-8" />
+		<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+		<meta http-equiv="Pragma" content="no-cache" /><meta http-equiv="Expires" content="0" />
+		<meta name="viewport" content="width=1024, initial-scale=0.80, shrink-to-fit=yes">
+		
+		<title>Salle01 - IMS3000 398869 - Dolby IMS3000</title>
+
+		<!-- css -->
+		<link rel="SHORTCUT ICON" href="/web/images/title_icon.png" />
+		<link rel="stylesheet" href="/web/css/bootstrap.min.css" type="text/css" /><link rel="stylesheet" href="/web/css/jquery-ui.min.css" type="text/css" /><link rel="stylesheet" href="/web/css/styles.min.css?version=3.21.5" type="text/css" /><link rel="stylesheet" href="/web/css/styles-1.css?version=3.21.5" type="text/css" /><link rel="stylesheet" href="/web/css/theme-3.css?version=3.21.5" type="text/css" />
+		<!-- jquery -->
+		<script src="/web/js/jquery/js/jquery-1.12.4.min.js"></script><script src="/web/js/jquery/js/jquery-ui-1.10.3.custom.min.js"></script><script src="/web/js/jquery/external/jquery.filter_input.min.js"></script><script src="/web/js/jquery/external/jquery.mask.min.js"></script><script src="/web/js/jquery/external/jquery.ui.rcarousel.min.js"></script><script src="/web/js/jquery/external/jquery.form.js"></script><script src="/web/js/jquery/external/flot/jquery.flot.min.js"></script><script src="/web/js/jquery/external/flot/jquery.flot.navigate.min.js"></script><script src="/web/js/jquery/external/jquery.jqplot.min.js"></script><script src="/web/js/jquery/external/plugins/jqplot.pieRenderer.min.js"></script><link rel="stylesheet" href="/web/js/jquery/external/jquery.jqplot.min.css" />		<!-- bootstrap -->
+		<script type="text/javascript" src="js/bootstrap.min.js"></script>
+		<!-- js -->
+		<script type="text/javascript" src="js/common.min.js?version=3.21.5"></script>
+		<script type="text/javascript" src="js/ajax_common.min.js?version=3.21.5"></script>
+		<script type="text/javascript" src="js/overview_controller.min.js?version=3.21.5"></script>
+		<script type="text/javascript" src="js/json2.min.js?version=3.21.5"></script>
+		<script type="text/javascript" src="js/drm_json.min.js?version=3.21.5"></script>
+		<script type="text/javascript" src="js/audioMeters.min.js?version=3.21.5"></script>
+		<script type="text/javascript" src="js/auditorium.min.js?version=3.21.5"></script>
+		<!-- Datatables -->
+		<script type="text/javascript" src="js/DataTables/datatables.min.js"></script>
+		<link rel="stylesheet" type="text/css" href="js/DataTables/datatables.min.css"/>
+		<!-- Tree view -->
+		<script type="text/javascript" src="js/simpletreemenu/simpletreemenu.min.js"></script>
+		<link rel="stylesheet" type="text/css" href="js/simpletreemenu/simpletree.css" />
+		<!-- Chart -->
+		<script type="text/javascript" src="js/chart.min.js"></script>
+		<!-- easeJS -->
+		<script type="text/javascript" src="js/easejs-0.8.2.min.js"></script>
+		<!-- local js -->
+		<script type="text/javascript" src="sys_control/cinelister/gui.js?version=3.21.5"></script>
+		<script type="text/javascript" src="sys_control/cinelister/ajax.js?version=3.21.5"></script>
+	</head>
+	<body attr-sid="0bacc662-2e73-4401-afd4-7829fca7efce" attr-user-level="3" attr-notif-count="0">
+		<!-- header -->
+		
+<div id="loadingDiv"></div>
+<div id="header">
+	<div id="headerGlobal">
+		<div class="row justify-content-between my-0">
+			<div class="col-auto m-0">
+				<div class="row m-0">
+					<div id="header-logo" class="col-auto">
+						<img src="/web/images/logo-dolby.png" />
+						<div class="serverConfDiv alert alert-dark p-1 m-0 text-small text-ellipsis" style="max-width: 170px;" attr-audio-engine="0">Server Mode</div>
+						<div class="chaseModeDiv alert alert-primary-2 d-none px-0 mx-0 mt-1 cursor-pointer text-ellipsis" style="max-width: 170px; padding-top: 1px !important; padding-bottom: 1px !important;" onclick="onClickGetChaseStatus();">
+							<i id="chaseModeDivIcon" class="icon-circle text-secondary"></i>
+							<span id="chaseModeDivText" class="text-small text-ellipsis position-relative text-white font-weight-bold" style="top: -2px;"></span>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="col col-xl-4 position-relative" style="max-width: 500px;">
+				<div id="headerCarousel" class="row align-items-center position-absolute-bottom">
+					<div id="carousel" class="carousel slide carousel-fade col" data-ride="carousel">
+						<div class="carousel-inner"></div>
+						<a class="carousel-control-prev" href="#carousel" role="button" data-slide="prev">
+							<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+							<span class="sr-only">Previous</span>
+						</a>
+						<a class="carousel-control-next" href="#carousel" role="button" data-slide="next">
+							<span class="carousel-control-next-icon" aria-hidden="true"></span>
+							<span class="sr-only">Next</span>
+						</a>
+					</div>
+				</div>
+			</div>
+
+			<div class="col-auto">
+				<div class="row">
+					<div class="col">
+						<div class="row m-0">
+							<div class="col my-0">
+								<div id="clock-container" class="my-3 mx-auto" onclick="openTimeInformation();">
+									<div id="clock" class="h1 m-0"></div>
+									<div id="clock-date">February 22nd, 2026</div> <!-- IGNORE-TS-MULTILINE -->
+								</div>
+							</div>
+
+													</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="row justify-content-between row-header-button">
+			<div class="col-auto m-0 p-0">
+				<div class="col-auto" id="header-screenname">IMS3000 (398869) - Salle01</div>
+			</div>
+
+			<div class="col"></div>
+
+			<div class="col-auto header-button" onclick="openSessionViewer();"><span class="icon fas fa-users pr-0"></span></div>
+
+			<div class="col-auto header-button notif-count-ims3" onclick="openNotifications();">
+				<span class="icon icon-flag notif-count-ims3"></span>&nbsp;Notifications				<div id="notifDashboard" style="display: none">
+					<div class="popupTitle">Notifications</div>
+					<div id="notifList"></div>
+					<div class="mt-2">
+						<button class="finish" onclick="deleteOnWebAllNotif();">Clear all notifications</button>
+						<button onclick="closeDialog('notifDashboard');">Close</button>
+					</div>
+				</div>
+			</div>
+
+			<div class="col-auto header-button" onclick="openInformation();"><span class="fas fa-info-circle"></span>&nbsp;Information</div>
+
+			<div class="row header-button my-0" id="header-user" onclick="var authDialogContent = ajaxGetAuthenticationForm(1, 'function() {}'); showDialog(authDialogContent, 310);">
+				<span class="icon-user"></span>&nbsp;<span id="userNameArea">admin</span>&nbsp;(<span id="userLevelArea"></span>)
+			</div>
+
+			<div class="col-auto header-button" id="header-logout" onclick="onClickLogoutPopup(); return false;"><span class="icon icon-switch pr-0"></span>&nbsp;Logout</div>
+		</div>
+	</div>
+</div>
+		<!-- vertical left menu -->
+		<div id="vMenuContainer"><div id="sidebar" class="nav-collapse">
+	<!-- sidebar menu start-->
+	<div class="leftside-navigation" tabindex="5000">
+		<ul class="sidebar-menu" id="nav-accordion">
+			<li>
+				<a class="" href="/web/index.php?page=overview/index.php">
+					<i class="icon-display"></i>
+					<span>Overview</span>
+				</a>
+			</li>
+			<li class="title">Operation</li>
+			<li class="sub-menu dcjq-parent-li">
+				<a class="dcjq-parent active" href="/web/index.php?page=sys_control/cinelister/playback.php">
+					<i class="icon-video-camera"></i>
+					<span>Cinelister</span>
+					<span class="dcjq-icon"></span>
+				</a>
+				<ul class="sub active">
+					<li class=""><a href="/web/index.php?page=sys_control/cinelister/editor.php">Editor</a></li>
+					<li class=""><a href="/web/index.php?page=sys_control/cinelister/playback.php">Playback</a></li>
+					<li class=""><a href="/web/index.php?page=sys_control/cinelister/schedule.php">Scheduler</a></li>
+				</ul>
+			</li>
+			<li class="sub-menu dcjq-parent-li">
+				<a class="dcjq-parent " href="/web/index.php?page=sys_control/content_manager/cpls.php">
+					<i class="icon-film"></i>
+					<span>Content</span>
+					<span class="dcjq-icon"></span>
+				</a>
+				<ul class="sub ">
+					<li class=""><a href="/web/index.php?page=sys_control/content_manager/overview.php">Overview</a></li>
+					<li class=""><a href="/web/index.php?page=sys_control/content_manager/cpls.php">Composition playlist</a></li>
+					<li class=""><a href="/web/index.php?page=sys_control/content_manager/kdms.php">Decryption keys</a></li>
+					<li class=""><a href="/web/index.php?page=sys_control/content_manager/spls.php">Show playlist</a></li>
+					<li class=""><a href="/web/index.php?page=sys_control/content_manager/dlms.php">Licenses</a></li>
+				</ul>
+			</li>
+			<li class="sub-menu dcjq-parent-li">
+				<a class="dcjq-parent " href="/web/index.php?page=sys_control/ingest_manager/ingest_scan.php">
+					<i class="icon-download3"></i>
+					<span>Ingest & export</span>
+					<span class="dcjq-icon"></span>
+				</a>
+				<ul class="sub ">
+					<li class=""><a href="/web/index.php?page=sys_control/ingest_manager/ingest_scan.php">Ingest scan</a></li>
+					<li class=""><a href="/web/index.php?page=sys_control/ingest_manager/ingest_monitor.php">Ingest monitor</a></li>
+					<li class=""><a href="/web/index.php?page=sys_control/export_manager/index.php">Export monitor</a></li>
+					<li class=""><a href="/web/index.php?page=sys_control/ingest_manager/upload.php">Upload</a></li>
+				</ul>
+			</li>
+			<li class="title">Monitoring</li>
+			<li class="sub-menu dcjq-parent-li">
+				<a class="dcjq-parent " href="/web/index.php?page=monitoring/diagnostic_tool/system.php">
+					<i class="icon-stats-dots"></i>
+					<span>Diagnostics</span>
+					<span class="dcjq-icon"></span>
+				</a>
+				<ul class="sub ">
+					<li class=""><a href="/web/index.php?page=monitoring/log_viewer/index.php">Logs & notifications</a></li>
+					<li class=""><a href="/web/index.php?page=monitoring/diagnostic_tool/mediablock.php">Mediablock</a></li>
+					<li class=""><a href="/web/index.php?page=monitoring/diagnostic_tool/storage.php">Storage</a></li>
+					<li class=""><a href="/web/index.php?page=monitoring/diagnostic_tool/system.php">System information</a></li>
+					<li class=""><a href="/web/index.php?page=monitoring/diagnostic_tool/overview.php">System status</a></li>
+				</ul>
+			</li>
+			<li class="title">Configuration</li>
+			<li class="sub-menu dcjq-parent-li">
+				<a class="dcjq-parent " href="/web/index.php?page=macros/macro_exec/index.php">
+					<i class="icon-cogs"></i>
+					<span>Automations and macros</span>
+					<span class="dcjq-icon"></span>
+				</a>
+				<ul class="sub ">
+					<li class=""><a href="/web/index.php?page=macros/macro_exec/index.php">Execute now</a></li>
+					<li class=""><a href="/web/index.php?page=macros/macro_editor/index.php">Automation cue</a></li>
+					<li class=""><a href="/web/index.php?page=macros/macro_editor/trigger_cue.php">Trigger cue</a></li>
+					<li class=""><a href="/web/index.php?page=macros/quick_controls/index.php">Quick controls</a></li>
+				</ul>
+			</li>
+			<li class="sub-menu dcjq-parent-li">
+				<a class="dcjq-parent " href="/web/index.php?page=cinema_audio/default_audio_config/index.php">
+					<i class="icon-music"></i>
+					<span>Cinema audio</span>
+					<span class="dcjq-icon"></span>
+				</a>
+				<ul class="sub ">
+											<li class=""><a href="/web/index.php?page=cinema_audio/audio_config/audio_delay.php">Audio delay</a></li>
+						<li class=""><a href="/web/index.php?page=cinema_audio/audio_config/channel_mapping.php">Channel mapping</a></li>
+									</ul>
+			</li>
+						<li>
+				<a class="" href="/web/index.php?page=sys_control/device_controller/index.php">
+					<i class="icon-drive"></i>
+					<span>Device controller</span>
+				</a>
+			</li>
+			<li class="sub-menu dcjq-parent-li">
+				<a class="dcjq-parent " href="/web/index.php?page=sys_admin/device_manager/index.php">
+					<i class="icon-cog"></i>
+					<span>Setup &amp; maintenance</span>
+					<span class="dcjq-icon"></span>
+				</a>
+				<ul class="sub ">
+					<li class=""><a href="/web/index.php?page=sys_admin/device_manager/index.php">Device manager</a></li>
+					<li class=""><a href="/web/index.php?page=sys_admin/content_feed/index.php">Content feed manager</a></li>
+					<li class=""><a href="/web/index.php?page=sys_admin/control_panel/index.php">Control panel</a></li>
+				</ul>
+			</li>
+		</ul>
+	</div>
+
+	
+
+	<!-- footer buttons -->
+	<div class="footer-buttons">
+		<div class="row justify-content-between m-0">
+			<div class="col-2" title="Playback">
+				<a class="text-center footer-button" id="footerPlaybackBtn2" href="?page=sys_control/cinelister/playback.php">
+					<div><span class="icon icon-play3"></span></div>
+					<div><span class="text">Playback</span></div>
+				</a>
+			</div>
+
+			<div class="col-2" title="Ingest">
+				<a class="text-center footer-button" id="footerIngestBtn2" href="?page=sys_control/ingest_manager/ingest_monitor.php">
+					<div><span class="icon icon-download3"></span></div>
+					<div><span class="text">Ingest</span></div>
+				</a>
+			</div>
+
+			<div class="col-2" title="Export">
+				<a class="text-center footer-button" id="footerExportBtn2" href="?page=sys_control/export_manager/index.php">
+					<div><span class="icon icon-upload3"></span></div>
+					<div><span class="text">Export</span></div>
+				</a>
+			</div>
+
+			
+			<div class="col-2" onclick="onClickGetQuickControls();" title="Quick controls">
+				<a class="text-center footer-button quick-control active" id="footerQuickBtn2">
+					<div><span class="icon fas fa-stopwatch"></span></div>
+					<div><span class="text">Quick controls</span></div>
+				</a>
+			</div>
+		</div>
+	</div>
+</div></div>
+		
+		<!-- body -->
+		<div id="bodyMain">
+			<div id="bodyRight">
+				<div class="packDiv  old ">

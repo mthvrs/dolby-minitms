@@ -1,0 +1,105 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="CONTENT-TYPE" content="text/html; charset=UTF-8" />
+		<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" /><meta http-equiv="Pragma" content="no-cache" /><meta http-equiv="Expires" content="0" />
+		
+		<!-- jquery -->
+		<link rel="stylesheet" href="/web/jquery/css/doremi/jquery-ui-1.10.3.custom.min.css" /><script src="/web/jquery/js/jquery-1.9.1.js"></script><script src="/web/jquery/js/jquery-ui-1.10.3.custom.min.js"></script><script src="/web/jquery/external/jquery.filter_input.js"></script><script src="/web/jquery/external/jquery.ui.rcarousel.js"></script><link rel="stylesheet" href="/web/jquery/external/rcarousel.css" />
+		<title>dcp2000.dc.doremilabs.com - DCP2000 252208 - Dolby</title>
+		<link rel="SHORTCUT ICON" href="/web/images/title_icon.png" />
+		<link rel="stylesheet" href="/web/css/ltr/classes.css?version=2.8.51" type="text/css" /><link rel="stylesheet" href="/web/css/ltr/layout.css?version=2.8.51" type="text/css" /><link rel="stylesheet" href="/web/css/ltr/menus.css?version=2.8.51" type="text/css" /><link rel="stylesheet" href="/web/css/styles.css?version=2.8.51" type="text/css" /><style>#header{background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAJCAIAAAB8JNGzAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAYdEVYdFNvZnR3YXJlAHBhaW50Lm5ldCA0LjAuM4zml1AAAAAPSURBVBhXY8jZuIOBAAYAJlEQfvgpomwAAAAASUVORK5CYII=);}</style><link rel="stylesheet" href="/web/css/styles-auto.css?version=2.8.51" type="text/css" />		<script type="text/javascript" language="javascript" src="gui.js?version=2.8.51"></script>
+		<script type="text/javascript" language="javascript" src="../common.js?version=2.8.51"></script>
+		<script type="text/javascript" language="javascript" src="../ajax_common.js?version=2.8.51"></script>
+		<script type="text/javascript" language="javascript" src="../js/json2.js"></script>
+		<script type="text/javascript" language="javascript" src="../js/drm_json.js?version=2.8.51"></script>		
+		<script type="text/javascript" language="javascript" src="../js/overview_controller.js?version=2.8.51"></script>		
+		
+		<!-- jquery -->
+	</head>
+	<body onload="initSysControl('5988ee52-ec6f-4876-afc8-da7a740d2fd4', '3','auto','0', '')">
+		
+	<!-- header -->
+	
+<div id="loadingDiv"></div>
+<div id="header">
+	<div id="toplogo"><img src="/web/images/logo.png"></div>
+	<div id="logoContainer"><div id="tohide_title">Technology Leadership<br>for Digital Cinema</div></div>
+	<div id="infoContainer">
+	    <div class="model">DCP2000</div>
+	    <div class="serial">Serial Number:  252208</div>
+	    <div id="carouselContainer">
+			<a href="#" id="ui-carousel-next"><span>next</span></a>
+			<a href="#" id="ui-carousel-prev"><span>prev</span></a>
+		</div>
+		<dl class="meta">
+	      <dt>Screen:</dt><dd>dcp2000.dc.doremilabs.com</dd>
+	      <dt>Software Version:</dt><dd>2.8.52-0
+</dd>
+   	      <dt>User Level:</dt><dd><span id="userNameArea">admin</span> / <span id="userLevelArea"></span></dd>
+	    </dl>
+	</div>
+</div>			
+	<!-- body -->
+	<div id="bodyMain">
+		<!-- horizontal menu -->
+		<div id="hMenuContainer">
+			<div id="hMenuWrapper">
+			<ul id="hMenu"><li id="mainTitleArea">&nbsp;</li><li><a class="" href="../overview/index.php">Overview</a></li><li><a class="" href="../sys_admin/index.php?page=control_panel/index.php">Administration</a><ul><li><a class="" href="../sys_admin/index.php?page=device_manager/index.php">Device Manager</a></li><li><a class="" href="../sys_admin/index.php?page=content_feed/index.php">Content Feed Manager</a></li><li><a class="hasChildren" href="../sys_admin/index.php?page=macro_editor/automation_cue.php">Macro Editor</a><ul><li><a class="" href="../sys_admin/index.php?page=macro_editor/automation_cue.php">Automation Cue</a></li><li><a class="" href="../sys_admin/index.php?page=macro_editor/trigger_cue.php">Trigger Cue</a></li><li><a class="" href="../sys_admin/index.php?page=macro_editor/edit_control.php">Quick Controls</a></li></ul></li><li><a class="" href="../sys_admin/index.php?page=terminal/index.php">Terminal</a></li><li><a class="" href="../sys_admin/index.php?page=system/index.php">System</a></li><li><a class="" href="../sys_admin/index.php?page=control_panel/index.php">Control Panel</a></li></ul></li><li><a class="current" href="../sys_control/index.php">Control</a><ul><li><a class="hasChildren" href="../sys_control/index.php?page=cinelister/playback.php">CineLister</a><ul><li><a class="" href="../sys_control/index.php?page=cinelister/editor.php">Editor</a></li><li><a class="" href="../sys_control/index.php?page=cinelister/playback.php">Playback</a></li><li><a class="" href="../sys_control/index.php?page=cinelister/schedule.php">Schedule</a></li></ul></li><li><a class="hasChildren" href="../sys_control/index.php?page=ingest_manager/ingest_scan.php">Ingest Manager</a><ul><li><a class="" href="../sys_control/index.php?page=ingest_manager/ingest_scan.php">Ingest Scan</a></li><li><a class="" href="../sys_control/index.php?page=ingest_manager/ingest_monitor.php">Ingest Monitor</a></li><li><a class="" href="../sys_control/index.php?page=ingest_manager/upload.php">Upload</a></li></ul></li><li><a class="hasChildren" href="../sys_control/index.php?page=content_manager/overview.php">Content Manager</a><ul><li><a class="" href="../sys_control/index.php?page=content_manager/overview.php">Overview</a></li><li><a class="" href="../sys_control/index.php?page=content_manager/cpls.php">Composition Playlist</a></li><li><a class="" href="../sys_control/index.php?page=content_manager/kdms.php">Decryption Keys</a></li><li><a class="" href="../sys_control/index.php?page=content_manager/spls.php">Show Playlist</a></li><li><a class="" href="../sys_control/index.php?page=content_manager/dlms.php">Licenses</a></li></ul></li><li><a class="" href="../sys_control/index.php?page=export_manager/index.php">Export Manager</a></li><li><a class="" href="../sys_control/index.php?page=device_controller/index.php">Device Controller</a></li><li><a class="" href="../sys_control/index.php?page=macro_exec/index.php">Macro Execution</a></li></ul></li><li><a class="" href="../monitoring/index.php">Monitoring</a><ul><li><a class="hasChildren" href="../monitoring/index.php?page=diagnostic_tool/system.php">Diagnostics</a><ul><li><a class="" href="../monitoring/index.php?page=diagnostic_tool/system.php">System</a></li><li><a class="" href="../monitoring/index.php?page=diagnostic_tool/overview.php">Status Overview</a></li><li><a class="" href="../monitoring/index.php?page=diagnostic_tool/storage.php">Storage</a></li><li><a class="" href="../monitoring/index.php?page=diagnostic_tool/mediablock.php">MediaBlock</a></li></ul></li><li><a class="hasChildren" href="../monitoring/index.php?page=log_viewer/index.php">Log Viewer</a><ul><li><a class="" href="../monitoring/index.php?page=log_viewer/last_pkgs.php">Last Packages Logs</a></li><li><a class="" href="../monitoring/index.php?page=log_viewer/index.php">Log Records</a></li><li><a class="" href="../monitoring/index.php?page=log_viewer/download.php">Log Download</a></li><li><a class="" href="../monitoring/index.php?page=notifications_manager/index.php">Notifications</a></li></ul></li></ul></li><li><div class="imgLogout" onclick="onClickLogoutPopup(); return false;" title="Reboot or Shutdown the system"><img src="/web/images/power_72.png" /></div><a class="" href="../logout/index.php">Logout</a></li></ul>	
+			</div>
+		</div>			
+			<div id="bodyLeft">
+			<div id="vMenuContainer">
+			<div class="editorBoxHeader" style="margin-top: 30px; border: none;"><a href="/web/sys_admin/index.php?page=bookmarks_manager/index.php" class="editorBoxHeader" style="text-decoration: none;">Quick Access Links</a></div><ul style="margin-top: 4px;"><li class=""><a href="/web/sys_control/index.php?page=cinelister/playback.php"><img src="/web/images/cinelister.png" class="vmIcon" />Playback</a></li></ul>			</div>
+		</div>		<div id="bodyRight">
+			<iframe name="contentFrame" id="contentFrame" src="cinelister/playback.php" width="100%" height="500" frameborder="0" scrolling="auto"></iframe>
+		</div>
+		<div id="notifDashboard" style="display: none">
+			<div id="titleBar">
+				<div class="titleContainer">
+					<span class="bigTitle" style="cursor: pointer;" onclick="navigateTo('/web/monitoring/index.php?page=notifications_manager/index.php');">Notifications</span>
+				</div>
+				<a onclick="deleteOnWebAllNotif();" class="normalLink" style="cursor: pointer; float: right;" title="Clear all notifications">[Clear all notifications]</a>
+			</div>
+			<div id="notifList"></div>
+		</div>		
+	</div>
+	
+	<!-- footer -->
+	<div id="footer">
+	<div>
+		<div id="footerArea">
+			<div id="quickControl">
+				<div></div>
+				<a class="imgFooterButton inactive quickLink" href="javascript: void(0)" onclick="toggleQL();"><img src="/web/images/quickControl.png">&nbsp;&nbsp;Quick Controls</a>
+			</div>
+		</div>
+		<div id="notifArea" style="display:none;"></div>
+	</div>
+
+	<div id="notifIcons">
+		<a id="" class="imgFooterButton inactive iconNotif" title="Notifications" href="javascript:void(0)" onclick="$('#notifDashboard').fadeToggle()" ><img src="/web/images/gray-flag.png"><span id="notif-count" class="notif-count" style="display: none">0</span></a>
+	</div>		
+	<div id="sessionIcons">
+		<div>
+			<div class="titleContainer" style="margin-bottom: 5px; border-bottom: 1px solid #888888;">
+				<span class="bigTitle">Session Viewer</span>
+			</div>
+			<div class="container"></div>
+		</div>
+		<a class="imgFooterButton inactive iconNotif" title="Session Viewer" href="javascript:void(0)" onclick="toggleSession();" ><img src="/web/images/user_nb_16.png"><span id="user-count" class="notif-count" style="display: none">0</span></a>
+	</div>
+	<div class="reverseFloatingDiv">
+		<div id="clockDetails">
+			<div class="titleContainer" style="margin-bottom: 5px; border-bottom: 1px solid #888888; text-align: left;">
+				<span class="bigTitle">Date and Time</span>
+			</div>
+			<div class="clockTimeDetails"></div>
+			<div id="clockContent"></div>
+		</div>
+		<div id="clock" onclick="toggleClock();" title="Date and Time details"></div>
+	</div>
+	<div style="clear:both;"></div>	
+</div>	</body>
+</html>

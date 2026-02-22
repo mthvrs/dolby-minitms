@@ -1,0 +1,238 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+		<meta http-equiv="Pragma" content="no-cache" />
+		<meta http-equiv="Expires" content="0" />
+
+		<link rel="stylesheet" href="/web/jquery/css/doremi/jquery-ui-1.10.3.custom.min.css" /><script src="/web/jquery/js/jquery-1.9.1.js"></script><script src="/web/jquery/js/jquery-ui-1.10.3.custom.min.js"></script><script src="/web/jquery/external/jquery.filter_input.js"></script>
+		<title>Login - Dolby</title>
+		<link rel="SHORTCUT ICON" href="/web/images/title_icon.png" />
+		<link rel="stylesheet" href="/web/css/ltr/classes.css?version=2.8.51" type="text/css" /><link rel="stylesheet" href="/web/css/ltr/layout.css?version=2.8.51" type="text/css" /><link rel="stylesheet" href="/web/css/ltr/menus.css?version=2.8.51" type="text/css" /><link rel="stylesheet" href="/web/css/styles.css?version=2.8.51" type="text/css" /><style>#header{background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAJCAIAAAB8JNGzAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAYdEVYdFNvZnR3YXJlAHBhaW50Lm5ldCA0LjAuM4zml1AAAAAPSURBVBhXY8jZuIOBAAYAJlEQfvgpomwAAAAASUVORK5CYII=);}</style><link rel="stylesheet" href="/web/css/styles-auto.css?version=2.8.51" type="text/css" />		<script type="text/javascript" language="javascript" src="common.js?version=2.8.51"></script>
+		<script type="text/javascript" language="javascript" src="ajax_common.js?version=2.8.51"></script>
+		<script type="text/javascript" language="javascript" src="js/json2.js"></script>
+		<script type="text/javascript" language="javascript" src="js/drm_json.js?version=2.8.51"></script>
+		<script>
+			if(typeof(localStorage) !== 'undefined'){
+				localStorage.clear();
+				localStorage.setItem('certifDialog', '0');
+				// platform
+				var json_platform = '{"name":"dcp2000","type":"dcp2000","capability":{"productColor":"D13B2A","productColor64":"iVBORw0KGgoAAAANSUhEUgAAAAEAAAAJCAIAAAB8JNGzAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAYdEVYdFNvZnR3YXJlAHBhaW50Lm5ldCA0LjAuM4zml1AAAAAPSURBVBhXY8jZuIOBAAYAJlEQfvgpomwAAAAASUVORK5CYII=","isScreenName":false,"le100Style":false,"securedClock":true,"live":false,"record":false,"chase":false,"audioDelay":2,"maxRTC":1800,"captivView_ImageMode":false,"lockPlayback":true,"HDSDI_ColorSpace_Auto":false,"pingest":true,"sensorList":{"fans":true,"temperatures":true,"voltages":true,"memory":true,"network":true,"projector":true,"storage":true,"securityManager":true,"time":true,"administration":true,"playback":true,"security":true,"connections":true,"inputFeeds":false,"outputFeeds":false,"features":true}}}';
+				if(json_platform == 'null' || typeof(json_platform) == 'undefined')
+					json_platform = '{"name":"dcp2000","type":"dcp2000","capability":{"productColor":"D13B2A","productColor64":"iVBORw0KGgoAAAANSUhEUgAAAAEAAAAJCAIAAAB8JNGzAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAYdEVYdFNvZnR3YXJlAHBhaW50Lm5ldCA0LjAuM4zml1AAAAAPSURBVBhXY8jZuIOBAAYAJlEQfvgpomwAAAAASUVORK5CYII=","isScreenName":false,"le100Style":false,"securedClock":true,"live":false,"record":false,"chase":false,"audioDelay":2,"maxRTC":1800,"captivView_ImageMode":false,"lockPlayback":true,"HDSDI_ColorSpace_Auto":false,"pingest":true,"sensorList":{"fans":true,"temperatures":true,"voltages":true,"memory":true,"network":true,"projector":true,"storage":true,"securityManager":true,"time":true,"administration":true,"playback":true,"security":true,"connections":true,"inputFeeds":false,"outputFeeds":false,"features":true}}}';
+				localStorage.setItem('platform', json_platform);
+				// time
+				var timeDiff = new Date().getTime()/1000 - 1771787904;
+				var tzOffset = new Date().getTimezoneOffset()*60 + 3600;
+				localStorage.setItem('timeDiff', timeDiff);
+				localStorage.setItem('tzOffset', tzOffset);
+				localStorage.setItem('timeFormat', '24');
+				// lang
+				localStorage.setItem('lang', 'en-US');
+				if(localStorage.getItem('lang') != 'en-US')
+					loadTranslate();
+			}
+
+			function getConnectedUsers(){
+				$.ajax({ type: "POST",
+					context: this,
+					url: WebUI,
+					contentType: 'text/xml',
+					data: generateJsonRequestNoSession("GetConnectionCount"),
+					success: function(msg) {
+						nbUsers = msg.GetConnectionCountResponse.count;
+						$('#connectedUsersSpan').html(nbUsers);
+						if(nbUsers > 0)
+							$('#connectedUsersDiv').fadeIn('slow');
+						else{
+							$('#connectedUsersDiv').fadeOut('slow');
+						}
+						setTimeout("getConnectedUsers()", 5000);
+					}
+				});
+			}
+
+			$(document).ready(function() {
+				$("body").click(function(event){
+					var $item = $(this);
+					var $target = $(event.target);
+
+					if($target.is(":not(#connectedUsersWarningDiv)")){
+						$('#connectedUsersInfosDiv').fadeOut('slow');
+					}
+				});
+
+				getConnectedUsers();
+			});
+		</script>
+		<style>
+			body {margin: 0px auto; background: none; box-shadow: none;}
+		</style>
+	</head>
+	<body onload="$('#usernameInput').focus().select();">
+		<div style="position: absolute; width: 100%; height: 100%; top: 0px; left: 0px;">
+			<div id="loginContainer">
+								<div id="loginLogo" style="background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAJCAIAAAB8JNGzAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAYdEVYdFNvZnR3YXJlAHBhaW50Lm5ldCA0LjAuM4zml1AAAAAPSURBVBhXY8jZuIOBAAYAJlEQfvgpomwAAAAASUVORK5CYII=);">
+					<img src="/web/images/logo.png" style="max-width:300px;" />
+				</div>
+
+				<div id="loginWrapper">
+					<form name="loginForm" method="post" action="index.php">
+						<fieldset class="container">
+							<fieldset class="field">
+								<div id="screenName">dcp2000.dc.doremilabs.com</div>
+							</fieldset>
+							<fieldset class="field" id="connectedUsersDiv" style="display: none;">
+								<div id="sessionIcons" style="float: left; width: 260px;">
+									<div id="connectedUsersInfosDiv" style="margin: 24px 0px 0px -64px; box-shadow: none; opacity: 1;">
+										<div class="titleContainer" style="margin-bottom: 5px; border-bottom: 1px solid #888888;">
+											<span class="bigTitle">Session Viewer</span>
+										</div>
+										<div class="container"></div>
+									</div>
+									<div id="connectedUsersWarningDiv" title="Click to see details" onclick="toggleSession();">
+										<img src="/web/images/warning_16.png" style="position: relative; top: 4px; left: -4px;" /><span id="connectedUsersSpan">9</span>&nbsp;user(s) already connected									</div>
+								</div>
+							</fieldset>
+							<fieldset class="field">
+								<label for="usernameInput">Username</label>
+								<input type="text" name="username" id="usernameInput" maxlength="25" value=""></input>
+							</fieldset>
+							<fieldset class="field">
+								<label for="passwordInput">Password</label>
+								<input type="password" name="password" id="passwordInput" maxlength="25"></input>
+							</fieldset>
+							<fieldset class="field" style="text-align: center; padding-top: 13px;">
+								<button class="finish" onclick="is800600(); document.loginForm.submit()" style="margin-left: -1px;">Login</button>
+								<input type="hidden" id="screen" name="screen" value="false"></input>
+								<input type="submit" class="hidden"></input>
+							</fieldset>
+						</fieldset>
+					</form>
+				</div>
+			</div>
+
+			
+			<div id="dialog" style="display:none;">
+				<div class="smallTitle" style="padding-bottom:8px; margin-bottom:5px; border-bottom:#c8c8c8 solid 1px;">
+					Site Language				</div>
+				<div style="margin-bottom:15px;">
+					<table cellpadding="0" cellspacing="0" border="0">
+					<tr style="height:40px;">
+								 <td>
+									<a href="?lang=en-US">
+										<div class="icon32" style="background-image:url(images/en.png);"></div>
+									</a>
+								 </td>
+								 <td>
+									&nbsp;<a class="normalLink" href="?lang=en-US">English</a>
+								 </td>
+							  </tr><tr style="height:40px;">
+								 <td>
+									<a href="?lang=es-ES">
+										<div class="icon32" style="background-image:url(locale/es-ES/flag.png);"></div>
+									</a>
+								 </td>
+								 <td>
+									&nbsp;<a class="normalLink" href="?lang=es-ES">Espanol</a>
+								 </td>
+							  </tr><tr style="height:40px;">
+								 <td>
+									<a href="?lang=fr-FR">
+										<div class="icon32" style="background-image:url(locale/fr-FR/flag.png);"></div>
+									</a>
+								 </td>
+								 <td>
+									&nbsp;<a class="normalLink" href="?lang=fr-FR">Français</a>
+								 </td>
+							  </tr><tr style="height:40px;">
+								 <td>
+									<a href="?lang=pt-BR">
+										<div class="icon32" style="background-image:url(locale/pt-BR/flag.png);"></div>
+									</a>
+								 </td>
+								 <td>
+									&nbsp;<a class="normalLink" href="?lang=pt-BR">Brazilian</a>
+								 </td>
+							  </tr><tr style="height:40px;">
+								 <td>
+									<a href="?lang=pt-PT">
+										<div class="icon32" style="background-image:url(locale/pt-PT/flag.png);"></div>
+									</a>
+								 </td>
+								 <td>
+									&nbsp;<a class="normalLink" href="?lang=pt-PT">Português</a>
+								 </td>
+							  </tr><tr style="height:40px;">
+								 <td>
+									<a href="?lang=ru-RU">
+										<div class="icon32" style="background-image:url(locale/ru-RU/flag.png);"></div>
+									</a>
+								 </td>
+								 <td>
+									&nbsp;<a class="normalLink" href="?lang=ru-RU">Russian</a>
+								 </td>
+							  </tr><tr style="height:40px;">
+								 <td>
+									<a href="?lang=zh-CN">
+										<div class="icon32" style="background-image:url(locale/zh-CN/flag.png);"></div>
+									</a>
+								 </td>
+								 <td>
+									&nbsp;<a class="normalLink" href="?lang=zh-CN">Chinese</a>
+								 </td>
+							  </tr>					</table>
+				</div>
+				<div style="width:100%; margin:5px auto; text-align:center;">
+					<button class="finish" id="cancelBtn" onclick="closeDialog()" class="button">Cancel</button>
+				</div>
+			</div>
+
+			<div id="langContainer">
+								<button class="icon-text" onclick="showDialog(null, 190);document.getElementById('cancelBtn').focus();">
+				<img src="/web/images/transparent.png" style="background-image:url('images/en.png')" />Site Language				</button>
+			</div>
+
+			<div class="errorContainer">
+							</div>
+		</div>
+		<script type="text/javascript">
+			is800600();
+
+			function is800600(){
+				var x;
+				var y;
+
+				// IE
+				if (!window.innerWidth)
+				{
+					if (!(document.documentElement.clientWidth == 0)) {
+						// strict mode
+						x = document.documentElement.clientWidth;
+						y = document.documentElement.clientHeight;
+					}
+					else
+					{
+						// quirk mode
+						x = document.body.clientWidth;
+						y = document.body.clientHeight;
+					}
+				}
+				else
+				{
+					// W3C
+					x = window.innerWidth;
+					y = window.innerHeight;
+				}
+
+				if ( x <= 800 && y <= 600)
+					$("#screen").attr("value","true");
+				else if(x > 800 && x < 1280)
+					$("#screen").attr("value","medium");
+				else
+					$("#screen").attr("value","auto");
+			}
+		</script>
+	</body>
+</html>

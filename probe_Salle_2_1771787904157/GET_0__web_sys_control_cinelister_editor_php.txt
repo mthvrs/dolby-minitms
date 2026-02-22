@@ -1,0 +1,106 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+  	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" /><meta http-equiv="Pragma" content="no-cache" /><meta http-equiv="Expires" content="0" />
+
+	<link rel="stylesheet" href="/web/jquery/css/doremi/jquery-ui-1.10.3.custom.min.css" /><script src="/web/jquery/js/jquery-1.9.1.js"></script><script src="/web/jquery/js/jquery-ui-1.10.3.custom.min.js"></script><script src="/web/jquery/external/jquery.filter_input.js"></script>
+	<link rel="stylesheet" href="styles.css?version=2.8.51" type="text/css" />
+	<link rel="stylesheet" href="/web/css/ltr/classes.css?version=2.8.51" type="text/css" /><link rel="stylesheet" href="/web/css/ltr/layout.css?version=2.8.51" type="text/css" /><link rel="stylesheet" href="/web/css/ltr/menus.css?version=2.8.51" type="text/css" /><link rel="stylesheet" href="/web/css/styles.css?version=2.8.51" type="text/css" /><style>#header{background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAJCAIAAAB8JNGzAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAYdEVYdFNvZnR3YXJlAHBhaW50Lm5ldCA0LjAuM4zml1AAAAAPSURBVBhXY8jZuIOBAAYAJlEQfvgpomwAAAAASUVORK5CYII=);}</style><link rel="stylesheet" href="/web/css/styles-auto.css?version=2.8.51" type="text/css" />
+	<style  type="text/css">html {background: none;}</style>
+	<script type="text/javascript" language="javascript" src="gui.js?version=2.8.51"></script>
+	<script type="text/javascript" language="javascript" src="ajax.js?version=2.8.51"></script>
+	<script type="text/javascript" language="javascript" src="../../common.js?version=2.8.51"></script>
+	<script type="text/javascript" language="javascript" src="../../ajax_common.js?version=2.8.51"></script>
+	<script type="text/javascript" language="javascript" src="../../js/json2.js"></script>
+</head>
+
+<body class="frame" onclick="if($('#closeDiv').val() == 0){$('#createMarkerDiv').fadeOut();}" onload="initEditor('3', 'Editor','auto')">
+
+<div class="actionsContainer">
+		<button class="icon-text" id="refreshBtn" title="Refresh content" onclick="onClickRefresh()"><img src="/web/images/transparent.png" style="background-image:url('../../images/refresh_32.png')" alt="" />Refresh</button>
+		<button class="icon-text" title="Create a new Show Playlist" onclick="ajaxNewSPL();" ><img src="/web/images/transparent.png" style="background-image:url('../../images/filenew.png')" />New</button>
+	<button class="icon-text" title="Open an existing show Playlist" onclick="ajaxShowOpenSPL()"><img src="/web/images/transparent.png" style="background-image:url('../../images/fileopen.png')" />Open</button>
+	<button class="icon-text" title="Save the current Show Playlist" onclick="onClickSaveSPL()"><img src="/web/images/transparent.png" style="background-image:url('../../images/saveIcon.png')" />Save</button>
+	<button class="icon-text" title="Display Show Playlist properties" onclick="ajaxShowSPLProperties()"><img src="/web/images/transparent.png" style="background-image:url('../../images/repair.png')" />Properties</button>
+	<button class="icon-text" title="Delete a Show Playlist" onclick="onClickDeleteSPL()"><img src="/web/images/transparent.png" style="background-image:url('../../images/filedelete.png')" />Delete</button>
+	<div class="reverseFloatingDiv">
+		<a href="javascript: void(0)" onclick="navigateTo('/web/sys_control/index.php?page=cinelister/schedule.php')" class="imgLink prevImgLink" title="Create or edit a Schedule">Schedule</a><!--
+		--><a href="javascript: void(0)" onclick="" class="imgLink centerImgLink">&nbsp;</a><!--
+		--><a href="javascript: void(0)" onclick="navigateTo('/web/sys_control/index.php?page=cinelister/playback.php')" class="imgLink nextImgLink" title="Control the show">Playback</a>
+	</div>
+</div>
+
+<!-- CPL list -->
+<div id="CPLList" class="floatingDiv" style="width:450px;">
+	<div class="editorBoxHeader">All available elements</div>
+	<div style="width:450px;">
+		<div style="padding-top:5px; padding-bottom:5px;">
+			<select id="searchSelect" class="dropdown" style="width:180px;" onchange="onChangeSearchSelect()"></select>
+			&nbsp;
+			<div class="searchDiv"><input id="searchInput" type="search" style="width:210px;" onkeyup="searchElements()" />
+			<a href="javascript:void(0)" onclick="onClickSearchResetImg()"><img id="searchResetImg" src="../../images/disabled_16.png" /></a></div>
+		</div>
+   		<div id="custScroll" style="width:450px; height:333px; border:rgb(200,200,200) solid 1px;">
+       					<div id="loadingDiv2"></div>
+			           	<div id="elementSelectDiv" dir="ltr" style=""></div>
+        </div>
+	</div>
+</div>
+
+<!-- SPL list -->
+<div id="SPLList" style="width:500px;" class="floatingDiv ">
+	<div class="editorBoxHeader">Show Playlist</div>
+	<div style="height:28px; margin:5px">
+		<div class="mediumTitle" style="float:left;height:20px;width:100%;overflow:hidden;">
+	       	SPL:
+	   		<span id="propBtnSPLTitle"></span><span >,</span>
+			<span id="propBtnSPLMode" ></span><!--
+	   		--><span id="propBtnHFRMode"></span>
+	   	</div>
+	</div>
+	<div class="reverseFloatingDiv" style="width:45px; display: block;">
+				<button id="itemUpBtn" class="icon-text" title="Move up item" onclick="moveItem('UP')" style="min-width: 50px;"><img src="/web/images/transparent.png" style="background-image:url('../../images/up_16.png'); background-size: auto; background-position: center -6px;" /></button>
+		<button id="itemDownBtn" class="icon-text" title="Move down item" onclick="moveItem('DOWN')" style="min-width: 50px;"><img src="/web/images/transparent.png" style="background-image:url('../../images/down_16.png'); background-size: auto; background-position: center -4px;" /></button>
+		<button id="" class="icon-text" title="Create a marker, an intermission or a segment" style="min-width: 50px;" onmouseover="$('#closeDiv').val(1);" onmouseout="$('#closeDiv').val(0);"  onclick="$('#createMarkerDiv').fadeToggle();" style="margin-bottom:4px;"><img src="/web/images/transparent.png" style="background-image:url('../../images/add.png');" /></button>
+		<div id="createMarkerDiv">
+			<table cellspacing="0" cellpadding="0">
+				<tr>
+					<td onclick="addMarker('segment');"><img src="/web/images/package_link.png" />&nbsp;Segment</td>
+				</tr>
+								<tr>
+					<td onclick="addMarker('intermission');"><img src="/web/images/intermission.png" />&nbsp;Intermission</td>
+				</tr>
+				<tr>
+					<td onclick="addMarker('marker');"><img src="/web/images/marker_orange.png" />&nbsp;Marker</td>
+				</tr>
+							</table>
+			</ul>
+		</div>
+		<input type="hidden" id="closeDiv" value="0" />
+	</div>
+	<div>
+		<div id="editorSPLUpperDiv" style="overflow:auto; width:450px; height:333px; position:relative; border:rgb(200,200,200) solid 1px;">
+			<div id="editorSPLDiv" dir="ltr" style="">
+							</div>
+		</div>
+		<div style="margin-top:3px;">
+			<span class="smallText">Start Time&nbsp;|&nbsp;Elements</span>
+		</div>
+	</div>
+</div>
+<input type="hidden" id="hfr_value_input" value="0"><input type="hidden" id="spl_duration_js" value="0">
+<input id="needToSave" type="hidden" value="0" />
+</body>
+<script>
+	// $(window).on('beforeunload ',function() {
+		
+		// return 'bb';
+		// if(confirm("Yes ?"))
+			// ;
+	// });
+</script>
+
+</html>
